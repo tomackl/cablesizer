@@ -1,5 +1,7 @@
 #
 #
+import json
+
 
 def determine_electrical_load(load, unit, voltage, phases):
     """

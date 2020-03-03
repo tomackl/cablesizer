@@ -1,1 +1,1 @@
-from Constants.import_constants import *
+from Constants.configuration import *

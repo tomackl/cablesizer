@@ -1,5 +1,5 @@
 """
-The test functions for the electricallibrary/cable.config library.
+The test functions for the electricallibrary/cable.json library.
 """
 
 from ElectricalLibrary import constants as uc

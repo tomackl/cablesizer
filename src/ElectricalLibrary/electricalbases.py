@@ -9,11 +9,11 @@ from ElectricalLibrary.constants import NumType, ComType
 class ElectricalBase:
     def __init__(self, freq: int = None, freq_unit: str = None, **kwargs):
         """
-        A generic base class for electrical units. The class contains attributes to store the scalar of the unit and
+        A generic base class for electrical units. The class contains attributes to store the magnitude of the unit and
         also contain the respective frequency associated with the electrical characteristic. Where series of frequency
         values are required it is expected that these will be achieved by using a list containing objects of the
         appropriate class.
-        :param freq: frequency associated with the object's scalar
+        :param freq: frequency associated with the object's magnitude
         :param freq_unit: frequency unit
         """
         self._freq: int = freq
@@ -160,7 +160,7 @@ class Volt(ElectricalBase):
     @property
     def volts(self) -> NumType:
         """
-        The scalar attribute getter.
+        The magnitude attribute getter.
         :return:
         """
         return self._volt
@@ -292,7 +292,7 @@ class Amp(ElectricalBase):
     @property
     def amps(self) -> NumType:
         """
-        The scalar attribute getter.
+        The magnitude attribute getter.
         :return:
         """
         return self._amp

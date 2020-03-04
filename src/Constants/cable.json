@@ -176,16 +176,24 @@
 	"circuit": {
 		"type": ["SINGLE", "MULTI", "CONTROL", "INSTRUMENT", "COMMUNICATION", "DATA"],
 		"default": "MULTI",
-		"voltage": [0, 12, 24, 48, 110, 230, 240, 380, 400, 415, 690, 1000, 3300, 6600, 11000, 22000, 33000],
-		"waveform": ["AC", "DC"],
-		"install_method": {
+		"voltage": {
+			"type": [0, 12, 24, 48, 110, 230, 240, 380, 400, 415, 433, 440, 690, 1000, 3300, 6600, 11000, 22000, 33000],
+			"default": 50
+
+			},
+			"frequency": {
+				"type": [0, 50, 60],
+				"default": 50,
+				"waveform": ["AC", "DC"]
+				}
+	},
+	"install_method": {
 			"type": ["UNENCLOSED_SPACED", "UNENCLOSED_SURFACE", "UNENCLOSED_TOUCHING", "ENCLOSED_CONDUIT", "ENCLOSED_PARTIAL", "ENCLOSED_COMPLETE", "UNENCLOSED_PARTIAL", "UNENCLOSED_COMPLETE", "UNENCLOSED_BURIED", "ENCLOSED_BURIED", "ENCLOSED_BURIED_SEPARATE"],
 			"default": "UNENCLOSED_TOUCHING"
 		},
-		"cable_arrangement": {
-			"type": ["NIL", "FLAT", "TREFOIL"],
-			"default": "NIL"
-		}
+	"cable_arrangement": {
+		"type": ["NIL", "FLAT", "TREFOIL"],
+		"default": "NIL"
 	},
 	"power_unit": {
 		"WATT": 1,

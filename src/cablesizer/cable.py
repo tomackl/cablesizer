@@ -1,6 +1,7 @@
 import datetime
 import decimal
 import cmath
+from typing import Tuple
 #
 class CableRunDefaultValues:
     """
@@ -140,11 +141,20 @@ class RevisionDetail:
 
 
 class Impedance:
-    def __init__(self, mvam: float = 0.0, r_ohms: float = 0.0, x_ohms: float = 0.0, z_ohms: float = 0.0):
+    def __init__(self, mvam: float = 0.0,
+                 r: float = 0.0, r_unit: str = '',
+                 x: float = 0.0, x_unit: str = '',
+                 z: float = 0.0, z_unit: str = ''):
         self.mvam = mvam
-        self.r = r_ohms
-        self.x = x_ohms
-        self.z = z_ohms
+        self._r = Vector()
+        self._x = Vector()
+        self._z = Vector()
+        self.r = r
+        self.r_unit = r_unit
+        self.x = x
+        self.x_unit = x_unit
+        self.z = z
+        self.z_unit = z_unit
 
     @property
     def mvam(self) -> float:
@@ -156,46 +166,182 @@ class Impedance:
 
     @property
     def r(self) -> float:
-        return self._r
+        return self._r.magnitude
 
     @r.setter
     def r(self, value: float):
-        self._r = value
+        self._r.magnitude = value
+
+    @property
+    def r_unit(self) -> str:
+        return self._r.unit
+
+    @r_unit.setter
+    def r_unit(self, unit: str):
+        self._r.unit = unit.upper()
 
     @property
     def x(self) -> float:
-        return self._x
+        return self._x.magnitude
 
     @x.setter
     def x(self, value: float):
-        self._x = value
+        self._x.magnitude = value
+
+    @property
+    def x_unit(self) -> str:
+        return self._x.unit
+
+    @x_unit.setter
+    def x_unit(self, unit: str):
+        self._x.unit = unit.upper()
 
     @property
     def z(self) -> float:
-        return self._z
+        return self._z.magnitude
 
     @z.setter
     def z(self, value: float):
-        self._z = value
+        self._z.magnitude = value
+
+    @property
+    def z_unit(self) -> str:
+        return self._z.unit.upper()
+
+    @z_unit.setter
+    def z_unit(self, unit: str):
+        self._z.unit = unit
+
+    def resistance(self) -> tuple:
+        return self.r, self.r_unit
+
+    def reactance(self) -> tuple:
+        return self.x, self.x_unit
+
+    def impedance(self) -> tuple:
+        return self.z, self.z_unit
 
 
 class Contracts:
-    def __init__(self):
-        self.supply: str = ''
-        self.install: str = ''
-        self.connect: str = ''
+    def __init__(self, supply: str = '', install: str = '', connect: str = ''):
+        self.supply = supply
+        self.install = install
+        self.connect = connect
+
+    @property
+    def supply(self) -> str:
+        return self._supply
+
+    @supply.setter
+    def supply(self, supplier: str):
+        self._supply = supplier.upper()
+
+    @property
+    def install(self) -> str:
+        return self._install
+
+    @install.setter
+    def install(self, installer: str):
+        self._install = installer.upper()
+
+    @property
+    def connect(self) -> str:
+        return self._connect
+
+    @connect.setter
+    def connect(self, connecter: str):
+        self._connect = connecter.upper()
 
 
 class Circuit:
-    def __init__(self):
-        self.voltage: int = 0
-        self.phases: int = 0
-        self.ccc: int = 0
-        self.load_current: float = 0.0
-        self.derating: float = 0.0
-        self.installation_method: str = ''
-        self.requires_neutral: bool = True
-        self.vd_max: float = 0.0
-        self.vd: float = 0.0
+    def __init__(self, circuit_type: str = '', voltage: int = 0, voltage_unit: str = '', waveform: str = '', phases: int = 0, ccc: int = 0, load_current: float = 0.0, derating: float = 0.0, installation_method: str = '', requires_neutral: bool = True, vd_max: float = 0.0, vd: float = 0.0):
+        self.circuit_type = circuit_type
+        self._voltage = Vector()
+        self.v = voltage
+        self.v_unit = voltage_unit
+        self._waveform: str = waveform
+
+    @property
+    def circuit_type(self) -> str:
+        return self._type
+
+    @circuit_type.setter
+    def circuit_type(self, value: str):
+        self._type = value.upper()
+
+    @property
+    def v(self) -> int:
+        return self._voltage.magnitude
+
+    @v.setter
+    def v(self, value: int):
+        self._voltage.magnitude = value
+
+    @property
+    def v_unit(self) -> str:
+        return self._voltage.unit
+
+    @v_unit.setter
+    def v_unit(self, unit: str):
+        self._voltage.unit = unit.upper()
+
+    @property
+    def waveform(self) -> str:
+        return self._waveform
+
+    @waveform.setter
+    def waveform(self, value: str):
+        self._waveform = value.upper()
 
 
+class Vector:
+    """
+    A simple class to represent a magnitude, unit vector pair.
+    """
+    def __init__(self, magnitude=None, unit: str = ''):
+        self.magnitude = magnitude
+        self.unit = unit
+
+    @property
+    def magnitude(self):
+        return self._scalar
+
+    @magnitude.setter
+    def magnitude(self, magnitude):
+        self._scalar = magnitude
+
+    @property
+    def unit(self) -> str:
+        return self._unit
+
+    @unit.setter
+    def unit(self, unit: str):
+        self._unit = unit
+
+
+class Frequency:
+    """
+    A simple class for frequency details.
+    """
+    def __init__(self, freq: int = None, unit: str = '', waveform: str = ''):
+        self._wf: str = waveform
+        self._scalar: int = freq
+        self._unit: str = unit
+
+    @property
+    def waveform(self) -> str:
+        return self._wf
+
+    @waveform.setter
+    def waveform(self, wf: str):
+        self._wf = wf.upper()
+
+    @property
+    def frequency(self) -> int:
+        return self._scalar
+
+    @frequency.setter
+    def frequency(self, freq: int):
+        self._scalar = freq
+
+    @property

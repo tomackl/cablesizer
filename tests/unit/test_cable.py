@@ -131,16 +131,94 @@ def test_impedance_mvam_getter():
 def test_impedance_ohm_setter():
     test_cls_impedance = cable.Impedance()
     test_cls_impedance.r = 0.1
+    test_cls_impedance.r_unit = "ohms"
     test_cls_impedance.x = 0.2
+    test_cls_impedance.x_unit = "oHms"
     test_cls_impedance.z = 0.3
-    expected = (0.1, 0.2, 0.3)
-    result = (test_cls_impedance.r, test_cls_impedance.x, test_cls_impedance.z)
+    test_cls_impedance.z_unit = "OHMS"
+    expected = (0.1, "OHMS", 0.2, "OHMS", 0.3, "OHMS")
+    result = (test_cls_impedance.r, test_cls_impedance.r_unit,
+              test_cls_impedance.x, test_cls_impedance.x_unit,
+              test_cls_impedance.z, test_cls_impedance.z_unit)
     assert result == expected
 
 
 def test_impedance_ohm_getter():
-    test_cls_impedance = cable.Impedance(r_ohms=0.2, x_ohms=0.4, z_ohms=0.6)
-    expected = (0.2, 0.4, 0.6)
-    result = (test_cls_impedance.r, test_cls_impedance.x, test_cls_impedance.z)
+    test_cls_impedance = cable.Impedance(r=0.2, r_unit='ohms', x=0.4, x_unit='ohms', z=0.6, z_unit='ohms')
+    expected = (0.2, "OHMS", 0.4, "OHMS", 0.6, "OHMS")
+    result = (test_cls_impedance.r, test_cls_impedance.r_unit,
+              test_cls_impedance.x, test_cls_impedance.x_unit,
+              test_cls_impedance.z, test_cls_impedance.z_unit)
     assert result == expected
 
+
+def test_impedance_resistance():
+    test_cls_impedance = cable.Impedance(r=0.8, r_unit='ohms')
+    expected = (0.8, "OHMS")
+    result = test_cls_impedance.resistance()
+    assert result == expected
+
+
+def test_impedance_reactance():
+    test_cls_impedance = cable.Impedance(x=0.08, x_unit='ohms')
+    expected = (0.08, "OHMS")
+    result = test_cls_impedance.reactance()
+    assert result == expected
+
+
+def test_impedance_impedance():
+    test_cls_impedance = cable.Impedance(z=0.2, z_unit='ohms')
+    expected = (0.2, "OHMS")
+    result = test_cls_impedance.impedance()
+    assert result == expected
+
+
+def test_contracts_getter():
+    test_cls_contracts = cable.Contracts('Contract_supply', 'contract_install', 'contract_connect')
+    expected = ('CONTRACT_SUPPLY', 'CONTRACT_INSTALL', 'CONTRACT_CONNECT')
+    result = (test_cls_contracts.supply,
+              test_cls_contracts.install,
+              test_cls_contracts.connect)
+    assert result == expected
+
+
+def test_contracts_setter():
+    test_cls_contracts = cable.Contracts()
+    test_cls_contracts.install = 'contract_install'
+    test_cls_contracts.supply = 'contract_supply'
+    test_cls_contracts.connect = 'contract_connect'
+    expected = ('CONTRACT_SUPPLY', 'CONTRACT_INSTALL', 'CONTRACT_CONNECT')
+    result = (test_cls_contracts.supply,
+              test_cls_contracts.install,
+              test_cls_contracts.connect)
+    assert result == expected
+
+
+def test_vector_cls():
+    test_cls_vector = cable.Vector()
+    test_cls_vector.magnitude = 415
+    test_cls_vector.unit = 'VAC'
+    expected = (415, 'VAC')
+    result = (test_cls_vector.magnitude, test_cls_vector.unit)
+    assert result == expected
+
+
+def test_vector_magnitude_getter():
+    test_cls_vector = cable.Vector(33, 'kV')
+    expected = (33, 'kV')
+    result = (test_cls_vector.magnitude, test_cls_vector.unit)
+    assert result == expected
+
+
+def test_circuit_type():
+    test_cls_circuit = cable.Circuit(circuit_type='power')
+    expected = "POWER"
+    result = test_cls_circuit.circuit_type
+    assert result == expected
+
+
+def test_circuit_voltage():
+    test_cls_circuit = cable.Circuit(voltage=22, voltage_unit='kv')
+    expected = (22, 'KV')
+    result = (test_cls_circuit.v, test_cls_circuit.v_unit)
+    assert result == expected

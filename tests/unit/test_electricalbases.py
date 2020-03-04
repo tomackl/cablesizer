@@ -10,16 +10,16 @@ def test_electricalbase__init__():
 
 def test_electricalbase_scalar():
     test_obj = eb.ElectricalBase()
-    test_obj.scalar = 415
+    test_obj.magnitude = 415
     result = 415
-    assert test_obj.scalar == result
+    assert test_obj.magnitude == result
 
 
 def test_electricalbase_scalar_unit():
     test_obj = eb.ElectricalBase()
-    test_obj.scalar = 'V'
+    test_obj.magnitude = 'V'
     result = 'V'
-    assert test_obj.scalar == result
+    assert test_obj.magnitude == result
 
 
 def test_electricalbase_freq():
@@ -123,10 +123,10 @@ def test_volt_freq_unit():
 
 def test_volt_scalar():
     test_obj = eb.Volt()
-    test_obj.scalar = 275
+    test_obj.magnitude = 275
     test_obj.scalar_unit = 'Turns per inch'
     result = (275, 'Turns per inch')
-    assert tuple([test_obj.scalar,
+    assert tuple([test_obj.magnitude,
                   test_obj.scalar_unit]) == result
 
 
@@ -224,10 +224,10 @@ def test_amp_freq_unit():
 
 def test_amp_scalar():
     test_obj = eb.Amp()
-    test_obj.scalar = 275
+    test_obj.magnitude = 275
     test_obj.scalar_unit = 'Turns per inch'
     result = (275, 'Turns per inch')
-    assert tuple([test_obj.scalar,
+    assert tuple([test_obj.magnitude,
                   test_obj.scalar_unit]) == result
 
 
@@ -341,10 +341,10 @@ def test_ohm_freq_unit():
 
 def test_ohm_scalar():
     test_obj = eb.Ohm()
-    test_obj.scalar = 275
+    test_obj.magnitude = 275
     test_obj.scalar_unit = 'Turns per inch'
     result = (275, 'Turns per inch')
-    assert tuple([test_obj.scalar,
+    assert tuple([test_obj.magnitude,
                   test_obj.scalar_unit]) == result
 
 

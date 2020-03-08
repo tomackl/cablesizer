@@ -254,12 +254,24 @@ class Contracts:
 
 
 class Circuit:
-    def __init__(self, circuit_type: str = '', voltage: int = 0, voltage_unit: str = '', waveform: str = '', phases: int = 0, ccc: int = 0, load_current: float = 0.0, derating: float = 0.0, installation_method: str = '', requires_neutral: bool = True, vd_max: float = 0.0, vd: float = 0.0):
+    def __init__(self, circuit_type: str = '', voltage: int = 0, voltage_unit: str = '', frequency: int = 0,
+                 frequency_unit: str = '', waveform: str = '', phases: int = 0, neutral_required: bool = True,
+                 physical_method: str = '', cable_arrangement: str = '', ccc: int = 0, load_current: float = 0.0,
+                 derating: float = 0.0, vd_max: float = 0.0, vd: float = 0.0):
         self.circuit_type = circuit_type
-        self._voltage = Vector()
+        self._voltage = Voltage()
         self.v = voltage
         self.v_unit = voltage_unit
-        self._waveform: str = waveform
+        self.phases = phases
+        self.neutral_required = neutral_required
+        self._waveform = Frequency()
+        self.frequency = frequency
+        self.frequency_unit = frequency_unit
+        self.waveform = waveform
+        self._installation = Vector()
+        self.physical_installation = physical_method
+        self.cable_arrangement = cable_arrangement
+        self._load_current = load_current
 
     @property
     def circuit_type(self) -> str:
@@ -279,24 +291,80 @@ class Circuit:
 
     @property
     def v_unit(self) -> str:
-        return self._voltage.unit
+        return self._voltage.v_unit
 
     @v_unit.setter
     def v_unit(self, unit: str):
-        self._voltage.unit = unit.upper()
+        self._voltage.v_unit = unit.upper()
+
+    @property
+    def phases(self):
+        return self._voltage.phases
+
+    @phases.setter
+    def phases(self, phases):
+        self._voltage.phases = phases
+
+    @property
+    def neutral_required(self) -> bool:
+        return self._voltage.neutral_required
+
+    @neutral_required.setter
+    def neutral_required(self, neutral_req: bool):
+        self._voltage.neutral_required = neutral_req
+
+    @property
+    def frequency(self) -> int:
+        return self._waveform.freq
+
+    @frequency.setter
+    def frequency(self, value: int):
+        self._waveform.freq = value
+
+    @property
+    def frequency_unit(self) -> str:
+        return self._waveform.unit
+
+    @frequency_unit.setter
+    def frequency_unit(self, unit: str):
+        self._waveform.unit = unit.upper()
 
     @property
     def waveform(self) -> str:
-        return self._waveform
+        return self._waveform.waveform
 
     @waveform.setter
     def waveform(self, value: str):
-        self._waveform = value.upper()
+        self._waveform.waveform = value.upper()
+
+    @property
+    def physical_installation(self) -> str:
+        return self._installation.unit
+
+    @physical_installation.setter
+    def physical_installation(self, value: str):
+        self._installation.unit = value.upper()
+
+    @property
+    def cable_arrangement(self) -> str:
+        return self._installation.magnitude
+
+    @cable_arrangement.setter
+    def cable_arrangement(self, value: str):
+        self._installation.magnitude = value.upper()
+
+    @property
+    def load_current(self) -> float:
+        return self._load_current
+
+    @load_current.setter
+    def load_current(self, amps: float):
+        self._load_current = amps
 
 
 class Vector:
     """
-    A simple class to represent a magnitude, unit vector pair.
+    A simple class to represent a magnitude, v_unit vector pair.
     """
     def __init__(self, magnitude=None, unit: str = ''):
         self.magnitude = magnitude
@@ -321,12 +389,12 @@ class Vector:
 
 class Frequency:
     """
-    A simple class for frequency details.
+    A simple class for freq details.
     """
     def __init__(self, freq: int = None, unit: str = '', waveform: str = ''):
-        self._wf: str = waveform
-        self._scalar: int = freq
-        self._unit: str = unit
+        self.waveform: str = waveform
+        self.freq: int = freq
+        self.unit: str = unit
 
     @property
     def waveform(self) -> str:
@@ -337,11 +405,60 @@ class Frequency:
         self._wf = wf.upper()
 
     @property
-    def frequency(self) -> int:
+    def freq(self) -> int:
         return self._scalar
 
-    @frequency.setter
-    def frequency(self, freq: int):
+    @freq.setter
+    def freq(self, freq: int):
         self._scalar = freq
 
     @property
+    def unit(self) -> str:
+        return self._unit
+
+    @unit.setter
+    def unit(self, unit: str):
+        self._unit = unit.upper()
+
+
+class Voltage:
+    """
+    A simple class for voltage details.
+    """
+    def __init__(self, volts: int = None, unit: str = '', phases: int = 0, neutral_required: bool = True):
+        self.phases: str = phases
+        self.v: int = volts
+        self.v_unit: str = unit
+        self.neutral_required: bool = neutral_required
+
+    @property
+    def phases(self) -> str:
+        return self._phases
+
+    @phases.setter
+    def phases(self, phases: str):
+        self._phases = phases
+
+    @property
+    def v(self) -> int:
+        return self._volts
+
+    @v.setter
+    def v(self, v: int):
+        self._volts = v
+
+    @property
+    def v_unit(self) -> str:
+        return self._unit
+
+    @v_unit.setter
+    def v_unit(self, unit: str):
+        self._unit = unit.upper()
+
+    @property
+    def neutral_required(self) -> bool:
+        return self._neutral_req
+
+    @neutral_required.setter
+    def neutral_required(self, neutral: bool):
+        self._neutral_req = neutral

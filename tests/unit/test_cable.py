@@ -218,7 +218,29 @@ def test_circuit_type():
 
 
 def test_circuit_voltage():
-    test_cls_circuit = cable.Circuit(voltage=22, voltage_unit='kv')
-    expected = (22, 'KV')
-    result = (test_cls_circuit.v, test_cls_circuit.v_unit)
+    test_cls_circuit = cable.Circuit(voltage=22, voltage_unit='kv', phases=4, neutral_required=True)
+    expected = (22, 'KV', 4, True)
+    result = (test_cls_circuit.v, test_cls_circuit.v_unit, test_cls_circuit.phases, test_cls_circuit.neutral_required)
+    assert result == expected
+
+
+def test_frequency_cls():
+    test_cls_frequency = cable.Frequency(50, 'hz', 'dc')
+    expected = (50, "HZ", "DC")
+    result = (test_cls_frequency.freq, test_cls_frequency.unit, test_cls_frequency.waveform)
+    assert result == expected
+
+
+def test_installation_method():
+    test_cls_circuit = cable.Circuit(physical_method="touching", cable_arrangement='trefoil')
+    expected = ("TOUCHING", "TREFOIL")
+    result = (test_cls_circuit.physical_installation, test_cls_circuit.cable_arrangement)
+    assert result == expected
+
+
+def test_load_current():
+    test_cls_circuit = cable.Circuit(load_current=5.5)
+    expected = 6.0
+    test_cls_circuit.load_current = 6.0
+    result = test_cls_circuit.load_current
     assert result == expected

@@ -9,7 +9,7 @@ setup(
     author='Tom Ackland',
     author_email='ackland.thomas@gmail.com',
     url='https://github.com/tomackl/cablesizer',
-    description='Auto-unit electrical cables.',
+    description='Auto-v_unit electrical cables.',
     long_description=long_description,
     long_description_content_type="text/markdown",
     python_requires=">=3.8",

@@ -672,9 +672,9 @@ class Power(ElectricalBase):
 class ElectricalCalc:
     """
     A factory class that will calculate the power based on the objects that have been passed to the function.
-    :param obj1: Amps(), Volts() and Ohms() objects passed to the function. The number and type of objects passed will
+    :param obj1: Amps(), Volts() and Ohms() objects passed to the function. The number and run_type of objects passed will
     determine the calculation.
-    :param obj2: Amps(), Volts() and Ohms() objects passed to the function. The number and type of objects passed will
+    :param obj2: Amps(), Volts() and Ohms() objects passed to the function. The number and run_type of objects passed will
     determine the calculation.
     """
     def __init__(self, obj1, obj2):
@@ -691,7 +691,7 @@ class ElectricalCalc:
 
     def determine_obj(self, obj):
         """
-        Determine the objects type and set the flag that it has been passed. If two objects of the same type are passed
+        Determine the objects run_type and set the flag that it has been passed. If two objects of the same run_type are passed
         then the second object will reset the flag to false.
         :param obj:
         :return:

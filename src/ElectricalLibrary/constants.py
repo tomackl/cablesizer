@@ -6,7 +6,7 @@ A library of electrical scalar_unit conversions.
 from math import sqrt
 from typing import TypeVar
 
-"""NumType is a generic type that allow int or float values to be passed/returned to a function."""
+"""NumType is a generic run_type that allow int or float values to be passed/returned to a function."""
 NumType = TypeVar('NumType', int, float)
 """ComType is a generic types that allows for in, float or complex values to passed/returned to a function."""
 ComType = TypeVar('ComType', complex, int, float)

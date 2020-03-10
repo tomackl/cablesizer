@@ -3,15 +3,17 @@ import CableSizer.cable as cable
 import datetime as dt
 
 test_cls_cable_run = cable.CableRun
-test_cls_revision_detail = cable.RevisionDetail
 
-test_cls_impedance = cable.Impedance
-test_cls_contracts = cable.Contracts
-test_cls_circuit = cable.Circuit
+
+def test_cable_run_cls():
+    test_cls_cable_run = cable.CableRun(required_ccc=10, derating_run=0.8)
+    expected = (10.0, 0.8)
+    result = (test_cls_cable_run.required_ccc, test_cls_cable_run.derate_run)
+    assert result == expected
 
 
 def test_conductor_detail_size_setter():
-    test_cls_conductor_detail = cable.ConductorDetail()
+    test_cls_conductor_detail = cable.ConductorDetail
     test_cls_conductor_detail.size = 1.5
     expected = 1.5
     result = test_cls_conductor_detail.size
@@ -243,4 +245,21 @@ def test_load_current():
     expected = 6.0
     test_cls_circuit.load_current = 6.0
     result = test_cls_circuit.load_current
+    assert result == expected
+
+
+def test_cls_cablespec():
+    test_cls_cable_run = cable.CableSpec(run_type='multi', max_parallel=2, allow_parallel_multicore=True,
+                                         shape="circular", conductor_material="CU", min_size=4.0,
+                                         core_arrangement='multi', sheath='none', insulation_material='xlpe',
+                                         insulation_code='x-90', maximum_operating_temp=90, armour='dwa',
+                                         screen_cable='nil', screen_core='is', volt_rating='0.6/1kv', flexible=False)
+    expected = ("MULTI", 2, True, "CIRCULAR", "CU", 4.0, "MULTI", "NONE", "XLPE", "X-90", 90, "DWA", "NIL", "IS",
+                "0.6/1KV", False)
+    result = (test_cls_cable_run.type, test_cls_cable_run.max_parallel, test_cls_cable_run.allow_parallel_multicore,
+              test_cls_cable_run.shape, test_cls_cable_run.conductor_material, test_cls_cable_run.min_size,
+              test_cls_cable_run.core_arrangement, test_cls_cable_run.sheath, test_cls_cable_run.insulation_material,
+              test_cls_cable_run.insulation_code, test_cls_cable_run.maximum_operating_temp, test_cls_cable_run.armour,
+              test_cls_cable_run.screen_cable, test_cls_cable_run.screen_core, test_cls_cable_run.volt_rating,
+              test_cls_cable_run.flexible)
     assert result == expected

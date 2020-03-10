@@ -1,6 +1,6 @@
 {
 	"cable": {
-		"type": ["POWER", "EARTH", "CONTROL", "INSTRUMENT", "DATA", "COMMS", "-"],
+		"type": ["POWER", "EARTH", "CONTROL", "INSTRUMENT", "DATA", "COMMUNICATION", "-"],
 		"default": "POWER",
 		"max_parallel": 4,
 		"allow_parallel_multicore": true,
@@ -10,29 +10,34 @@
 		},
 		"core_arrangement": {
 			"single": {
-				"type": ["-", "1C", "2C+E"],
+				"type": ["-", "1C", "2C", "2C+E"],
 				"name": "CORE",
+				"core_abbreviation": "C",
 				"default": ["2C+E"]
 			},
 			"multi": {
-				"type": ["-", "1C", "2C", "3C", "2C+E", "3C+E", "3C+3E", "4C+E"],
+				"type": ["-", "1C", "3C", "2C+E", "3C+E", "3C+3E", "4C+E"],
 				"name": "CORE",
+				"core_abbreviation": "C",
 				"default": "3C+E"
 			},
 			"control": {
 				"type": ["-", "1C", "2C", "3C", "2C+E", "3C+E", "3C+3E", "4C+E", "5C+E", "10C+E", "20C+E", "50C+E"],
 				"name": "CORE",
+				"core_abbreviation": "C",
 				"default": "2C"
 			},
 			"instrument": {
 				"pair": {
 					"type": ["-", "1PR", "2PR", "4PR", "5PR", "6PR", "10PR", "12PR", "20PR"],
 					"name": "PAIR",
+					"core_abbreviation": "PR",
 					"default": "1PR"
 				},
 				"triple": {
 					"type": ["-", "1TRI", "2TRI", "4TRI", "5TRI", "6TRI", "10TRI", "12TRI", "20TRI"],
 					"name": "TRIPLE",
+					"core_abbreviation": "TRI",
 					"default": "1TRI"
 				}
 			}
@@ -41,99 +46,139 @@
 			"type": ["CIRCULAR", "FLAT"],
 			"default": "CIRCULAR"
 		},
-		"conductor": {
-			"material": ["CU", "AL"],
+		"conductor_material": {
+			"type": ["CU", "AL"],
 			"default": "CU"
 		},
-		"size": {
-			"type": [0, 1, 1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120, 150, 185, 240, 300, 400, 500, 630],
-			"min_size": 4,
-			"min_single_core_size": 120,
-			"unit": {
-				"type": ["MM2", null],
-				"default": "MM2"
+		"size_list": {
+			"0": {"unit":  "MM2"},
+			"1": {"unit":  "MM2"},
+			"1.5": {"unit":  "MM2"},
+			"2.5": {"unit":  "MM2"},
+			"4": {"unit":  "MM2"},
+			"6": {"unit":  "MM2"},
+			"10": {"unit":  "MM2"},
+			"16": {"unit":  "MM2"},
+			"25": {"unit":  "MM2"},
+			"35": {"unit":  "MM2"},
+			"50": {"unit":  "MM2"},
+			"70": {"unit":  "MM2"},
+			"95": {"unit":  "MM2"},
+			"120": {"unit":  "MM2"},
+			"150": {"unit":  "MM2"},
+			"185": {"unit":  "MM2"},
+			"240": {"unit":  "MM2"},
+			"300": {"unit":  "MM2"},
+			"400": {"unit":  "MM2"},
+			"500": {"unit":  "MM2"},
+			"630": {"unit":  "MM2"}
+		},
+		"min_size": 4,
+		"min_single_core_size": 120,
+		"unit": {
+			"type": ["MM2"],
+			"default": "MM2"
+		},
+		"earth_conductor_size_min": {
+			"1": {
+				"CU": 1.0,
+				"AL": 0,
+				"unit": "MM2"
 			},
-			"earth_conductor_size_min": {
-				"1": {
-					"CU": 1.0,
-					"AL": 0
-				},
-				"1.5": {
-					"CU": 1.5,
-					"AL": 0
-				},
-				"2.5": {
-					"CU": 2.5,
-					"AL": 0
-				},
-				"4": {
-					"CU": 2.5,
-					"AL": 0
-				},
-				"6": {
-					"CU": 2.5,
-					"AL": 2.5
-				},
-				"10": {
-					"CU": 4,
-					"AL": 2.5
-				},
-				"16": {
-					"CU": 6,
-					"AL": 4
-				},
-				"25": {
-					"CU": 6,
-					"AL": 6
-				},
-				"35": {
-					"CU": 10,
-					"AL": 6
-				},
-				"50": {
-					"CU": 16,
-					"AL": 10
-				},
-				"70": {
-					"CU": 25,
-					"AL": 10
-				},
-				"95": {
-					"CU": 25,
-					"AL": 16
-				},
-				"120": {
-					"CU": 35,
-					"AL": 25
-				},
-				"150": {
-					"CU": 50,
-					"AL": 25
-				},
-				"185": {
-					"CU": 70,
-					"AL": 35
-				},
-				"240": {
-					"CU": 95,
-					"AL": 50
-				},
-				"300": {
-					"CU": 120,
-					"AL": 70
-				},
-				"400": {
-					"CU": 120,
-					"AL": 95
-				},
-				"500": {
-					"CU": 120,
-					"AL": 95
-				},
-				"630": {
-					"CU": 120,
-					"AL": 120
-				}
+			"1.5": {
+				"CU": 1.5,
+				"AL": 0,
+				"unit": "MM2"
+			},
+			"2.5": {
+				"CU": 2.5,
+				"AL": 0,
+				"unit": "MM2"
+			},
+			"4": {
+				"CU": 2.5,
+				"AL": 0,
+				"unit": "MM2"
+			},
+			"6": {
+				"CU": 2.5,
+				"AL": 2.5,
+				"unit": "MM2"
+			},
+			"10": {
+				"CU": 4,
+				"AL": 2.5,
+				"unit": "MM2"
+			},
+			"16": {
+				"CU": 6,
+				"AL": 4,
+				"unit": "MM2"
+			},
+			"25": {
+				"CU": 6,
+				"AL": 6,
+				"unit": "MM2"
+			},
+			"35": {
+				"CU": 10,
+				"AL": 6,
+				"unit": "MM2"
+			},
+			"50": {
+				"CU": 16,
+				"AL": 10,
+				"unit": "MM2"
+			},
+			"70": {
+				"CU": 25,
+				"AL": 10,
+				"unit": "MM2"
+			},
+			"95": {
+				"CU": 25,
+				"AL": 16,
+				"unit": "MM2"
+			},
+			"120": {
+				"CU": 35,
+				"AL": 25,
+				"unit": "MM2"
+			},
+			"150": {
+				"CU": 50,
+				"AL": 25,
+				"unit": "MM2"
+			},
+			"185": {
+				"CU": 70,
+				"AL": 35,
+				"unit": "MM2"
+			},
+			"240": {
+				"CU": 95,
+				"AL": 50,
+				"unit": "MM2"
+			},
+			"300": {
+				"CU": 120,
+				"AL": 70,
+				"unit": "MM2"
+			},
+			"400": {
+				"CU": 120,
+				"AL": 95,
+				"unit": "MM2"
+			},
+			"500": {
+				"CU": 120,
+				"AL": 95,
+				"unit": "MM2"
+			},
+			"630": {
+				"CU": 120,
+				"AL": 120,
+				"unit": "MM2"
 			}
 		},
 		"sheath": {
@@ -146,9 +191,10 @@
 				"default": "PVC"
 			},
 			"code": {
-				"type": ["X-90", "V-90", "V-90RP", "V-75", "V-90HT", "R-EP-90", "R-CPE-90", "R-S-150", "HF-I-90", "R-E-110"],
+				"type": ["PILS", "X-90", "V-90", "V-90RP", "V-75", "V-90HT", "R-EP-90", "R-CPE-90", "R-S-150", "HF-I-90", "R-E-110"],
 				"default": "V-90"
-			}
+			},
+			"max_operating_temperature": [65, 75, 90, 110]
 		},
 		"armour": {
 			"type": ["NIL", "SWA", "DWA"],

@@ -252,7 +252,7 @@ def test_cls_cablespec():
     test_cls_cable_run = cable.CableSpec(run_type='multi', max_parallel=2, allow_parallel_multicore=True,
                                          shape="circular", conductor_material="CU", min_size=4.0,
                                          core_arrangement='multi', sheath='none', insulation_material='xlpe',
-                                         insulation_code='x-90', maximum_operating_temp=90, armour='dwa',
+                                         insulation_code='x-90', max_operating_temp=90, armour='dwa',
                                          screen_cable='nil', screen_core='is', volt_rating='0.6/1kv', flexible=False)
     expected = ("MULTI", 2, True, "CIRCULAR", "CU", 4.0, "MULTI", "NONE", "XLPE", "X-90", 90, "DWA", "NIL", "IS",
                 "0.6/1KV", False)
@@ -262,4 +262,14 @@ def test_cls_cablespec():
               test_cls_cable_run.insulation_code, test_cls_cable_run.maximum_operating_temp, test_cls_cable_run.armour,
               test_cls_cable_run.screen_cable, test_cls_cable_run.screen_core, test_cls_cable_run.volt_rating,
               test_cls_cable_run.flexible)
+    assert result == expected
+
+
+def test_cls_insulation():
+    test_cls_insulation_detail = cable.Insulation()
+    test_cls_insulation_detail.material = "xlpe"
+    test_cls_insulation_detail.code = "x-90"
+    test_cls_insulation_detail.max_temp = 90
+    expected = ("XLPE", "X-90", 90)
+    result = (test_cls_insulation_detail.material, test_cls_insulation_detail.code, test_cls_insulation_detail.max_temp)
     assert result == expected

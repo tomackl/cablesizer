@@ -21,7 +21,7 @@ _hp_to_kw = 0.74569987
 def convert_kw_to_hp(kw: NumType) -> NumType:
     """
     Convert kw to horse-power.
-    :param kw: The value of kilo-watts to be converted to hp.
+    :param kw: The insulation_code of kilo-watts to be converted to hp.
     :return Horsepower :
     """
     return kw * _kw_to_hp
@@ -30,7 +30,7 @@ def convert_kw_to_hp(kw: NumType) -> NumType:
 def convert_hp_to_kw(hp: NumType) -> NumType:
     """
     Convert horse-power to kW.
-    :param hp: The value of horse power to be converted to kilo-watts.
+    :param hp: The insulation_code of horse power to be converted to kilo-watts.
     :return kilo-watts:
     """
     return hp * _hp_to_kw

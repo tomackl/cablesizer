@@ -84,7 +84,7 @@ class Volt(ElectricalBase):
 
     def __sub__(self, other):
         """
-        1. Subtract a value from an Volt() object. Return a new Volt() object with '.volts' that is the difference of
+        1. Subtract a insulation_code from an Volt() object. Return a new Volt() object with '.volts' that is the difference of
         the 'self.volts'and the passed int/float.
         2. Subtract two Volt() objects, returning a new Volt() object with '.volts' that is the difference of
         'self.volts' and 'other.volts'.
@@ -440,16 +440,16 @@ class Ohm(ElectricalBase):
     @property
     def r(self) -> float:
         """
-        Return ohm as a resistance. This will not change the value of self._ohms.
+        Return ohm as a resistance. This will not change the insulation_code of self._ohms.
         """
         return self._ohms.real
 
     @r.setter
     def r(self, r: ComType):
         """
-        Set ohm as a resistance. If passed as a complex value no checking or manipulation of the value is completed.
+        Set ohm as a resistance. If passed as a complex insulation_code no checking or manipulation of the insulation_code is completed.
         It is up to the user to ensure that it is the correct form.
-        The existing value of self._ohms is overwritten.
+        The existing insulation_code of self._ohms is overwritten.
         """
         if isinstance(r, complex):
             self._ohms = r
@@ -459,15 +459,15 @@ class Ohm(ElectricalBase):
     @property
     def x(self) -> float:
         """
-        Return ohm as a reactance. This will not change the value of self._ohms.
+        Return ohm as a reactance. This will not change the insulation_code of self._ohms.
         """
         return self._ohms.imag
 
     @x.setter
     def x(self, x: ComType):
         """
-        Set ohm as a reactance. If passed as a complex value no checking or manipulation of the value is completed.
-        The existing value of self._ohms is overwritten.
+        Set ohm as a reactance. If passed as a complex insulation_code no checking or manipulation of the insulation_code is completed.
+        The existing insulation_code of self._ohms is overwritten.
         """
         if isinstance(x, complex):
             self._ohms = x
@@ -477,16 +477,16 @@ class Ohm(ElectricalBase):
     @property
     def z(self) -> NumType:
         """
-        Return ohm as an impedance. This is returned as the absolute value for the
-        This will not change the value of self._ohms
+        Return ohm as an impedance. This is returned as the absolute insulation_code for the
+        This will not change the insulation_code of self._ohms
         """
         return abs(self._ohms)
 
     @z.setter
     def z(self, z: ComType):
         """
-        Set ohm as an impedance. If passed as a complex value no checking or manipulation of the value is completed.
-        The existing value of self._ohms is overwritten.
+        Set ohm as an impedance. If passed as a complex insulation_code no checking or manipulation of the insulation_code is completed.
+        The existing insulation_code of self._ohms is overwritten.
         """
         self._ohms = z
 
@@ -618,16 +618,16 @@ class Power(ElectricalBase):
     @property
     def p(self) -> float:
         """
-        Return ohm as a resistance. This will not change the value of self._ohms.
+        Return ohm as a resistance. This will not change the insulation_code of self._ohms.
         """
         return self._pwr.real
 
     @p.setter
     def p(self, p: ComType):
         """
-        Set power as watts. If passed as a complex value no checking or manipulation of the value is completed.
+        Set power as watts. If passed as a complex insulation_code no checking or manipulation of the insulation_code is completed.
         It is up to the user to ensure that it is the correct form.
-        The existing value of self._pwr is overwritten.
+        The existing insulation_code of self._pwr is overwritten.
         """
         if isinstance(p, complex):
             self._pwr = p
@@ -637,15 +637,15 @@ class Power(ElectricalBase):
     @property
     def q(self) -> float:
         """
-        Return power as volt-amp reactive. This will not change the value of self._pwr.
+        Return power as volt-amp reactive. This will not change the insulation_code of self._pwr.
         """
         return self._pwr.imag
 
     @q.setter
     def q(self, q: ComType):
         """
-        Set ohm as volt-amp reactive. If passed as a complex value no checking or manipulation of the value is
-        completed. The existing value of self._pwr is overwritten.
+        Set ohm as volt-amp reactive. If passed as a complex insulation_code no checking or manipulation of the insulation_code is
+        completed. The existing insulation_code of self._pwr is overwritten.
         """
         if isinstance(q, complex):
             self._pwr = q
@@ -655,16 +655,16 @@ class Power(ElectricalBase):
     @property
     def s(self) -> NumType:
         """
-        Return ohm as an impedance. This is returned as the absolute value for the
-        This will not change the value of self._ohms
+        Return ohm as an impedance. This is returned as the absolute insulation_code for the
+        This will not change the insulation_code of self._ohms
         """
         return abs(self._pwr)
 
     @s.setter
     def s(self, s: ComType):
         """
-        Set power as volt-amps. If passed as a complex value no checking or manipulation of the value is completed.
-        The existing value of self._pwr is overwritten.
+        Set power as volt-amps. If passed as a complex insulation_code no checking or manipulation of the insulation_code is completed.
+        The existing insulation_code of self._pwr is overwritten.
         """
         self._pwr = s
 

@@ -1,7 +1,7 @@
 import datetime
 import decimal
 import cmath
-from typing import Tuple
+from typing import Tuple, List
 #
 class CableRunDefaultValues:
     """
@@ -285,15 +285,35 @@ class Cable:
                  conductor_material: str = "", cross_sectional_area: int = 0, cable_sheath: str = "",
                  insulation_material: str = "", insulation_code: str = "", max_conductor_temp: int = 0):
         self.type = cable_type
-        self.core_arrangement = core_arrangement
-        self.shape = cable_shape
-        self.conductor_material = conductor_material
-        self.cross_sectional_area = cross_sectional_area
-        self.sheath = cable_sheath
+        self.active_cores = CoreDetails()
+        self.neutral_cores = CoreDetails()
+        self.earth_cores = CoreDetails()
+        self.control_cores = CoreDetails()
+        self.instrument_cores = CoreDetails()
+        self.communication_cores = CoreDetails()
+        self.data_cores = CoreDetails()
+        self.install_method = CableInstallationMethod()
+        self.impedance = Impedance()
+        self.cable_screen = Screen()
+        self.core_screen = Screen()
         self.insulation = Insulation()
         self.insulation.material = insulation_material
         self.insulation.code = insulation_code
+        self.sheath = cable_sheath
+        # self.voltage_rating # todo: complete parameter
+        self.flexible         # todo: complete parameter
+        self.armour         # todo: complete parameter
+        self.rev              # todo: complete parameter
+        self.description              # todo: complete parameter
+        self.circuit_type              # todo: complete parameter
+        self.conductor_material = conductor_material
+        self.core_arrangement = core_arrangement
+        self.shape = cable_shape
+        self.cross_sectional_area = cross_sectional_area
         self.insulation.max_temp = max_conductor_temp
+        # todo: add properties for the below
+        self.ccc = ""
+
 
     @property
     def type(self) -> str:
@@ -545,7 +565,7 @@ class Impedance:
 
 
 class Insulation:
-    def __init__(self, insulation_material: str = "", insulation_code: str = '', max_temp: int = 0):
+    def __init__(self, insulation_material: str = "", insulation_code: str = '', op_temp: int = 0, max_temp: int = 0):
         """
         :param insulation_material: The cable's insulation material.
         :param insulation_code: The insulation code.
@@ -553,6 +573,7 @@ class Insulation:
         """
         self.material = insulation_material
         self.code: str = insulation_code
+        self.op_temp: int = op_temp
         self.max_temp: int = max_temp
 
     @property
@@ -570,6 +591,17 @@ class Insulation:
     @code.setter
     def code(self, code: str):
         self._code = code.upper()
+
+
+    @property
+    def op_temp(self) -> int:
+        return self._op_temp
+
+    @op_temp.setter
+    def op_temp(self, temp: int):
+        if temp < 0:
+            raise ValueError(f"Value must be a value greater than 0.")
+        self._op_temp = temp
 
     @property
     def max_temp(self) -> int:
@@ -840,3 +872,167 @@ class Voltage:
     def neutral_required(self, neutral: bool):
         self._neutral_req = neutral
 
+
+class CoreDetails:
+    def __init__(self, csa: float = 0, csa_unit: str = "", number: int = 0, name: str = ""):
+        """
+        This class defines and checks the details of a cable core.
+        :param csa: Cross sectional area of the main conductors
+        :param csa_unit: The cross-sectional area unit of measurement.
+        :param number: The number of cable cores including earth and neutrals.
+        :param name: Description of the cable cores.
+        """
+        self.csa: float = csa
+        self.csa_unit: str = csa_unit
+        self.number: int = number
+        self.name: str = name
+
+    @property
+    def csa(self) -> float:
+        return self._csa
+
+    @csa.setter
+    def csa(self, value: float):
+        self._csa = value
+
+    @property
+    def csa_unit(self) -> str:
+        return self._csa_unit
+
+    @csa_unit.setter
+    def csa_unit(self, value: str):
+        self._csa_unit = value.upper()
+
+    @property
+    def number(self) -> int:
+        return self._number
+
+    @number.setter
+    def number(self, value: int):
+        self._number = value
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, value: str):
+        self._name = value.upper()
+
+
+class CableInstallationMethod:
+    def __init__(self, name: str = "", ccc: int = 0, install_temp: int = 0, cable_arrangement: str = ""):
+        """
+        This class defines and checks the details of the cable installation details.
+        :param name: The installation method.
+        :param ccc: Current carrying capacity  of the cable cable.
+        :param install_temp: The ambient temperature for the operational environment.
+        :param cable_arrangement: The arrangement of the cable cores. Single core cables only.
+        """
+        self.name: str = name
+        self.ccc: int = ccc
+        self.install_temp: int = install_temp
+        self.cable_arrangement: str = cable_arrangement
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, value: str):
+        self._name = value.upper()
+
+    @property
+    def ccc(self) -> int:
+        return self._ccc
+
+    @ccc.setter
+    def ccc(self, value: int):
+        self._ccc = value
+
+    @property
+    def install_temp(self) -> int:
+        return self._install_temp
+
+    @install_temp.setter
+    def install_temp(self, value: int):
+        self._install_temp = value
+
+    @property
+    def cable_arrangement(self) -> str:
+        return self._cable_arrangement
+
+    @cable_arrangement.setter
+    def cable_arrangement(self, value: str):
+        self._cable_arrangement = value.upper()
+
+
+class Screen:
+    def __init__(self, name: str = "", fault_withstand: int = 0):
+        self.name: str = name
+        self.fault_withstand: int = fault_withstand
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, value: str):
+        self._name = value.upper()
+
+    @property
+    def fault_withstand(self):
+        return self._fault_withstand
+
+    @fault_withstand.setter
+    def fault_withstand(self, value: int):
+        self._fault_withstand = value
+
+
+class Manufacturer:
+    def __init__(self, name: str = "", part_number: str = ""):
+        self.name: str = name
+        self.part_number: str = part_number
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, value: str):
+        self._name = value.upper()
+
+    @property
+    def part_number(self) -> str:
+        return self._number
+
+    @part_number.setter
+    def part_number(self, value: str):
+        self._number = value.upper()
+
+
+class I2T:
+    def __init__(self, k_factor: int = 0, amp_time: List[Tuple[int]] = None):
+        self.k_factor: int = k_factor
+        self._amp_time = []
+        self.amp_time: list = amp_time
+        # self.current: list = current
+
+    @property
+    def k_factor(self) -> int:
+        return self._kfactor
+
+    @k_factor.setter
+    def k_factor(self, value: int):
+        self._kfactor = value
+
+    @property
+    def amp_time(self) -> List[Tuple[int]]:
+        return self._amp_time
+
+    @amp_time.setter
+    def amp_time(self, value: (Tuple[int])):
+        if value is None:
+            pass
+        else:
+            self._amp_time.append(value)

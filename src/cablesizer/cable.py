@@ -281,39 +281,75 @@ class CableSpec:
 
 
 class Cable:
-    def __init__(self, cable_type: str = "", core_arrangement: str = "", cable_shape: str = "",
+    def __init__(self, cable_type: str = "", active_size: float = 0.0, active_number: int = 0,
+                 active_unit: str = "", active_name: str = "", neutral_size: float = 0.0, neutral_number: int = 0,
+                 neutral_unit: str = "", neutral_name: str = "", earth_size: float = 0.0, earth_number: int = 0,
+                 earth_unit: str = "", earth_name: str = "", instrument_size: float = 0.0,
+                 instrument_number: int = 0, instrument_unit: str = "", instrument_name: str = "",
+                 control_size: float = 0.0, control_number: int = 0, control_unit: str = "", control_name: str = "",
+                 communication_size: float = 0.0, communication_number: int = 0, communication_unit: str = "",
+                 communication_name: str = "", data_size: float = 0.0, data_number: int = 0, data_unit: str = "",
+                 data_name: str = "", core_arrangement: str = "", cable_shape: str = "",
                  conductor_material: str = "", cross_sectional_area: int = 0, cable_sheath: str = "",
-                 insulation_material: str = "", insulation_code: str = "", max_conductor_temp: int = 0):
-        self.type = cable_type
-        self.active_cores = CoreDetails()
-        self.neutral_cores = CoreDetails()
-        self.earth_cores = CoreDetails()
-        self.control_cores = CoreDetails()
-        self.instrument_cores = CoreDetails()
-        self.communication_cores = CoreDetails()
-        self.data_cores = CoreDetails()
-        self.install_method = CableInstallationMethod()
+                 insulation_material: str = "", insulation_code: str = "", max_conductor_temp: int = 0,
+                 ccc: float = 0.0, circuit_type: str = "", volt_rating: str = "", armour: [None, str] = None,
+                 description: str = "", flexible: bool = False):
+        self.type: str = cable_type
+        self.activeCores = CoreDetails()
+        self.activeCores.size = active_size
+        self.activeCores.unit = active_unit
+        self.activeCores.number = active_number
+        self.activeCores.name = active_name
+        self.neutralCores = CoreDetails()
+        self.neutralCores.size = neutral_size
+        self.neutralCores.unit = neutral_unit
+        self.neutralCores.number = neutral_number
+        self.neutralCores.name = neutral_name
+        self.earthCores = CoreDetails()
+        self.earthCores.size = earth_size
+        self.earthCores.unit = earth_unit
+        self.earthCores.number = earth_number
+        self.earthCores.name = earth_name
+        self.controlCores = CoreDetails()
+        self.controlCores.size = control_size
+        self.controlCores.unit = control_unit
+        self.controlCores.number = control_number
+        self.controlCores.name = control_name
+        self.instrumentCores = CoreDetails()
+        self.instrumentCores.size = instrument_size
+        self.instrumentCores.unit = instrument_unit
+        self.instrumentCores.number = instrument_number
+        self.instrumentCores.name = instrument_name
+        self.communicationCores = CoreDetails()
+        self.communicationCores.size = communication_size
+        self.communicationCores.unit = communication_unit
+        self.communicationCores.number = communication_number
+        self.communicationCores.name = communication_name
+        self.dataCores = CoreDetails()
+        self.dataCores.size = data_size
+        self.dataCores.unit = data_unit
+        self.dataCores.number = data_number
+        self.dataCores.name = data_name
+        self.installMethod = CableInstallationMethod()
         self.impedance = Impedance()
-        self.cable_screen = Screen()
-        self.core_screen = Screen()
+        self.cableScreen = Screen()
+        self.coreScreen = Screen()
         self.insulation = Insulation()
         self.insulation.material = insulation_material
         self.insulation.code = insulation_code
         self.sheath = cable_sheath
-        # self.voltage_rating # todo: complete parameter
-        self.flexible         # todo: complete parameter
-        self.armour         # todo: complete parameter
-        self.rev              # todo: complete parameter
-        self.description              # todo: complete parameter
-        self.circuit_type              # todo: complete parameter
+        self.voltage_rating: str = volt_rating
+        self.flexible: bool = flexible
+        self.armour: [None, bool] = armour
+        self.rev = RevisionDetail()
+        self.description = description
+        self.circuit_type = circuit_type
         self.conductor_material = conductor_material
         self.core_arrangement = core_arrangement
         self.shape = cable_shape
         self.cross_sectional_area = cross_sectional_area
         self.insulation.max_temp = max_conductor_temp
-        # todo: add properties for the below
-        self.ccc = ""
-
+        self.ccc: float = ccc
 
     @property
     def type(self) -> str:
@@ -364,6 +400,41 @@ class Cable:
     @sheath.setter
     def sheath(self, value: str):
         self._sheath = value.upper()
+
+    def find_ccc(self):
+        pass
+
+    def find_mvam(self):
+        pass
+
+    def has_active(self):
+        if self.active_cores.number > 0:
+            return True
+        else:
+            False
+
+    def has_neutral(self):
+        if self.neutral_cores.number > 0:
+            return True
+        else:
+            False
+
+    def has_earth(self):
+        if self.earth_cores.number > 0:
+            return True
+        else:
+            False
+
+    @property
+    def ccc(self) -> float:
+        return self._ccc
+
+    @ccc.setter
+    def ccc(self, value: float):
+        if value < 0:
+            raise ValueError(f"value must be greater than 0.")
+        else:
+            self._ccc = value
 
 
 class ConductorDetail:
@@ -700,11 +771,11 @@ class Circuit:
 
     @property
     def v_unit(self) -> str:
-        return self._voltage.v_unit
+        return self._voltage.unit
 
     @v_unit.setter
     def v_unit(self, unit: str):
-        self._voltage.v_unit = unit.upper()
+        self._voltage.unit = unit.upper()
 
     @property
     def phases(self):
@@ -724,11 +795,11 @@ class Circuit:
 
     @property
     def frequency(self) -> int:
-        return self._waveform.freq
+        return self._waveform.frequency
 
     @frequency.setter
     def frequency(self, value: int):
-        self._waveform.freq = value
+        self._waveform.frequency = value
 
     @property
     def frequency_unit(self) -> str:
@@ -773,7 +844,7 @@ class Circuit:
 
 class Vector:
     """
-    A simple class to represent a magnitude, v_unit vector pair.
+    A simple class to represent a magnitude, unit vector pair.
     """
     def __init__(self, magnitude=None, unit: str = ''):
         self.magnitude = magnitude
@@ -793,16 +864,22 @@ class Vector:
 
     @unit.setter
     def unit(self, unit: str):
-        self._unit = unit
+        self._unit = unit.upper()
+
+    def to_dict(self):
+        x = dict()
+        x["magnitude"] = self.magnitude
+        x["unit"] = self.unit
+        return x
 
 
 class Frequency:
     """
-    A simple class for freq details.
+    A simple class for frequency details.
     """
     def __init__(self, freq: int = None, unit: str = '', waveform: str = ''):
         self.waveform: str = waveform
-        self.freq: int = freq
+        self.frequency: int = freq
         self.unit: str = unit
 
     @property
@@ -814,11 +891,11 @@ class Frequency:
         self._wf = wf.upper()
 
     @property
-    def freq(self) -> int:
+    def frequency(self) -> int:
         return self._scalar
 
-    @freq.setter
-    def freq(self, freq: int):
+    @frequency.setter
+    def frequency(self, freq: int):
         self._scalar = freq
 
     @property
@@ -829,6 +906,13 @@ class Frequency:
     def unit(self, unit: str):
         self._unit = unit.upper()
 
+    def to_dict(self) -> dict:
+        x = dict()
+        x["waveform"] = self.waveform
+        x["frequency"] = self.frequency
+        x["unit"] = self.unit
+        return x
+
 
 class Voltage:
     """
@@ -837,7 +921,7 @@ class Voltage:
     def __init__(self, volts: int = None, unit: str = '', phases: int = 0, neutral_required: bool = True):
         self.phases: str = phases
         self.v: int = volts
-        self.v_unit: str = unit
+        self.unit: str = unit
         self.neutral_required: bool = neutral_required
 
     @property
@@ -857,11 +941,11 @@ class Voltage:
         self._volts = v
 
     @property
-    def v_unit(self) -> str:
+    def unit(self) -> str:
         return self._unit
 
-    @v_unit.setter
-    def v_unit(self, unit: str):
+    @unit.setter
+    def unit(self, unit: str):
         self._unit = unit.upper()
 
     @property
@@ -871,6 +955,14 @@ class Voltage:
     @neutral_required.setter
     def neutral_required(self, neutral: bool):
         self._neutral_req = neutral
+
+    def to_dict(self) -> dict:
+        x = dict()
+        x["phases"] = self.phases
+        x["v"] = self.v
+        x["unit"] = self.unit
+        x["neutral_required"] = self.neutral_required
+        return x
 
 
 class CoreDetails:
@@ -882,25 +974,25 @@ class CoreDetails:
         :param number: The number of cable cores including earth and neutrals.
         :param name: Description of the cable cores.
         """
-        self.csa: float = csa
-        self.csa_unit: str = csa_unit
+        self.size: float = csa
+        self.unit: str = csa_unit
         self.number: int = number
         self.name: str = name
 
     @property
-    def csa(self) -> float:
+    def size(self) -> float:
         return self._csa
 
-    @csa.setter
-    def csa(self, value: float):
+    @size.setter
+    def size(self, value: float):
         self._csa = value
 
     @property
-    def csa_unit(self) -> str:
+    def unit(self) -> str:
         return self._csa_unit
 
-    @csa_unit.setter
-    def csa_unit(self, value: str):
+    @unit.setter
+    def unit(self, value: str):
         self._csa_unit = value.upper()
 
     @property
@@ -918,6 +1010,19 @@ class CoreDetails:
     @name.setter
     def name(self, value: str):
         self._name = value.upper()
+
+    def to_dict(self) -> dict:
+        """
+        Convert the class to a dictionary.
+        :return:
+        """
+        # todo: add to test
+        x = dict()
+        x["size"] = self.size
+        x["unit"] = self.unit
+        x["number"] = self.number
+        x["name"] = self.name
+        return x
 
 
 class CableInstallationMethod:
@@ -965,6 +1070,19 @@ class CableInstallationMethod:
     @cable_arrangement.setter
     def cable_arrangement(self, value: str):
         self._cable_arrangement = value.upper()
+
+    def convert_to_dict(self) -> dict:
+        """
+        Convert the class to a dictionary.
+        :return:
+        """
+        # todo: add to test
+        x = dict()
+        x["name"] = self.name
+        x["ccc"] = self.ccc
+        x["install_temp"] = self.install_temp
+        x["cable_arrangement"] = self.cable_arrangement
+        return x
 
 
 class Screen:

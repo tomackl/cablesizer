@@ -1,0 +1,5 @@
+{
+  "tests/v_unit/Constants/test_constants.py": true,
+  "tests/v_unit/Constants/test_constants.py::test_import_cable_config": true,
+  "tests/v_unit/test_constants.py::test_import_cable_config": true
+}

@@ -24,9 +24,9 @@ def test_electricalbase_scalar_unit():
 
 def test_electricalbase_freq():
     test_obj = eb.ElectricalBase()
-    test_obj.freq = 50
+    test_obj.frequency = 50
     result = 50
-    assert test_obj.freq == result
+    assert test_obj.frequency == result
 
 
 def test_electricalbase_freq_unit():
@@ -112,7 +112,7 @@ def test_volt__truediv__int_float():
 def test_volt_freq():
     test_obj = eb.Volt(freq=40)
     result = 40
-    assert test_obj.freq == result
+    assert test_obj.frequency == result
 
 
 def test_volt_freq_unit():
@@ -213,7 +213,7 @@ def test_amp_scalar_unit():
 def test_amp_freq():
     test_obj = eb.Amp(freq=40)
     result = 40
-    assert test_obj.freq == result
+    assert test_obj.frequency == result
 
 
 def test_amp_freq_unit():
@@ -236,7 +236,7 @@ def test_ohm__init__():
     result = ((0.3+0.4j), 'ohm', 50, 'hz')
     assert tuple([test_obj.ohm,
                   test_obj.ohm_unit,
-                  test_obj.freq,
+                  test_obj.frequency,
                   test_obj.freq_unit]) == result
 
 
@@ -330,7 +330,7 @@ def test_ohm_scalar_unit():
 def test_ohm_freq():
     test_obj = eb.Ohm(freq=50)
     result = 50
-    assert test_obj.freq == result
+    assert test_obj.frequency == result
 
 
 def test_ohm_freq_unit():
@@ -374,7 +374,7 @@ def test_pwr__init__():
     result = ((110+10j), 'VA', 50, 'hz')
     assert tuple([test_obj.power,
                   test_obj.power_unit,
-                  test_obj.freq,
+                  test_obj.frequency,
                   test_obj.freq_unit]) == result
 
 
@@ -468,7 +468,7 @@ def test_pwr_scalar_unit():
 def test_pwr_freq():
     test_obj = eb.Power(freq=50)
     result = 50
-    assert test_obj.freq == result
+    assert test_obj.frequency == result
 
 
 def test_pwr_freq_unit():

@@ -178,6 +178,10 @@ def test_contracts_setter():
     assert result == expected
 
 
+def test_voltage_cls():
+#     todo: complete test
+    pass
+
 def test_vector_cls():
     test_cls_vector = cable.Vector()
     test_cls_vector.magnitude = 415
@@ -189,8 +193,15 @@ def test_vector_cls():
 
 def test_vector_magnitude_getter():
     test_cls_vector = cable.Vector(33, 'kV')
-    expected = (33, 'kV')
+    expected = (33, 'KV')
     result = (test_cls_vector.magnitude, test_cls_vector.unit)
+    assert result == expected
+
+
+def test_vector_cls_dict():
+    test_class = cable.Vector(33, 'kV')
+    expected = {"magnitude": 33, "unit": "KV"}
+    result = test_class.to_dict()
     assert result == expected
 
 
@@ -211,7 +222,14 @@ def test_circuit_voltage():
 def test_frequency_cls():
     test_cls_frequency = cable.Frequency(50, 'hz', 'dc')
     expected = (50, "HZ", "DC")
-    result = (test_cls_frequency.freq, test_cls_frequency.unit, test_cls_frequency.waveform)
+    result = (test_cls_frequency.frequency, test_cls_frequency.unit, test_cls_frequency.waveform)
+    assert result == expected
+
+
+def test_frequency_cls_dict():
+    test_class = cable.Frequency(50, 'hz', 'dc')
+    expected = {"frequency": 50, "unit": "HZ", "waveform": "DC"}
+    result = test_class.to_dict()
     assert result == expected
 
 
@@ -258,12 +276,19 @@ def test_cls_insulation():
 
 def test_cls_core_details():
     test_class = cable.CoreDetails()
-    test_class.csa = 2.5
-    test_class.csa_unit = "mm2"
+    test_class.size = 2.5
+    test_class.unit = "mm2"
     test_class.number = 4
     test_class.name = "core"
     expected = (2.5, "MM2", 4, "CORE")
-    result = (test_class.csa, test_class.csa_unit, test_class.number, test_class.name)
+    result = (test_class.size, test_class.unit, test_class.number, test_class.name)
+    assert result == expected
+
+
+def test_cls_core_details_dict():
+    test_class = cable.CoreDetails(35, "mm2", 4, "core")
+    expected = {"size": 35, "unit": "MM2", "number": 4, "name": "CORE"}
+    result = test_class.to_dict()
     assert result == expected
 
 

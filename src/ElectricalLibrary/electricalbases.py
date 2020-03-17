@@ -1,36 +1,36 @@
 """
 A set of electrical classes: current, voltage, impedance and power. The classes are designed to be used with each other
- for the modelling both DC and AC circuits. Frequency is the only v_unit to be defined in the base class and forms the
+ for the modelling both DC and AC circuits. Frequency is the only unit to be defined in the base class and forms the
  only check when performing addition, subtraction, multiplication and division functions on the classes.
 """
 from ElectricalLibrary.constants import NumType, ComType
 
 
 class ElectricalBase:
-    def __init__(self, freq: int = None, freq_unit: str = None, **kwargs):
+    def __init__(self, frequency: int = None, freq_unit: str = None, **kwargs):
         """
-        A generic base class for electrical units. The class contains attributes to store the magnitude of the v_unit and
-        also contain the respective freq associated with the electrical characteristic. Where series of freq
+        A generic base class for electrical units. The class contains attributes to store the magnitude of the unit and
+        also contain the respective frequency associated with the electrical characteristic. Where series of frequency
         values are required it is expected that these will be achieved by using a list containing objects of the
         appropriate class.
-        :param freq: freq associated with the object's magnitude
-        :param freq_unit: freq v_unit
+        :param freq: frequency associated with the object's magnitude
+        :param freq_unit: frequency unit
         """
         self._freq: int = freq
         self._freq_unit: str = freq_unit
 
     @property
-    def freq(self) -> NumType:
+    def frequency(self) -> NumType:
         """
-        The freq attribute getter.
+        The frequency attribute getter.
         :return:
         """
         return self._freq
 
     @freq.setter
-    def freq(self, freq: int):
+    def frequency(self, frequency: int):
         """
-        The freq attribute setter.
+        The frequency attribute setter.
         :param freq:
         :return:
         """
@@ -51,7 +51,7 @@ class Volt(ElectricalBase):
     opportunity to rename the class parameters to suit the class.
     """
     def __init__(self, volt: NumType = None, volt_unit: str = None,
-                 freq: int = None, freq_unit: str = 'hz', **kwargs):
+                 frequency: int = None, freq_unit: str = 'hz', **kwargs):
         self._volt: NumType = volt
         self._volt_unit: str = volt_unit
         super().__init__(freq=freq, freq_unit=freq_unit, **kwargs)
@@ -64,7 +64,7 @@ class Volt(ElectricalBase):
         2. Adding two Volt() objects together, returning a new Volt() object with '.volts' that is the sum of
         'self.volts' and 'other.volts'.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The amp_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Volt() object.
@@ -74,10 +74,10 @@ class Volt(ElectricalBase):
             return Volt(self.volts + other, self.volt_unit, self.freq, self.freq_unit)
         if self.volt_unit != other.volt_unit:
             raise ArithmeticError(f"The objects' volt units {self.volt_unit} and {other.volt_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         volt_sum = self.volts + other.volts
         return Volt(volt_sum, self.volt_unit, self.freq, self.freq_unit)
@@ -89,7 +89,7 @@ class Volt(ElectricalBase):
         2. Subtract two Volt() objects, returning a new Volt() object with '.volts' that is the difference of
         'self.volts' and 'other.volts'.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The amp_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Volt() object.
@@ -99,10 +99,10 @@ class Volt(ElectricalBase):
             return Volt(self.volts - other, self.volt_unit, self.freq, self.freq_unit)
         if self.volt_unit != other.volt_unit:
             raise ArithmeticError(f"The objects' volt units {self.volt_unit} and {other.volt_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         volt_sum = self.volts - other.volts
         return Volt(volt_sum, self.volt_unit, self.freq, self.freq_unit)
@@ -112,7 +112,7 @@ class Volt(ElectricalBase):
         Multiply a Volt() object. If multiplying by a int or float the self.
         Multiply two Volt() objects together, returning the product of the two objects.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The volt_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Volt() object.
@@ -124,10 +124,10 @@ class Volt(ElectricalBase):
             if self.volt_unit != other.volt_unit:
                 raise ArithmeticError(f"The objects' volt units {self.volt_unit} and {other.volt_unit} are not the"
                                       f" same.")
-            if self.freq != other.freq:
-                raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+            if self.freq != other.frequency:
+                raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
             if self.freq_unit != other.freq_unit:
-                raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+                raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                       f"are not the same.")
             prod_sum = self.volts * other.volts
             return Volt(prod_sum, self.volt_unit, self.freq, self.freq_unit)
@@ -137,7 +137,7 @@ class Volt(ElectricalBase):
         Divide a Volt() object. If dividing by a int or float the self.
         Divide two Volt() objects together, returning the factor of the two objects.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The volt_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Volt() object.
@@ -149,10 +149,10 @@ class Volt(ElectricalBase):
             if self.volt_unit != other.volt_unit:
                 raise ArithmeticError(f"The objects' volt units {self.volt_unit} and {other.volt_unit} are not the"
                                       f" same.")
-            if self.freq != other.freq:
-                raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+            if self.freq != other.frequency:
+                raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
             if self.freq_unit != other.freq_unit:
-                raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+                raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                       f"are not the same.")
             prod_sum = self.volts / other.volts
             return Volt(prod_sum, self.volt_unit, self.freq, self.freq_unit)
@@ -189,7 +189,7 @@ class Amp(ElectricalBase):
     opportunity to rename the class parameters to suit the class.
     """
     def __init__(self, amp: NumType = None, amp_unit: str = None,
-                 freq: int = None, freq_unit: str = 'hz', **kwargs):
+                 frequency: int = None, freq_unit: str = 'hz', **kwargs):
         self._amp: NumType = amp
         self._amp_unit: str = amp_unit
         super().__init__(freq=freq, freq_unit=freq_unit, **kwargs)
@@ -202,7 +202,7 @@ class Amp(ElectricalBase):
         2. Adding two Amp() objects together, returning a new Amp() object with '.amps' that is the sum of 'self.amps'
         and 'other.amps'.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The amp_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Amp() object.
@@ -212,10 +212,10 @@ class Amp(ElectricalBase):
             return Amp(self.amps + other, self.amp_unit, self.freq, self.freq_unit)
         if self.amp_unit != other.amp_unit:
             raise ArithmeticError(f"The objects' amp units {self.amp_unit} and {other.amp_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         amp_sum = self.amps + other.amps
         return Amp(amp_sum, self.amp_unit, self.freq, self.freq_unit)
@@ -227,7 +227,7 @@ class Amp(ElectricalBase):
         2. Subtract two Amp() objects, returning a new Amp() object with '.amps' that is the difference of 'self.amps'
         and 'other.amps'.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The amp_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Amp() object.
@@ -237,10 +237,10 @@ class Amp(ElectricalBase):
             return Amp(self.amps - other, self.amp_unit, self.freq, self.freq_unit)
         if self.amp_unit != other.amp_unit:
             raise ArithmeticError(f"The objects' amp units {self.amp_unit} and {other.amp_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         amp_sum = self.amps - other.amps
         return Amp(amp_sum, self.amp_unit, self.freq, self.freq_unit)
@@ -249,7 +249,7 @@ class Amp(ElectricalBase):
         """"
         Multiply two Amp() objects together, returning the product of the two objects.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The amp_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Amp() object.
@@ -259,10 +259,10 @@ class Amp(ElectricalBase):
             return Amp(self.amps * other, self.amp_unit, self.freq, self.freq_unit)
         if self.amp_unit != other.amp_unit:
             raise ArithmeticError(f"The objects' amp units {self.amp_unit} and {other.amp_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         prod_sum = self.amps * other.amps
         return Amp(prod_sum, self.amp_unit, self.freq, self.freq_unit)
@@ -271,7 +271,7 @@ class Amp(ElectricalBase):
         """"
         Divide two Amp() objects together, returning the product of the two objects.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The amp_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Amp() object.
@@ -281,10 +281,10 @@ class Amp(ElectricalBase):
             return Amp(self.amps / other, self.amp_unit, self.freq, self.freq_unit)
         if self.amp_unit != other.amp_unit:
             raise ArithmeticError(f"The objects' amp units {self.amp_unit} and {other.amp_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         prod_sum = self.amps / other.amps
         return Amp(prod_sum, self.amp_unit, self.freq, self.freq_unit)
@@ -321,7 +321,7 @@ class Ohm(ElectricalBase):
     opportunity to rename the class parameters to suit the class.
     """
     def __init__(self, ohm: ComType = None, ohm_unit: str = None,
-                 freq: int = None, freq_unit: str = 'hz', **kwargs):
+                 frequency: int = None, freq_unit: str = 'hz', **kwargs):
         self.ohm: complex = ohm
         self.ohm_unit: str = ohm_unit
         super().__init__(freq=freq, freq_unit=freq_unit, **kwargs)
@@ -334,7 +334,7 @@ class Ohm(ElectricalBase):
         2. Adding two Ohm() objects together, returning a new Ohm() object with '.ohm' that is the sum of 'self.ohm'
         and 'other.ohm'.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The ohm_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Ohm() object.
@@ -344,10 +344,10 @@ class Ohm(ElectricalBase):
             return Ohm(self.ohm + other, self.ohm_unit, self.freq, self.freq_unit)
         if self.ohm_unit != other.ohm_unit:
             raise ArithmeticError(f"The objects' ohm units {self.ohm_unit} and {other.ohm_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         ohm_sum = self.ohm + other.ohm
         return Ohm(ohm_sum, self.ohm_unit, self.freq, self.freq_unit)
@@ -359,7 +359,7 @@ class Ohm(ElectricalBase):
         'self.ohm' and the passed complex().
         2. Subtract two Ohm() objects, returning a new Ohm() object with '.ohm' that is the difference of 'self.ohm'
         and 'other.ohm'.
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The ohm_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Ohm() object.
@@ -369,10 +369,10 @@ class Ohm(ElectricalBase):
             return Ohm(self.ohm - other, self.ohm_unit, self.freq, self.freq_unit)
         if self.ohm_unit != other.ohm_unit:
             raise ArithmeticError(f"The objects' ohm units {self.ohm_unit} and {other.ohm_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         ohm_sum = self.ohm - other.ohm
         return Ohm(ohm_sum, self.ohm_unit, self.freq, self.freq_unit)
@@ -381,7 +381,7 @@ class Ohm(ElectricalBase):
         """"
         Multiply two Ohm() objects together, returning the product of the two objects.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The ohm_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Ohm() object.
@@ -391,10 +391,10 @@ class Ohm(ElectricalBase):
             return Ohm(self.ohm * other, self.ohm_unit, self.freq, self.freq_unit)
         if self.ohm_unit != other.ohm_unit:
             raise ArithmeticError(f"The objects' ohm units {self.ohm_unit} and {other.ohm_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         prod_sum = self.ohm * other.ohm
         return Ohm(prod_sum, self.ohm_unit, self.freq, self.freq_unit)
@@ -403,7 +403,7 @@ class Ohm(ElectricalBase):
         """"
         Divide two Ohm() objects together, returning the factor of the two objects.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The ohm_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Ohm() object.
@@ -413,10 +413,10 @@ class Ohm(ElectricalBase):
             return Ohm(self.ohm / other, self.ohm_unit, self.freq, self.freq_unit)
         if self.ohm_unit != other.ohm_unit:
             raise ArithmeticError(f"The objects' ohm units {self.ohm_unit} and {other.ohm_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         prod_sum = self.ohm / other.ohm
         return Ohm(prod_sum, self.ohm_unit, self.freq, self.freq_unit)
@@ -497,7 +497,7 @@ class Power(ElectricalBase):
     """
 
     def __init__(self, pwr: ComType = None, pwr_unit: str = None,
-                 freq: int = None, freq_unit: str = 'hz', **kwargs):
+                 frequency: int = None, freq_unit: str = 'hz', **kwargs):
         self.power: complex = pwr
         self.power_unit: str = pwr_unit
         super().__init__(freq=freq, freq_unit=freq_unit, **kwargs)
@@ -510,7 +510,7 @@ class Power(ElectricalBase):
         2. Adding two Power() objects together, returning a new Power() object with '.power' that is the sum of
         'self.power' and 'other.ohm'.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The power_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Power() object.
@@ -520,10 +520,10 @@ class Power(ElectricalBase):
             return Power(self.power + other, self.power_unit, self.freq, self.freq_unit)
         if self.power_unit != other.power_unit:
             raise ArithmeticError(f"The objects' ohm units {self.power_unit} and {other.power_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         power_sum = self.power + other.power
         return Power(power_sum, self.power_unit, self.freq, self.freq_unit)
@@ -535,7 +535,7 @@ class Power(ElectricalBase):
         'self.power' and the passed complex().
         2. Subtract two Power() objects, returning a new Power() object with '.ohm' that is the difference of
         'self.power' and 'other.power'.
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The power_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Power() object.
@@ -545,10 +545,10 @@ class Power(ElectricalBase):
             return Power(self.power - other, self.power_unit, self.freq, self.freq_unit)
         if self.power_unit != other.power_unit:
             raise ArithmeticError(f"The objects' ohm units {self.power_unit} and {other.power_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         power_sum = self.power - other.power
         return Power(power_sum, self.power_unit, self.freq, self.freq_unit)
@@ -557,7 +557,7 @@ class Power(ElectricalBase):
         """"
         Multiply two Power() objects together, returning the product of the two objects.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The power_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Power() object.
@@ -568,10 +568,10 @@ class Power(ElectricalBase):
         if self.power_unit != other.power_unit:
             raise ArithmeticError(f"The objects' power units {self.power_unit} "
                                   f"and {other.power_unit} are not the same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         power_prod = self.power * other.power
         return Power(power_prod, self.power_unit, self.freq, self.freq_unit)
@@ -580,7 +580,7 @@ class Power(ElectricalBase):
         """"
         Divide two Power() objects together, returning the factor of the two objects.
         Conditions:
-        a) The frequencies (including the freq units) of both objects must be equal.
+        a) The frequencies (including the frequency units) of both objects must be equal.
         b) The power_unit of both objects must be equal.
         If any of these conditions are not met then an ArithmeticError exception will be raised.
         :param other: another Power() object.
@@ -591,10 +591,10 @@ class Power(ElectricalBase):
         if self.power_unit != other.power_unit:
             raise ArithmeticError(f"The objects' power units {self.power_unit} and {other.power_unit} are not the "
                                   f"same.")
-        if self.freq != other.freq:
-            raise ArithmeticError(f"The objects' freq {self.freq} and {other.freq} are not the same.")
+        if self.freq != other.frequency:
+            raise ArithmeticError(f"The objects' frequency {self.freq} and {other.frequency} are not the same.")
         if self.freq_unit != other.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self.freq_unit} and {other.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self.freq_unit} and {other.freq_unit} "
                                   f"are not the same.")
         power_factor = self.power / other.power
         return Power(power_factor, self.power_unit, self.freq, self.freq_unit)
@@ -707,13 +707,13 @@ class ElectricalCalc:
 
     def compare_freq(self):
         """
-        Compare the freq attributes of the two objects and ensure that they are equal to allow the calculation to
+        Compare the frequency attributes of the two objects and ensure that they are equal to allow the calculation to
         take place. Set the 'self._freq_equal' to True if the same.
         """
-        if self._obj1.freq != self._obj2.freq:
-            raise ArithmeticError(f"The objects' freq {self._obj1.freq} and {self._obj2.freq} are not the same.")
+        if self._obj1.frequency != self._obj2.frequency:
+            raise ArithmeticError(f"The objects' frequency {self._obj1.frequency} and {self._obj2.frequency} are not the same.")
         if self._obj1.freq_unit != self._obj1.freq_unit:
-            raise ArithmeticError(f"The objects' freq units {self._obj1.freq_unit} and {self._obj2.freq_unit} "
+            raise ArithmeticError(f"The objects' frequency units {self._obj1.freq_unit} and {self._obj2.freq_unit} "
                                   f"are not the same.")
         self._freq_equal = True
 
@@ -769,7 +769,7 @@ class ElectricalCalc:
         else:
             return None
 
-        return Power(pwr, pwr_unit, self._obj1.freq, self._obj1.freq_unit)
+        return Power(pwr, pwr_unit, self._obj1.frequency, self._obj1.freq_unit)
 
     def calc_current(self) -> (Amp, None):
         """
@@ -810,7 +810,7 @@ class ElectricalCalc:
         else:
             return None
 
-        return Amp(current, current_unit, self._obj1.freq, self._obj1.freq_unit)
+        return Amp(current, current_unit, self._obj1.frequency, self._obj1.freq_unit)
 
     def calc_voltage(self) -> (Volt, None):
         """
@@ -852,7 +852,7 @@ class ElectricalCalc:
         else:
             return None
 
-        return Volt(volt, volt_unit, self._obj1.freq, self._obj1.freq_unit)
+        return Volt(volt, volt_unit, self._obj1.frequency, self._obj1.freq_unit)
 
     def calc_impedance(self) -> (Ohm, None):
         """
@@ -894,4 +894,4 @@ class ElectricalCalc:
         else:
             return None
 
-        return Ohm(z, z_unit, self._obj1.freq, self._obj1.freq_unit)
+        return Ohm(z, z_unit, self._obj1.frequency, self._obj1.freq_unit)

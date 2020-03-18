@@ -411,19 +411,19 @@ class Cable:
         if self.active_cores.number > 0:
             return True
         else:
-            False
+            return False
 
     def has_neutral(self):
         if self.neutral_cores.number > 0:
             return True
         else:
-            False
+            return False
 
     def has_earth(self):
         if self.earth_cores.number > 0:
             return True
         else:
-            False
+            return False
 
     @property
     def ccc(self) -> float:
@@ -461,6 +461,12 @@ class ConductorDetail:
     @size_unit.setter
     def size_unit(self, unit: str):
         self._size_unit = unit.upper()
+
+    def to_dict(self):
+        x = dict()
+        x["size"] = self.size
+        x["unit"] = self.size_unit
+        return x
 
 
 class ConductorCableRun:
@@ -886,9 +892,9 @@ class InstallationMethod:
     """
     A simple class to represent the physical installation of cables and cable run.
     """
-    def __init__(self, physical_installation=None, cable_arrangement: str = ''):
-        self.physical_installation = physical_installation
-        self.cable_arrangement = cable_arrangement
+    def __init__(self, installation=None, arrangement: str = ''):
+        self.physical_installation = installation
+        self.cable_arrangement = arrangement
 
     @property
     def physical_installation(self) -> str:
@@ -913,9 +919,9 @@ class InstallationMethod:
             self._cable_arrangement = arrangement.upper()
 
     def to_dict(self):
-        x = dict()
-        x["physical_installation"] = self.physical_installation
-        x["cable_arrangement"] = self.cable_arrangement
+        x: dict = dict()
+        x["installation"] = self.physical_installation
+        x["arrangement"] = self.cable_arrangement
         return x
 
 
@@ -1127,7 +1133,7 @@ class CableInstallationMethod:
         x["name"] = self.name
         x["ccc"] = self.ccc
         x["install_temp"] = self.install_temp
-        x["cable_arrangement"] = self.cable_arrangement
+        x["arrangement"] = self.cable_arrangement
         return x
 
 
@@ -1188,7 +1194,7 @@ class Manufacturer:
 
 
 class I2T:
-    def __init__(self, k_factor: int = 0, amp_time: List[Tuple[int]] = None):
+    def __init__(self, k_factor: int = 0, amp_time: List[Tuple[int, float]] = None):
         self.k_factor: int = k_factor
         self._amp_time = []
         self.amp_time: list = amp_time

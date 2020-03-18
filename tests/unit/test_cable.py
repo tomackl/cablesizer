@@ -40,6 +40,13 @@ def test_cls_conductor_detail_size_unit_getter():
     assert result == expected
 
 
+def test_cls_conductor_detail_dict():
+    test_class = cable.ConductorDetail(95, "mm2")
+    expected = {"size": 95, "unit": "MM2"}
+    result = test_class.to_dict()
+    assert result == expected
+
+
 def test_cls_conductor_cable_run_size_getter():
     test_class = cable.ConductorCableRun(4, '', 4, '', 1.5, '')
     expected = (4.0, 4.0, 1.5)
@@ -240,7 +247,7 @@ def test_cls_circuit_dict():
     expected = {"circuit_type": "POWER",
                 "voltage": {"v": 22, "unit": "KV", "phases": 4, "neutral_required": True},
                 "frequency": {"frequency": 50, "unit": "HZ", "waveform": "AC"},
-                "installation_method": {"physical_installation": "BURIED_DIRECT", "cable_arrangement": "TREFOIL"},
+                "installation_method": {"installation": "BURIED_DIRECT", "arrangement": "TREFOIL"},
                 "load_current": 150
                 }
     result = test_class.to_dict()
@@ -262,7 +269,7 @@ def test_cls_frequency_dict():
 
 
 def test_cls_installation_method():
-    test_class = cable.InstallationMethod(physical_installation="touching", cable_arrangement='trefoil')
+    test_class = cable.InstallationMethod(installation="touching", arrangement='trefoil')
     expected = ("TOUCHING", "TREFOIL")
     result = (test_class.physical_installation, test_class.cable_arrangement)
     assert result == expected
@@ -286,8 +293,9 @@ def test_cls_load_current():
 def test_cls_cablespec():
     test_class = cable.CableSpec(run_type='multi', max_parallel=2, allow_parallel_multicore=True, shape="circular",
                                  conductor_material="CU", min_size=4.0, core_arrangement='multi', sheath='none',
-                                 insulation_material='xlpe', insulation_code='x-90', max_operating_temp=90, armour='dwa',
-                                 screen_cable='nil', screen_core='is', volt_rating='0.6/1kv', flexible=False)
+                                 insulation_material='xlpe', insulation_code='x-90', max_operating_temp=90,
+                                 armour='dwa', screen_cable='nil', screen_core='is', volt_rating='0.6/1kv',
+                                 flexible=False)
     expected = ("MULTI", 2, True, "CIRCULAR", "CU", 4.0, "MULTI", "NONE", "XLPE", "X-90", 90, "DWA", "NIL", "IS",
                 "0.6/1KV", False)
     result = (test_class.type, test_class.max_parallel, test_class.allow_parallel_multicore, test_class.shape,
@@ -340,7 +348,7 @@ def test_cls_cable_installation_method():
 
 def test_cls_cable_installation_method_dict():
     test_class = cable.CableInstallationMethod("buried_direct", 140, 45, "trefoil")
-    expected = {"name": "BURIED_DIRECT", "ccc": 140, "install_temp": 45, "cable_arrangement": "TREFOIL"}
+    expected = {"name": "BURIED_DIRECT", "ccc": 140, "install_temp": 45, "arrangement": "TREFOIL"}
     result = test_class.to_dict()
     assert result == expected
 
@@ -388,7 +396,7 @@ def test_cls_i2t_dict():
     test_class = cable.I2T(141, [(10000, 0.1)])
     expected = {"k_factor": 141, "amp_time": [(10000, 0.1)]}
     result = test_class.to_dict()
-    assert result ==expected
+    assert result == expected
 
 
 def test_cls_core_details():

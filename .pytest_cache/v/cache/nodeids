@@ -128,5 +128,6 @@
   "tests/unit/test_cable.py::test_cls_i2t[165-amp_time2-expected2]",
   "tests/unit/test_cable.py::test_cls_i2t[210-None-expected3]",
   "tests/unit/test_cable.py::test_cls_circuit_dict",
-  "tests/unit/test_cable.py::test_cls_circuit_installation_method"
+  "tests/unit/test_cable.py::test_cls_circuit_installation_method",
+  "tests/unit/test_cable.py::test_cls_conductor_detail_dict"
 ]

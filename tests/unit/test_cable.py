@@ -27,16 +27,16 @@ def test_cls_conductor_detail_size_getter():
 
 def test_cls_conductor_detail_size_unit_setter():
     test_class = cable.ConductorDetail()
-    test_class.size_unit = 'mm2'
+    test_class.unit = 'mm2'
     expected = 'MM2'
-    result = test_class.size_unit
+    result = test_class.unit
     assert result == expected
 
 
 def test_cls_conductor_detail_size_unit_getter():
-    test_class = cable.ConductorDetail(size_unit='mm2')
+    test_class = cable.ConductorDetail(unit='mm2')
     expected = 'MM2'
-    result = test_class.size_unit
+    result = test_class.unit
     assert result == expected
 
 
@@ -50,24 +50,59 @@ def test_cls_conductor_detail_dict():
 def test_cls_conductor_cable_run_size_getter():
     test_class = cable.ConductorCableRun(4, '', 4, '', 1.5, '')
     expected = (4.0, 4.0, 1.5)
-    result = (test_class.active_size, test_class.neutral_size, test_class.earth_size)
+    result = (test_class.activeConductors.size, test_class.neutralConductors.size, test_class.earthConductors.size)
     assert result == expected
 
 
 def test_cls_conductor_cable_run_size_setter():
     test_class = cable.ConductorCableRun()
-    test_class.active_size = 4
-    test_class.neutral_size = 4
-    test_class.earth_size = 1.5
-    expected = (4.0, 4.0, 1.5)
-    result = (test_class.active_size, test_class.neutral_size, test_class.earth_size)
+    test_class.activeConductors.size = 4
+    test_class.activeConductors.unit = "mm2"
+    test_class.neutralConductors.size = 4
+    test_class.neutralConductors.unit = "mm2"
+    test_class.earthConductors.size = 1.5
+    test_class.earthConductors.unit = "mm2"
+    test_class.instrumentationConductors.size = 1.5
+    test_class.instrumentationConductors.unit = "mm2"
+    test_class.controlConductors.size = 1.5
+    test_class.controlConductors.unit = "mm2"
+    test_class.dataConductors.size = 0.75
+    test_class.dataConductors.unit = "mm2"
+    test_class.communicationConductors.size = 1.5
+    test_class.communicationConductors.unit = "mm2"
+    expected = (4, "MM2", 4, "MM2", 1.5, "MM2", 1.5, "MM2", 1.5, "MM2", 0.75, "MM2", 1.5, "MM2")
+    result = (test_class.activeConductors.size, test_class.activeConductors.unit, test_class.neutralConductors.size,
+              test_class.neutralConductors.unit, test_class.earthConductors.size, test_class.earthConductors.unit,
+              test_class.instrumentationConductors.size, test_class.instrumentationConductors.unit,
+              test_class.controlConductors.size, test_class.controlConductors.unit,
+              test_class.dataConductors.size, test_class.dataConductors.unit,
+              test_class.communicationConductors.size, test_class.communicationConductors.unit
+              )
+    assert result == expected
+
+
+def test_cls_conductor_cable_run_dict():
+    test_class = cable.ConductorCableRun(active_size=4, active_unit="mm2", neutral_size=4, neutral_unit="mm2",
+                                         earth_size=1.5, earth_unit="mm2", instrumentation_size=1.5,
+                                         instrumentation_unit="mm2", control_size=1.5, control_unit="mm2",
+                                         data_size=0.75, data_unit="mm2", communication_size=1.5,
+                                         communication_unit="mm2")
+    expected = {"activeConductors": {"size": 4, "unit": "MM2"},
+                "neutralConductors": {"size": 4, "unit": "MM2"},
+                "earthConductors": {"size": 1.5, "unit": "MM2"},
+                "instrumentationConductors": {"size": 1.5, "unit": "MM2"},
+                "communicationConductors": {"size": 1.5, "unit": "MM2"},
+                "dataConductors": {"size": 0.75, "unit": "MM2"},
+                "controlConductors": {"size": 1.5, "unit": "MM2"},
+                }
+    result = test_class.to_dict()
     assert result == expected
 
 
 def test_cls_conductor_cable_run_size_unit_getter():
     test_class = cable.ConductorCableRun(0, 'mm2', 4, 'mm2', 1.5, 'mm2')
     expected = ('MM2', 'MM2', 'MM2')
-    result = (test_class.active_size_unit, test_class.neutral_size_unit, test_class.earth_size_unit)
+    result = (test_class.activeConductors.unit, test_class.neutralConductors.unit, test_class.earthConductors.unit)
     assert result == expected
 
 
@@ -424,10 +459,15 @@ def test_cls_screen():
     expected = ("OS", 10000000)
     result = (test_class.name, test_class.fault_withstand)
     assert result == expected
-    
+
 
 def test_cls_screen_dict():
     test_class = cable.Screen("os", 27000000)
     expected = {"name": "OS", "fault_withstand": 27000000}
     result = test_class.to_dict()
     assert result == expected
+
+
+# def test_cls_conductor_cable_run():
+#     test_class = cable.ConductorCableRun()
+#     test_class.

@@ -291,52 +291,23 @@ class Cable:
                  communication_name: str = "", data_size: float = 0.0, data_number: int = 0, data_unit: str = "",
                  data_name: str = "", core_arrangement: str = "", cable_shape: str = "",
                  conductor_material: str = "", cross_sectional_area: int = 0, cable_sheath: str = "",
-                 insulation_material: str = "", insulation_code: str = "", max_conductor_temp: int = 0,
-                 ccc: float = 0.0, circuit_type: str = "", volt_rating: str = "", armour: [None, str] = None,
-                 description: str = "", flexible: bool = False):
+                 insulation_material: str = "", insulation_code: str = "", cont_conductor_temp: int =0,
+                 max_conductor_temp: int = 0, ccc: float = 0.0, circuit_type: str = "", volt_rating: str = "",
+                 armour: [None, str] = None, description: str = "", flexible: bool = False):
         self.type: str = cable_type
-        self.activeCores = CoreDetails()
-        self.activeCores.size = active_size
-        self.activeCores.unit = active_unit
-        self.activeCores.number = active_number
-        self.activeCores.name = active_name
-        self.neutralCores = CoreDetails()
-        self.neutralCores.size = neutral_size
-        self.neutralCores.unit = neutral_unit
-        self.neutralCores.number = neutral_number
-        self.neutralCores.name = neutral_name
-        self.earthCores = CoreDetails()
-        self.earthCores.size = earth_size
-        self.earthCores.unit = earth_unit
-        self.earthCores.number = earth_number
-        self.earthCores.name = earth_name
-        self.controlCores = CoreDetails()
-        self.controlCores.size = control_size
-        self.controlCores.unit = control_unit
-        self.controlCores.number = control_number
-        self.controlCores.name = control_name
-        self.instrumentCores = CoreDetails()
-        self.instrumentCores.size = instrument_size
-        self.instrumentCores.unit = instrument_unit
-        self.instrumentCores.number = instrument_number
-        self.instrumentCores.name = instrument_name
-        self.communicationCores = CoreDetails()
-        self.communicationCores.size = communication_size
-        self.communicationCores.unit = communication_unit
-        self.communicationCores.number = communication_number
-        self.communicationCores.name = communication_name
-        self.dataCores = CoreDetails()
-        self.dataCores.size = data_size
-        self.dataCores.unit = data_unit
-        self.dataCores.number = data_number
-        self.dataCores.name = data_name
+        self.activeCores = CoreDetails(active_size, active_unit, active_number, active_name)
+        self.neutralCores = CoreDetails(neutral_size, neutral_unit, neutral_number, neutral_name)
+        self.earthCores = CoreDetails(earth_size, earth_unit, earth_number, earth_name)
+        self.controlCores = CoreDetails(control_size, control_unit, control_number, control_name)
+        self.instrumentCores = CoreDetails(instrument_size, instrument_unit, instrument_number, instrument_name)
+        self.communicationCores = CoreDetails(communication_size, communication_unit, communication_number,
+                                              communication_name)
+        self.dataCores = CoreDetails(data_size, data_unit, data_number, data_name)
         self.installMethod = CableInstallationMethod()
         self.impedance = Impedance()
         self.cableScreen = Screen()
         self.coreScreen = Screen()
-        self.insulation = Insulation()
-        self.insulation.material = insulation_material
-        self.insulation.code = insulation_code
+        self.insulation = Insulation(insulation_material, insulation_code, cont_conductor_temp, max_conductor_temp)
         self.sheath = cable_sheath
         self.voltage_rating: str = volt_rating
         self.flexible: bool = flexible
@@ -347,8 +318,7 @@ class Cable:
         self.conductor_material = conductor_material
         self.core_arrangement = core_arrangement
         self.shape = cable_shape
-        self.cross_sectional_area = cross_sectional_area
-        self.insulation.max_temp = max_conductor_temp
+        # self.cross_sectional_area = cross_sectional_area
         self.ccc: float = ccc
 
     @property
@@ -408,19 +378,19 @@ class Cable:
         pass
 
     def has_active(self):
-        if self.active_cores.number > 0:
+        if self.activeCores.number > 0:
             return True
         else:
             return False
 
     def has_neutral(self):
-        if self.neutral_cores.number > 0:
+        if self.neutralCores.number > 0:
             return True
         else:
             return False
 
     def has_earth(self):
-        if self.earth_cores.number > 0:
+        if self.earthCores.number > 0:
             return True
         else:
             return False
@@ -436,14 +406,42 @@ class Cable:
         else:
             self._ccc = value
 
+    def to_dict(self):
+        # todo: add to test
+        x = dict()
+        x["activeCores"] = self.activeCores.to_dict()
+        x["neutralCores"] = self.neutralCores.to_dict()
+        x["earthCores"] = self.earthCores.to_dict()
+        x["instrumentCores"] = self.instrumentCores.to_dict()
+        x["controlCores"] = self.controlCores.to_dict()
+        x["communicationCores"] = self.communicationCores.to_dict()
+        x["dataCores"] = self.dataCores.to_dict()
+        x["installMethod"] = self.installMethod.to_dict()
+        x["impedance"] = self.impedance.to_dict()
+        x["cableScreen"] = self.cableScreen.to_dict()
+        x["coreScreen"] = self.coreScreen.to_dict()
+        x["insulation"] = self.insulation.to_dict()
+        x["sheath"] = self.sheath
+        x["volt_rating"] = self.voltage_rating
+        x["flexible"] = self.flexible
+        x["armour"] = self.armour
+        x["rev"] = self.rev.to_dict()
+        x["description"] = self.description
+        x["circuit_type"] = self.circuit_type
+        x["conductor_material"] = self.conductor_material
+        x["core_arrangement"] = self.core_arrangement
+        x["cable_shape"] = self.shape
+        x["ccc"] = self.ccc
+        return x
+
 
 class ConductorDetail:
     """
     A simple class to allow conductor characteristics to be defined.
     """
-    def __init__(self, size: float = 0.0, size_unit: str = '', **kwargs):
+    def __init__(self, size: float = 0.0, unit: str = '', **kwargs):
         self.size = size
-        self.size_unit = size_unit
+        self.unit = unit
         self.kwargs = kwargs
 
     @property
@@ -455,74 +453,124 @@ class ConductorDetail:
         self._size = size
 
     @property
-    def size_unit(self) -> str:
+    def unit(self) -> str:
         return self._size_unit
 
-    @size_unit.setter
-    def size_unit(self, unit: str):
+    @unit.setter
+    def unit(self, unit: str):
         self._size_unit = unit.upper()
 
     def to_dict(self):
         x = dict()
         x["size"] = self.size
-        x["unit"] = self.size_unit
+        x["unit"] = self.unit
         return x
 
 
 class ConductorCableRun:
     def __init__(self, active_size: float = 0.0, active_unit: str = '', neutral_size: float = 0.0,
-                 neutral_unit: str = '', earth_size: float = 0.0, earth_unit: str = ''):
-        self._active = ConductorDetail(active_size, active_unit)
-        self._neutral = ConductorDetail(neutral_size, neutral_unit)
-        self._earth = ConductorDetail(earth_size, earth_unit)
+                 neutral_unit: str = '', earth_size: float = 0.0, earth_unit: str = '',
+                 instrumentation_size: float = 0.0, instrumentation_unit: str = '', control_size: float = 0.0,
+                 control_unit: str = '', data_size: float = 0.0, data_unit: str = '', communication_size: float = 0.0,
+                 communication_unit: str = ""):
+        self.activeConductors = ConductorDetail(active_size, active_unit)
+        self.neutralConductors = ConductorDetail(neutral_size, neutral_unit)
+        self.earthConductors = ConductorDetail(earth_size, earth_unit)
+        self.instrumentationConductors = ConductorDetail(instrumentation_size, instrumentation_unit)
+        self.controlConductors = ConductorDetail(control_size, control_unit)
+        self.dataConductors = ConductorDetail(data_size, data_unit)
+        self.communicationConductors = ConductorDetail(communication_size, communication_unit)
 
-    @property
-    def active_size(self) -> float:
-        return self._active.size
+    # @property
+    # def active_size(self) -> float:
+    #     return self.activeConductors.size
+    #
+    # @active_size.setter
+    # def active_size(self, size: float):
+    #     self.activeConductors.size = size
+    #
+    # @property
+    # def active_size_unit(self) -> str:
+    #     return self.activeConductors.unit
+    #
+    # @active_size_unit.setter
+    # def active_size_unit(self, unit: str):
+    #     self.activeConductors.unit = unit.upper()
+    #
+    # @property
+    # def neutral_size(self) -> float:
+    #     return self.neutralConductors.size
+    #
+    # @neutral_size.setter
+    # def neutral_size(self, size: float):
+    #     self.neutralConductors.size = size
+    #
+    # @property
+    # def neutral_size_unit(self) -> str:
+    #     return self.neutralConductors.unit
+    #
+    # @neutral_size_unit.setter
+    # def neutral_size_unit(self, unit: str):
+    #     self.neutralConductors.unit = unit.upper()
+    #
+    # @property
+    # def earth_size(self) -> float:
+    #     return self.earthConductors.size
+    #
+    # @earth_size.setter
+    # def earth_size(self, size: float):
+    #     self.earthConductors.size = size
+    #
+    # @property
+    # def earth_size_unit(self) -> str:
+    #     return self.earthConductors.unit
+    #
+    # @earth_size_unit.setter
+    # def earth_size_unit(self, unit: str):
+    #     self.earthConductors.unit = unit.upper()
+    #
+    # @property
+    # def communication_size_unit(self) -> str:
+    #     return self.communicationConductors.unit
+    #
+    # @communication_size_unit.setter
+    # def communication_size_unit(self, unit: str):
+    #     self.communicationConductors.unit = unit.upper()
+    #
+    # @property
+    # def instrument_size_unit(self) -> str:
+    #     return self.instrumentionConductors.unit
+    #
+    # @instrument_size_unit.setter
+    # def instrument_size_unit(self, unit: str):
+    #     self.instrumentionConductors.unit = unit.upper()
+    #
+    # @property
+    # def data_size_unit(self) -> str:
+    #     return self.dataConductors.unit
+    #
+    # @data_size_unit.setter
+    # def data_size_unit(self, unit: str):
+    #     self.dataConductors.unit = unit.upper()
+    #
+    # @property
+    # def control_size_unit(self) -> str:
+    #     return self.controlConductors.unit
+    #
+    # @control_size_unit.setter
+    # def control_size_unit(self, unit: str):
+    #     self.controlConductors.unit = unit.upper()
 
-    @active_size.setter
-    def active_size(self, size: float):
-        self._active.size = size
-
-    @property
-    def active_size_unit(self) -> str:
-        return self._active.size_unit
-
-    @active_size_unit.setter
-    def active_size_unit(self, unit: str):
-        self._active.size_unit = unit.upper()
-
-    @property
-    def neutral_size(self) -> float:
-        return self._neutral.size
-
-    @neutral_size.setter
-    def neutral_size(self, size: float):
-        self._neutral.size = size
-
-    @property
-    def neutral_size_unit(self) -> str:
-        return self._neutral.size_unit
-
-    @neutral_size_unit.setter
-    def neutral_size_unit(self, unit: str):
-        self._neutral.size_unit = unit.upper()
-
-    @property
-    def earth_size(self) -> float:
-        return self._earth.size
-
-    @earth_size.setter
-    def earth_size(self, size: float):
-        self._earth.size = size
-
-    @property
-    def earth_size_unit(self) -> str:
-        return self._earth.size_unit
-
-    @earth_size_unit.setter
-    def earth_size_unit(self, unit: str):
-        self._earth.size_unit = unit.upper()
+    def to_dict(self):
+        x = dict()
+        x["activeConductors"] = self.activeConductors.to_dict()
+        x["neutralConductors"] = self.neutralConductors.to_dict()
+        x["earthConductors"] = self.earthConductors.to_dict()
+        x["communicationConductors"] = self.earthConductors.to_dict()
+        x["instrumentationConductors"] = self.instrumentationConductors.to_dict()
+        x["dataConductors"] = self.dataConductors.to_dict()
+        x["controlConductors"] = self.controlConductors.to_dict()
+        return x
 
 
 class RevisionDetail:
@@ -548,6 +596,13 @@ class RevisionDetail:
             self._date = date
         else:
             self._date = date
+
+    def to_dict(self):
+        # todo: add to tests
+        x = dict()
+        x["number"] = self.number
+        x["date"] = self.date
+        return x
 
 
 class Impedance:
@@ -640,6 +695,18 @@ class Impedance:
     def impedance(self) -> tuple:
         return self.z, self.z_unit
 
+    def to_dict(self):
+        # todo: add to tests
+        x = dict()
+        x["mvam"] = self.mvam
+        x["r"] = self.r
+        x["r_unit"] = self.r_unit
+        x["x"] = self.x
+        x["x_unit"] = self.x_unit
+        x["z"] = self.z
+        x["z_unit"] = self.z_unit
+        return x
+
 
 class Insulation:
     def __init__(self, insulation_material: str = "", insulation_code: str = '', op_temp: int = 0, max_temp: int = 0):
@@ -669,7 +736,6 @@ class Insulation:
     def code(self, code: str):
         self._code = code.upper()
 
-
     @property
     def op_temp(self) -> int:
         return self._op_temp
@@ -689,6 +755,15 @@ class Insulation:
         if temp < 0:
             raise ValueError(f"Value must be a value greater than 0.")
         self._max_temp = temp
+
+    def to_dict(self):
+#         todo: add to tests
+        x = dict()
+        x["material"] = self.material
+        x["code"] = self.code
+        x["op_temp"] = self.op_temp
+        x["max_temp"] = self.max_temp
+        return x
 
 
 class Contracts:

@@ -1,5 +1,6 @@
 {
-  "tests/v_unit/Constants/test_constants.py": true,
-  "tests/v_unit/Constants/test_constants.py::test_import_cable_config": true,
-  "tests/v_unit/test_constants.py::test_import_cable_config": true
+  "tests/unit/Constants/test_constants.py": true,
+  "tests/unit/Constants/test_constants.py::test_import_cable_config": true,
+  "tests/unit/test_cable.py::test_cls_i2t": true,
+  "tests/unit/test_constants.py::test_import_cable_config": true
 }

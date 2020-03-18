@@ -726,17 +726,17 @@ class Circuit:
                  frequency_unit: str = '', waveform: str = '', phases: int = 0, neutral_required: bool = True,
                  physical_method: str = '', cable_arrangement: str = '', load_current: float = 0.0):
         """
-        :param circuit_type:
-        :param voltage:
-        :param voltage_unit:
-        :param frequency:
-        :param frequency_unit:
-        :param waveform:
-        :param phases:
-        :param neutral_required:
-        :param physical_method:
-        :param cable_arrangement:
-        :param load_current:
+        :param circuit_type: The type of circuit.
+        :param voltage: The circuit's voltage.
+        :param voltage_unit: Circuit voltage unit
+        :param frequency: Frequency of the circuit 0 = DC
+        :param frequency_unit: Unit of frequency measurement.
+        :param waveform: Is the circuit AC or DC
+        :param phases: The number of phases for the circuit
+        :param neutral_required: Does the circuit require a neutral?
+        :param physical_method: How the cable is intended to be physically installed
+        :param cable_arrangement: How the cables are to be arranged when installed.
+        :param load_current: The circuit's load current.
         """
         self.circuit_type = circuit_type
         self._voltage = Voltage()
@@ -744,11 +744,11 @@ class Circuit:
         self.v_unit = voltage_unit
         self.phases = phases
         self.neutral_required = neutral_required
-        self._waveform = Frequency()
+        self._frequency = Frequency()
         self.frequency = frequency
         self.frequency_unit = frequency_unit
         self.waveform = waveform
-        self._installation = Vector()
+        self._installation = InstallationMethod()
         self.physical_installation = physical_method
         self.cable_arrangement = cable_arrangement
         self._load_current = load_current
@@ -795,43 +795,43 @@ class Circuit:
 
     @property
     def frequency(self) -> int:
-        return self._waveform.frequency
+        return self._frequency.frequency
 
     @frequency.setter
     def frequency(self, value: int):
-        self._waveform.frequency = value
+        self._frequency.frequency = value
 
     @property
     def frequency_unit(self) -> str:
-        return self._waveform.unit
+        return self._frequency.unit
 
     @frequency_unit.setter
     def frequency_unit(self, unit: str):
-        self._waveform.unit = unit.upper()
+        self._frequency.unit = unit.upper()
 
     @property
     def waveform(self) -> str:
-        return self._waveform.waveform
+        return self._frequency.waveform
 
     @waveform.setter
     def waveform(self, value: str):
-        self._waveform.waveform = value.upper()
+        self._frequency.waveform = value.upper()
 
     @property
     def physical_installation(self) -> str:
-        return self._installation.unit
+        return self._installation.physical_installation
 
     @physical_installation.setter
     def physical_installation(self, value: str):
-        self._installation.unit = value.upper()
+        self._installation.physical_installation = value.upper()
 
     @property
     def cable_arrangement(self) -> str:
-        return self._installation.magnitude
+        return self._installation.cable_arrangement
 
     @cable_arrangement.setter
     def cable_arrangement(self, value: str):
-        self._installation.magnitude = value.upper()
+        self._installation.cable_arrangement = value.upper()
 
     @property
     def load_current(self) -> float:
@@ -840,6 +840,15 @@ class Circuit:
     @load_current.setter
     def load_current(self, amps: float):
         self._load_current = amps
+
+    def to_dict(self):
+        x = dict()
+        x["circuit_type"] = self.circuit_type
+        x["voltage"] = self._voltage.to_dict()
+        x["frequency"] = self._frequency.to_dict()
+        x["installation_method"] = self._installation.to_dict()
+        x["load_current"] = self.load_current
+        return x
 
 
 class Vector:
@@ -870,6 +879,43 @@ class Vector:
         x = dict()
         x["magnitude"] = self.magnitude
         x["unit"] = self.unit
+        return x
+
+
+class InstallationMethod:
+    """
+    A simple class to represent the physical installation of cables and cable run.
+    """
+    def __init__(self, physical_installation=None, cable_arrangement: str = ''):
+        self.physical_installation = physical_installation
+        self.cable_arrangement = cable_arrangement
+
+    @property
+    def physical_installation(self) -> str:
+        return self._physical_installation
+
+    @physical_installation.setter
+    def physical_installation(self, installation: str):
+        if installation is None:
+            self._physical_installation = installation
+        else:
+            self._physical_installation = installation.upper()
+
+    @property
+    def cable_arrangement(self) -> str:
+        return self._cable_arrangement
+
+    @cable_arrangement.setter
+    def cable_arrangement(self, arrangement: str):
+        if arrangement is None:
+            self._cable_arrangement = arrangement
+        else:
+            self._cable_arrangement = arrangement.upper()
+
+    def to_dict(self):
+        x = dict()
+        x["physical_installation"] = self.physical_installation
+        x["cable_arrangement"] = self.cable_arrangement
         return x
 
 
@@ -1071,7 +1117,7 @@ class CableInstallationMethod:
     def cable_arrangement(self, value: str):
         self._cable_arrangement = value.upper()
 
-    def convert_to_dict(self) -> dict:
+    def to_dict(self) -> dict:
         """
         Convert the class to a dictionary.
         :return:
@@ -1106,6 +1152,12 @@ class Screen:
     def fault_withstand(self, value: int):
         self._fault_withstand = value
 
+    def to_dict(self):
+        x = dict()
+        x["name"] = self.name
+        x["fault_withstand"] = self.fault_withstand
+        return x
+
 
 class Manufacturer:
     def __init__(self, name: str = "", part_number: str = ""):
@@ -1128,13 +1180,18 @@ class Manufacturer:
     def part_number(self, value: str):
         self._number = value.upper()
 
+    def to_dict(self):
+        x = dict()
+        x["name"] = self.name
+        x["part_number"] = self.part_number
+        return x
+
 
 class I2T:
     def __init__(self, k_factor: int = 0, amp_time: List[Tuple[int]] = None):
         self.k_factor: int = k_factor
         self._amp_time = []
         self.amp_time: list = amp_time
-        # self.current: list = current
 
     @property
     def k_factor(self) -> int:
@@ -1152,5 +1209,14 @@ class I2T:
     def amp_time(self, value: (Tuple[int])):
         if value is None:
             pass
+        elif isinstance(value, list):
+            for pair in value:
+                self._amp_time.append(pair)
         else:
             self._amp_time.append(value)
+
+    def to_dict(self):
+        x = dict()
+        x["k_factor"] = self.k_factor
+        x["amp_time"] = self.amp_time
+        return x

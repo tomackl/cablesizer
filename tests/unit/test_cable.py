@@ -3,14 +3,14 @@ import CableSizer.cable as cable
 import datetime as dt
 
 
-def test_cable_run_cls():
+def test_cls_cable_run():
     test_class = cable.CableRun(required_ccc=10, derating_run=0.8)
     expected = (10.0, 0.8)
     result = (test_class.required_ccc, test_class.derate_run)
     assert result == expected
 
 
-def test_conductor_detail_size_setter():
+def test_cls_conductor_detail_size_setter():
     test_class = cable.ConductorDetail()
     test_class.size = 1.5
     expected = 1.5
@@ -18,14 +18,14 @@ def test_conductor_detail_size_setter():
     assert result == expected
 
 
-def test_conductor_detail_size_getter():
+def test_cls_conductor_detail_size_getter():
     test_class = cable.ConductorDetail(size=1.5)
     expected = 1.5
     result = test_class.size
     assert result == expected
 
 
-def test_conductor_detail_size_unit_setter():
+def test_cls_conductor_detail_size_unit_setter():
     test_class = cable.ConductorDetail()
     test_class.size_unit = 'mm2'
     expected = 'MM2'
@@ -33,21 +33,21 @@ def test_conductor_detail_size_unit_setter():
     assert result == expected
 
 
-def test_conductor_detail_size_unit_getter():
+def test_cls_conductor_detail_size_unit_getter():
     test_class = cable.ConductorDetail(size_unit='mm2')
     expected = 'MM2'
     result = test_class.size_unit
     assert result == expected
 
 
-def test_conductor_cable_run_size_getter():
+def test_cls_conductor_cable_run_size_getter():
     test_class = cable.ConductorCableRun(4, '', 4, '', 1.5, '')
     expected = (4.0, 4.0, 1.5)
     result = (test_class.active_size, test_class.neutral_size, test_class.earth_size)
     assert result == expected
 
 
-def test_conductor_cable_run_size_setter():
+def test_cls_conductor_cable_run_size_setter():
     test_class = cable.ConductorCableRun()
     test_class.active_size = 4
     test_class.neutral_size = 4
@@ -57,14 +57,14 @@ def test_conductor_cable_run_size_setter():
     assert result == expected
 
 
-def test_conductor_cable_run_size_unit_getter():
+def test_cls_conductor_cable_run_size_unit_getter():
     test_class = cable.ConductorCableRun(0, 'mm2', 4, 'mm2', 1.5, 'mm2')
     expected = ('MM2', 'MM2', 'MM2')
     result = (test_class.active_size_unit, test_class.neutral_size_unit, test_class.earth_size_unit)
     assert result == expected
 
 
-def test_conductor_cable_run_size_unit_setter():
+def test_cls_conductor_cable_run_size_unit_setter():
     test_class = cable.ConductorCableRun()
     test_class.active_size = 4
     test_class.neutral_size = 4
@@ -74,38 +74,38 @@ def test_conductor_cable_run_size_unit_setter():
     assert result == expected
 
 
-def test_revision_detail_number_setter():
-    test_cls_revision_detail = cable.RevisionDetail()
-    test_cls_revision_detail.number = 'a'
+def test_cls_revision_detail_number_setter():
+    test_class = cable.RevisionDetail()
+    test_class.number = 'a'
     expected = 'A'
-    result = test_cls_revision_detail.number
+    result = test_class.number
     assert result == expected
 
 
-def test_revision_detail_number_getter():
-    test_cls_revision_detail = cable.RevisionDetail()
-    test_cls_revision_detail.number = 'a'
+def test_cls_revision_detail_number_getter():
+    test_class = cable.RevisionDetail()
+    test_class.number = 'a'
     expected = 'A'
-    result = test_cls_revision_detail.number
+    result = test_class.number
     assert result == expected
 
 
-def test_revision_detail_date_setter():
-    test_cls_revision_detail = cable.RevisionDetail()
-    test_cls_revision_detail.date = dt.datetime(1, 1, 1)
+def test_cls_revision_detail_date_setter():
+    test_class = cable.RevisionDetail()
+    test_class.date = dt.datetime(1, 1, 1)
     expected = dt.datetime(1, 1, 1)
-    result = test_cls_revision_detail.date
+    result = test_class.date
     assert result == expected
 
 
-def test_revision_detail_date_getter():
-    test_cls_revision_detail = cable.RevisionDetail()
+def test_cls_revision_detail_date_getter():
+    test_class = cable.RevisionDetail()
     expected = None
-    result = test_cls_revision_detail.date
+    result = test_class.date
     assert result == expected
 
 
-def test_impedance_mvam_setter():
+def test_cls_impedance_mvam_setter():
     test_class = cable.Impedance()
     test_class.mvam = 0.1
     expected = 0.1
@@ -113,14 +113,14 @@ def test_impedance_mvam_setter():
     assert result == expected
 
 
-def test_impedance_mvam_getter():
+def test_cls_impedance_mvam_getter():
     test_class = cable.Impedance(mvam=0.2)
     expected = 0.2
     result = test_class.mvam
     assert result == expected
 
 
-def test_impedance_ohm_setter():
+def test_cls_impedance_ohm_setter():
     test_class = cable.Impedance()
     test_class.r = 0.1
     test_class.r_unit = "ohms"
@@ -133,42 +133,42 @@ def test_impedance_ohm_setter():
     assert result == expected
 
 
-def test_impedance_ohm_getter():
+def test_cls_impedance_ohm_getter():
     test_class = cable.Impedance(r=0.2, r_unit='ohms', x=0.4, x_unit='ohms', z=0.6, z_unit='ohms')
     expected = (0.2, "OHMS", 0.4, "OHMS", 0.6, "OHMS")
     result = (test_class.r, test_class.r_unit, test_class.x, test_class.x_unit, test_class.z, test_class.z_unit)
     assert result == expected
 
 
-def test_impedance_resistance():
+def test_cls_impedance_resistance():
     test_class = cable.Impedance(r=0.8, r_unit='ohms')
     expected = (0.8, "OHMS")
     result = test_class.resistance()
     assert result == expected
 
 
-def test_impedance_reactance():
+def test_cls_impedance_reactance():
     test_class = cable.Impedance(x=0.08, x_unit='ohms')
     expected = (0.08, "OHMS")
     result = test_class.reactance()
     assert result == expected
 
 
-def test_impedance_impedance():
+def test_cls_impedance_impedance():
     test_class = cable.Impedance(z=0.2, z_unit='ohms')
     expected = (0.2, "OHMS")
     result = test_class.impedance()
     assert result == expected
 
 
-def test_contracts_getter():
+def test_cls_contracts_getter():
     test_class = cable.Contracts('Contract_supply', 'contract_install', 'contract_connect')
     expected = ('CONTRACT_SUPPLY', 'CONTRACT_INSTALL', 'CONTRACT_CONNECT')
     result = (test_class.supply, test_class.install, test_class.connect)
     assert result == expected
 
 
-def test_contracts_setter():
+def test_cls_contracts_setter():
     test_class = cable.Contracts()
     test_class.install = 'contract_install'
     test_class.supply = 'contract_supply'
@@ -178,69 +178,104 @@ def test_contracts_setter():
     assert result == expected
 
 
-def test_voltage_cls():
-#     todo: complete test
-    pass
+def test_cls_voltage():
+    test_class = cable.Voltage()
+    test_class.phases = 3
+    test_class.v = 433
+    test_class.unit = "vac"
+    test_class.neutral_required = True
+    expected = (3, 433, "VAC", True)
+    result = (test_class.phases, test_class.v, test_class.unit, test_class.neutral_required)
+    assert result == expected
 
-def test_vector_cls():
-    test_cls_vector = cable.Vector()
-    test_cls_vector.magnitude = 415
-    test_cls_vector.unit = 'VAC'
+
+def test_cls_voltage_to_dict():
+    test_class = cable.Voltage(433, "vac", 3, True)
+    expected = {"phases": 3, "v": 433, "unit": "VAC", "neutral_required": True}
+    result = test_class.to_dict()
+    assert result == expected
+
+
+def test_cls_vector():
+    test_class = cable.Vector()
+    test_class.magnitude = 415
+    test_class.unit = 'VAC'
     expected = (415, 'VAC')
-    result = (test_cls_vector.magnitude, test_cls_vector.unit)
+    result = (test_class.magnitude, test_class.unit)
     assert result == expected
 
 
-def test_vector_magnitude_getter():
-    test_cls_vector = cable.Vector(33, 'kV')
+def test_cls_vector_magnitude_getter():
+    test_class = cable.Vector(33, 'kV')
     expected = (33, 'KV')
-    result = (test_cls_vector.magnitude, test_cls_vector.unit)
+    result = (test_class.magnitude, test_class.unit)
     assert result == expected
 
 
-def test_vector_cls_dict():
+def test_cls_vector_dict():
     test_class = cable.Vector(33, 'kV')
     expected = {"magnitude": 33, "unit": "KV"}
     result = test_class.to_dict()
     assert result == expected
 
 
-def test_circuit_type():
-    test_cls_circuit = cable.Circuit(circuit_type='power')
+def test_cls_circuit_type():
+    test_class = cable.Circuit(circuit_type='power')
     expected = "POWER"
-    result = test_cls_circuit.circuit_type
+    result = test_class.circuit_type
     assert result == expected
 
 
-def test_circuit_voltage():
-    test_cls_circuit = cable.Circuit(voltage=22, voltage_unit='kv', phases=4, neutral_required=True)
+def test_cls_circuit_voltage():
+    test_class = cable.Circuit(voltage=22, voltage_unit='kv', phases=4, neutral_required=True)
     expected = (22, 'KV', 4, True)
-    result = (test_cls_circuit.v, test_cls_circuit.v_unit, test_cls_circuit.phases, test_cls_circuit.neutral_required)
+    result = (test_class.v, test_class.v_unit, test_class.phases, test_class.neutral_required)
     assert result == expected
 
 
-def test_frequency_cls():
-    test_cls_frequency = cable.Frequency(50, 'hz', 'dc')
+def test_cls_circuit_dict():
+    test_class = cable.Circuit(circuit_type="power", voltage=22, voltage_unit='kv', frequency=50, frequency_unit="hz",
+                               waveform="ac", phases=4, neutral_required=True, physical_method="buried_direct",
+                               cable_arrangement="trefoil", load_current=150)
+    expected = {"circuit_type": "POWER",
+                "voltage": {"v": 22, "unit": "KV", "phases": 4, "neutral_required": True},
+                "frequency": {"frequency": 50, "unit": "HZ", "waveform": "AC"},
+                "installation_method": {"physical_installation": "BURIED_DIRECT", "cable_arrangement": "TREFOIL"},
+                "load_current": 150
+                }
+    result = test_class.to_dict()
+    assert result == expected
+
+
+def test_cls_frequency():
+    test_class = cable.Frequency(50, 'hz', 'dc')
     expected = (50, "HZ", "DC")
-    result = (test_cls_frequency.frequency, test_cls_frequency.unit, test_cls_frequency.waveform)
+    result = (test_class.frequency, test_class.unit, test_class.waveform)
     assert result == expected
 
 
-def test_frequency_cls_dict():
+def test_cls_frequency_dict():
     test_class = cable.Frequency(50, 'hz', 'dc')
     expected = {"frequency": 50, "unit": "HZ", "waveform": "DC"}
     result = test_class.to_dict()
     assert result == expected
 
 
-def test_installation_method():
+def test_cls_installation_method():
+    test_class = cable.InstallationMethod(physical_installation="touching", cable_arrangement='trefoil')
+    expected = ("TOUCHING", "TREFOIL")
+    result = (test_class.physical_installation, test_class.cable_arrangement)
+    assert result == expected
+
+
+def test_cls_circuit_installation_method():
     test_class = cable.Circuit(physical_method="touching", cable_arrangement='trefoil')
     expected = ("TOUCHING", "TREFOIL")
     result = (test_class.physical_installation, test_class.cable_arrangement)
     assert result == expected
 
 
-def test_load_current():
+def test_cls_load_current():
     test_class = cable.Circuit(load_current=5.5)
     expected = 6.0
     test_class.load_current = 6.0
@@ -303,6 +338,13 @@ def test_cls_cable_installation_method():
     assert result == expected
 
 
+def test_cls_cable_installation_method_dict():
+    test_class = cable.CableInstallationMethod("buried_direct", 140, 45, "trefoil")
+    expected = {"name": "BURIED_DIRECT", "ccc": 140, "install_temp": 45, "cable_arrangement": "TREFOIL"}
+    result = test_class.to_dict()
+    assert result == expected
+
+
 def test_cls_cable_screen():
     test_class = cable.Screen()
     test_class.name = "dwt"
@@ -321,10 +363,63 @@ def test_cls_manufacturer():
     assert result == expected
 
 
-def test_cls_i2t():
+def test_cls_manufacturer_dict():
+    test_class = cable.Manufacturer("olex", "p1234")
+    expected = {"name": "OLEX", "part_number": "P1234"}
+    result = test_class.to_dict()
+    assert result == expected
+
+
+@pytest.mark.parametrize("k_factor, amp_time, expected",
+                         [(141, [(10000, 0.1)], (141, [(10000, 0.1)])),
+                          (141, (10000, 0.1), (141, [(10000, 0.1)])),
+                          (165, [], (165, [])),
+                          (210, None, (210, []))
+                          ])
+def test_cls_i2t(k_factor, amp_time, expected):
     test_class = cable.I2T()
-    expected = (141, [(10000, 0.1)])
-    test_class.k_factor = 141
-    test_class.amp_time = (10000, 0.1)
+    test_class.k_factor = k_factor
+    test_class.amp_time = amp_time
     result = (test_class.k_factor, test_class.amp_time)
+    assert result == expected
+
+
+def test_cls_i2t_dict():
+    test_class = cable.I2T(141, [(10000, 0.1)])
+    expected = {"k_factor": 141, "amp_time": [(10000, 0.1)]}
+    result = test_class.to_dict()
+    assert result ==expected
+
+
+def test_cls_core_details():
+    test_class = cable.CoreDetails()
+    test_class.unit = "mm2"
+    test_class.name = "core"
+    test_class.number = 3
+    test_class.size = 35
+    expected = (35, "MM2", 3, "CORE")
+    result = (test_class.size, test_class.unit, test_class.number, test_class.name)
+    assert result == expected
+
+
+def test_cls_core_details_dict():
+    test_class = cable.CoreDetails(35, "mm2", 3, "core")
+    expected = {"size": 35, "unit": "MM2", "number": 3, "name": "CORE"}
+    result = test_class.to_dict()
+    assert result == expected
+
+
+def test_cls_screen():
+    test_class = cable.Screen()
+    test_class.name = "os"
+    test_class.fault_withstand = 10000000
+    expected = ("OS", 10000000)
+    result = (test_class.name, test_class.fault_withstand)
+    assert result == expected
+    
+
+def test_cls_screen_dict():
+    test_class = cable.Screen("os", 27000000)
+    expected = {"name": "OS", "fault_withstand": 27000000}
+    result = test_class.to_dict()
     assert result == expected

@@ -2,7 +2,8 @@ import datetime
 import decimal
 import cmath
 from typing import Tuple, List
-#
+
+
 class CableRunDefaultValues:
     """
     A class to store the default values for the cable run
@@ -32,13 +33,13 @@ class CableRun:
         :param derating_run: The current carrying capacity derating factor to be applied to the cable run, based on
         installation conditions and other factors.
         """
-        self.cables = Cable()
+        self.cables: list = []
         self.circuit_details = Circuit()
         self.conductor = ConductorDetail()
         self.impedance = Impedance()
         self.tag: str = tag
         self.length: float = length
-        self.description: str = description
+        self.description: str = description # todo: add property
         self.supply: str = supply
         self.load: str = load
         self.notes: str = notes
@@ -46,6 +47,27 @@ class CableRun:
         self.revision = RevisionDetail()
         self.required_ccc: float = required_ccc
         self.derate_run: float = derating_run
+
+    def to_dict(self):
+        x = dict()
+        x["cables"] = self.cables
+        x["circuit_details"] = self.circuit_details
+        x["conductor"] = self.conductor
+        x["impedance"] = self.impedance
+        x["tag"] = self.tag
+        x["length"] = self.length
+        x["description"] = self.description
+        x["supply"] = self.supply
+        x["load"] = self.load
+        x["notes"] = self.notes
+        x["contracts"] = self.contracts
+        x["revision"] = self.revision
+        x["derate_run"] = self.derate_run
+        return x
+
+    def add_cable(self, cable):
+        self.cables.append(cable)
+
 
     def derate_ccc(self):
         """
@@ -289,12 +311,125 @@ class Cable:
                  control_size: float = 0.0, control_number: int = 0, control_unit: str = "", control_name: str = "",
                  communication_size: float = 0.0, communication_number: int = 0, communication_unit: str = "",
                  communication_name: str = "", data_size: float = 0.0, data_number: int = 0, data_unit: str = "",
-                 data_name: str = "", core_arrangement: str = "", cable_shape: str = "",
-                 conductor_material: str = "", cross_sectional_area: int = 0, cable_sheath: str = "",
-                 insulation_material: str = "", insulation_code: str = "", cont_conductor_temp: int =0,
-                 max_conductor_temp: int = 0, ccc: float = 0.0, circuit_type: str = "", volt_rating: str = "",
-                 armour: [None, str] = None, description: str = "", flexible: bool = False):
-        self.type: str = cable_type
+                 data_name: str = "", unenclosed_spaced_name: str = "", unenclosed_spaced_ccc: int = 0,
+                 unenclosed_spaced_install_temp: int = 0, unenclosed_spaced_arrangement: str = "",
+                 unenclosed_surface_name: str = "", unenclosed_surface_ccc: int = 0,
+                 unenclosed_surface_install_temp: int = 0, unenclosed_surface_arrangement: str = "",
+                 unenclosed_touching_name: str = "", unenclosed_touching_ccc: int = 0,
+                 unenclosed_touching_install_temp: int = 0, unenclosed_touching_arrangement: str = "",
+                 enclosed_conduit_ccc: int = 0, enclosed_conduit_name: str = "",
+                 enclosed_conduit_install_temp: int = 0, enclosed_conduit_arrangement: str = "",
+                 enclosed_partial_ccc: int = 0, enclosed_partial_name: str = "",
+                 enclosed_partial_install_temp: int = 0, enclosed_partial_arrangement: str = "",
+                 enclosed_complete_ccc: int = 0, enclosed_complete_name: str = "",
+                 enclosed_complete_install_temp: int = 0, enclosed_complete_arrangement: str = "",
+                 buried_direct_ccc: int = 0, buried_direct_name: str = "", buried_direct_install_temp: int = 0,
+                 buried_direct_arrangement: str = "", ducts_single_ccc: int = 0, ducts_single_name: str = "",
+                 ducts_single_install_temp: int = 0, ducts_single_arrangement: str = "", ducts_per_cable_ccc: int = 0,
+                 ducts_per_cable_name: str = "", ducts_per_cable_install_temp: int = 0,
+                 ducts_per_cable_arrangement: str = "", mvam: float = 0.0, r: float = 0.0, r_unit: str = "",
+                 x: float = 0.0, x_unit: str = "", z: float = 0.0, z_unit: str = "", cable_screen_type: str = "",
+                 cable_screen_withstand: int = 0, core_screen_type: str = "", core_screen_withstand: int = 0,
+                 insulation_material: str = "", insulation_code: str = "", cont_conductor_temp: int = 0,
+                 max_conductor_temp: int = 0, cable_sheath: str = "", volt_rating: str = "", flexible: bool = False,
+                 armour: [None, str] = None, rev_number: str = "", rev_date: datetime = None, description: str = "",
+                 core_arrangement: str = "", cable_shape: str = "", conductor_material: str = "", circuit_type: str = ""
+                 ):
+        """
+
+        :param cable_type:
+        :param active_size:
+        :param active_number:
+        :param active_unit:
+        :param active_name:
+        :param neutral_size:
+        :param neutral_number:
+        :param neutral_unit:
+        :param neutral_name:
+        :param earth_size:
+        :param earth_number:
+        :param earth_unit:
+        :param earth_name:
+        :param instrument_size:
+        :param instrument_number:
+        :param instrument_unit:
+        :param instrument_name:
+        :param control_size:
+        :param control_number:
+        :param control_unit:
+        :param control_name:
+        :param communication_size:
+        :param communication_number:
+        :param communication_unit:
+        :param communication_name:
+        :param data_size:
+        :param data_number:
+        :param data_unit:
+        :param data_name:
+        :param unenclosed_spaced_name:
+        :param unenclosed_spaced_ccc:
+        :param unenclosed_spaced_install_temp:
+        :param unenclosed_spaced_arrangement:
+        :param unenclosed_surface_name:
+        :param unenclosed_surface_ccc:
+        :param unenclosed_surface_install_temp:
+        :param unenclosed_surface_arrangement:
+        :param unenclosed_touching_name:
+        :param unenclosed_touching_ccc:
+        :param unenclosed_touching_install_temp:
+        :param unenclosed_touching_arrangement:
+        :param enclosed_conduit_ccc:
+        :param enclosed_conduit_name:
+        :param enclosed_conduit_install_temp:
+        :param enclosed_conduit_arrangement:
+        :param enclosed_partial_ccc:
+        :param enclosed_partial_name:
+        :param enclosed_partial_install_temp:
+        :param enclosed_partial_arrangement:
+        :param enclosed_complete_ccc:
+        :param enclosed_complete_name:
+        :param enclosed_complete_install_temp:
+        :param enclosed_complete_arrangement:
+        :param buried_direct_ccc:
+        :param buried_direct_name:
+        :param buried_direct_install_temp:
+        :param buried_direct_arrangement:
+        :param ducts_single_ccc:
+        :param ducts_single_name:
+        :param ducts_single_install_temp:
+        :param ducts_single_arrangement:
+        :param ducts_per_cable_ccc:
+        :param ducts_per_cable_name:
+        :param ducts_per_cable_install_temp:
+        :param ducts_per_cable_arrangement:
+        :param mvam:
+        :param r:
+        :param r_unit:
+        :param x:
+        :param x_unit:
+        :param z:
+        :param z_unit:
+        :param cable_screen_type:
+        :param cable_screen_withstand:
+        :param core_screen_type:
+        :param core_screen_withstand:
+        :param insulation_material:
+        :param insulation_code:
+        :param cont_conductor_temp:
+        :param max_conductor_temp:
+        :param cable_sheath:
+        :param volt_rating:
+        :param flexible:
+        :param armour:
+        :param rev_number:
+        :param rev_date:
+        :param description:
+        :param core_arrangement:
+        :param cable_shape:
+        :param conductor_material:
+        :param circuit_type:
+        """
+        self.cable_type: str = cable_type
         self.activeCores = CoreDetails(active_size, active_unit, active_number, active_name)
         self.neutralCores = CoreDetails(neutral_size, neutral_unit, neutral_number, neutral_name)
         self.earthCores = CoreDetails(earth_size, earth_unit, earth_number, earth_name)
@@ -303,31 +438,56 @@ class Cable:
         self.communicationCores = CoreDetails(communication_size, communication_unit, communication_number,
                                               communication_name)
         self.dataCores = CoreDetails(data_size, data_unit, data_number, data_name)
-        self.installMethod = CableInstallationMethod()
-        self.impedance = Impedance()
-        self.cableScreen = Screen()
-        self.coreScreen = Screen()
+        self.impedance = Impedance(mvam, r, r_unit, x, x_unit, z, z_unit)
+        self.cableScreen = Screen(cable_screen_type, cable_screen_withstand)
+        self.coreScreen = Screen(core_screen_type, core_screen_withstand)
         self.insulation = Insulation(insulation_material, insulation_code, cont_conductor_temp, max_conductor_temp)
+        self.unenclosedSpaced = CableInstallationMethod(unenclosed_spaced_name, unenclosed_spaced_ccc,
+                                                        unenclosed_spaced_install_temp, unenclosed_spaced_arrangement)
+        self.unenclosedSurface = CableInstallationMethod(unenclosed_surface_name, unenclosed_surface_ccc,
+                                                         unenclosed_surface_install_temp,
+                                                         unenclosed_surface_arrangement)
+        self.unenclosedTouching = CableInstallationMethod(unenclosed_touching_name, unenclosed_touching_ccc,
+                                                          unenclosed_touching_install_temp,
+                                                          unenclosed_touching_arrangement)
+        self.enclosedConduit = CableInstallationMethod(enclosed_conduit_name, enclosed_conduit_ccc,
+                                                       enclosed_conduit_install_temp, enclosed_conduit_arrangement,)
+        self.enclosedPartial = CableInstallationMethod(enclosed_partial_name, enclosed_partial_ccc,
+                                                       enclosed_partial_install_temp, enclosed_partial_arrangement)
+        self.enclosedComplete = CableInstallationMethod(enclosed_complete_name, enclosed_complete_ccc,
+                                                        enclosed_complete_install_temp, enclosed_complete_arrangement)
+        self.buriedDirect = CableInstallationMethod(buried_direct_name, buried_direct_ccc, buried_direct_install_temp,
+                                                    buried_direct_arrangement)
+        self.ductsSingle = CableInstallationMethod(ducts_single_name, ducts_single_ccc, ducts_single_install_temp,
+                                                   ducts_single_arrangement)
+        self.ductsPerCable = CableInstallationMethod(ducts_per_cable_name, ducts_per_cable_ccc,
+                                                     ducts_per_cable_install_temp, ducts_per_cable_arrangement)
         self.sheath = cable_sheath
         self.voltage_rating: str = volt_rating
         self.flexible: bool = flexible
         self.armour: [None, bool] = armour
-        self.rev = RevisionDetail()
+        self.revision = RevisionDetail(rev_number, rev_date)
         self.description = description
         self.circuit_type = circuit_type
         self.conductor_material = conductor_material
         self.core_arrangement = core_arrangement
         self.shape = cable_shape
-        # self.cross_sectional_area = cross_sectional_area
-        self.ccc: float = ccc
 
     @property
-    def type(self) -> str:
-        return self._type
+    def cable_type(self) -> str:
+        return self._cable_type
 
-    @type.setter
-    def type(self, value: str):
-        self._type = value.upper()
+    @cable_type.setter
+    def cable_type(self, value: str):
+        self._cable_type = value.upper()
+
+    @property
+    def circuit_type(self) -> str:
+        return self._circuit_type
+
+    @circuit_type.setter
+    def circuit_type(self, value: str):
+        self._circuit_type = value.upper()
 
     @property
     def core_arrangement(self) -> str:
@@ -409,6 +569,7 @@ class Cable:
     def to_dict(self):
         # todo: add to test
         x = dict()
+        x["cable_type"] = self.cable_type
         x["activeCores"] = self.activeCores.to_dict()
         x["neutralCores"] = self.neutralCores.to_dict()
         x["earthCores"] = self.earthCores.to_dict()
@@ -416,7 +577,15 @@ class Cable:
         x["controlCores"] = self.controlCores.to_dict()
         x["communicationCores"] = self.communicationCores.to_dict()
         x["dataCores"] = self.dataCores.to_dict()
-        x["installMethod"] = self.installMethod.to_dict()
+        x["unenclosedSpaced"] = self.unenclosedSpaced.to_dict()
+        x["unenclosedSurface"] = self.unenclosedSurface.to_dict()
+        x["unenclosedTouching"] = self.unenclosedTouching.to_dict()
+        x["enclosedConduit"] = self.enclosedConduit.to_dict()
+        x["enclosedPartial"] = self.enclosedPartial.to_dict()
+        x["enclosedComplete"] = self.enclosedComplete.to_dict()
+        x["buriedDirect"] = self.buriedDirect.to_dict()
+        x["ductsSingle"] = self.ductsSingle.to_dict()
+        x["ductsPerCable"] = self.ductsPerCable.to_dict()
         x["impedance"] = self.impedance.to_dict()
         x["cableScreen"] = self.cableScreen.to_dict()
         x["coreScreen"] = self.coreScreen.to_dict()
@@ -425,13 +594,12 @@ class Cable:
         x["volt_rating"] = self.voltage_rating
         x["flexible"] = self.flexible
         x["armour"] = self.armour
-        x["rev"] = self.rev.to_dict()
+        x["revision"] = self.revision.to_dict()
         x["description"] = self.description
         x["circuit_type"] = self.circuit_type
         x["conductor_material"] = self.conductor_material
         x["core_arrangement"] = self.core_arrangement
         x["cable_shape"] = self.shape
-        x["ccc"] = self.ccc
         return x
 
 
@@ -757,7 +925,7 @@ class Insulation:
         self._max_temp = temp
 
     def to_dict(self):
-#         todo: add to tests
+        # todo: add to tests
         x = dict()
         x["material"] = self.material
         x["code"] = self.code
@@ -807,7 +975,7 @@ class Circuit:
                  frequency_unit: str = '', waveform: str = '', phases: int = 0, neutral_required: bool = True,
                  physical_method: str = '', cable_arrangement: str = '', load_current: float = 0.0):
         """
-        :param circuit_type: The type of circuit.
+        :param circuit_type: The cable_type of circuit.
         :param voltage: The circuit's voltage.
         :param voltage_unit: Circuit voltage unit
         :param frequency: Frequency of the circuit 0 = DC
@@ -927,7 +1095,7 @@ class Circuit:
         x["circuit_type"] = self.circuit_type
         x["voltage"] = self._voltage.to_dict()
         x["frequency"] = self._frequency.to_dict()
-        x["installation_method"] = self._installation.to_dict()
+        x["installation_name"] = self._installation.to_dict()
         x["load_current"] = self.load_current
         return x
 
@@ -1046,17 +1214,17 @@ class Voltage:
     A simple class for voltage details.
     """
     def __init__(self, volts: int = None, unit: str = '', phases: int = 0, neutral_required: bool = True):
-        self.phases: str = phases
+        self.phases: int = phases
         self.v: int = volts
         self.unit: str = unit
         self.neutral_required: bool = neutral_required
 
     @property
-    def phases(self) -> str:
+    def phases(self) -> int:
         return self._phases
 
     @phases.setter
-    def phases(self, phases: str):
+    def phases(self, phases: int):
         self._phases = phases
 
     @property
@@ -1158,7 +1326,6 @@ class CableInstallationMethod:
         This class defines and checks the details of the cable installation details.
         :param name: The installation method.
         :param ccc: Current carrying capacity  of the cable cable.
-        :param install_temp: The ambient temperature for the operational environment.
         :param cable_arrangement: The arrangement of the cable cores. Single core cables only.
         """
         self.name: str = name
@@ -1172,7 +1339,10 @@ class CableInstallationMethod:
 
     @name.setter
     def name(self, value: str):
-        self._name = value.upper()
+        if value is None:
+            self._name = value
+        else:
+            self._name = value.upper()
 
     @property
     def ccc(self) -> int:
@@ -1184,11 +1354,11 @@ class CableInstallationMethod:
 
     @property
     def install_temp(self) -> int:
-        return self._install_temp
+        return self._temp
 
     @install_temp.setter
     def install_temp(self, value: int):
-        self._install_temp = value
+        self._temp = value
 
     @property
     def cable_arrangement(self) -> str:

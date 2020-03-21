@@ -5,7 +5,7 @@ import json
 
 def determine_electrical_load(load, unit, voltage, phases):
     """
-    Calculate the cable's current (amps) load.
+    Calculate the cable_list's current (amps) load.
     :param load:
     :param unit:
     :return:

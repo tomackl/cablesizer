@@ -53,10 +53,19 @@ def test_cls_conductor_detail_size_unit_getter():
     assert result == expected
 
 
-def test_cls_conductor_detail_dict():
+def test_cls_conductor_detail_to_dict():
     test_class = cable.ConductorDetail(95, "mm2")
     expected = {"size": 95, "unit": "MM2"}
     result = test_class.to_dict()
+    assert result == expected
+
+
+def test_cls_conductor_detail_from_dict():
+    test_class = cable.ConductorDetail()
+    details = {"size": 95, "unit": "mm2"}
+    test_class.from_dict(details)
+    expected = (95, "MM2")
+    result = (test_class.size, test_class.unit)
     assert result == expected
 
 
@@ -94,7 +103,7 @@ def test_cls_conductor_cable_run_size_setter():
     assert result == expected
 
 
-def test_cls_conductor_cable_run_dict():
+def test_cls_conductor_cable_run_to_dict():
     test_class = cable.ConductorCableRun(active_size=4, active_unit="mm2", neutral_size=4, neutral_unit="mm2",
                                          earth_size=1.5, earth_unit="mm2", instrumentation_size=1.5,
                                          instrumentation_unit="mm2", control_size=1.5, control_unit="mm2",
@@ -109,6 +118,31 @@ def test_cls_conductor_cable_run_dict():
                 "controlConductors": {"size": 1.5, "unit": "MM2"},
                 }
     result = test_class.to_dict()
+    assert result == expected
+
+
+def test_cls_conductor_cable_run_from_dict():
+    test_class = cable.ConductorCableRun(active_size=4, active_unit="mm2", neutral_size=4, neutral_unit="mm2",
+                                         earth_size=1.5, earth_unit="mm2", instrumentation_size=1.5,
+                                         instrumentation_unit="mm2", control_size=1.5, control_unit="mm2",
+                                         data_size=0.75, data_unit="mm2", communication_size=1.5,
+                                         communication_unit="mm2")
+    expected = (4, "MM2", 4, "MM2", 1.5, "MM2", 1.5, "MM2", 1.5, "MM2", 0.75, "MM2", 1.5, "MM2")
+    details = {"activeConductors": {"size": 4, "unit": "mm2"},
+               "neutralConductors": {"size": 4, "unit": "mm2"},
+               "earthConductors": {"size": 1.5, "unit": "mm2"},
+               "instrumentationConductors": {"size": 1.5, "unit": "mm2"},
+               "communicationConductors": {"size": 1.5, "unit": "mm2"},
+               "dataConductors": {"size": 0.75, "unit": "mm2"},
+               "controlConductors": {"size": 1.5, "unit": "mm2"},
+               }
+    test_class.from_dict(details)
+    result = (test_class.activeConductors.size, test_class.activeConductors.unit, test_class.neutralConductors.size,
+              test_class.neutralConductors.unit, test_class.earthConductors.size, test_class.earthConductors.unit,
+              test_class.instrumentationConductors.size, test_class.instrumentationConductors.unit,
+              test_class.communicationConductors.size, test_class.communicationConductors.unit,
+              test_class.dataConductors.size, test_class.dataConductors.unit, test_class.controlConductors.size,
+              test_class.controlConductors.unit)
     assert result == expected
 
 
@@ -216,10 +250,20 @@ def test_cls_impedance_impedance():
     assert result == expected
 
 
-def test_cls_impedance_dict():
+def test_cls_impedance_to_dict():
     test_class = cable.Impedance(mvam=0.2, r=0.8, r_unit='ohms', x=0.08, x_unit='ohms', z=0.2, z_unit='ohms')
-    expected = {"mvam": 0.2, "r": 0.8, "r_unit": "OHMS",  "x": 0.08, "x_unit": "OHMS",  "z": 0.2, "z_unit": "OHMS", }
+    expected = {"mvam": 0.2, "r": 0.8, "r_unit": "OHMS",  "x": 0.08, "x_unit": "OHMS",  "z": 0.2, "z_unit": "OHMS"}
     result = test_class.to_dict()
+    assert result == expected
+
+
+def test_cls_impedance_from_dict():
+    test_class = cable.Impedance()
+    expected = (0.2, 0.8, "OHMS", 0.08, "OHMS", 0.2, "OHMS")
+    details = {"mvam": 0.2, "r": 0.8, "r_unit": "ohms",  "x": 0.08, "x_unit": "ohms",  "z": 0.2, "z_unit": "ohms"}
+    test_class.from_dict(details)
+    result = (test_class.mvam, test_class.r, test_class.r_unit, test_class.x, test_class.x_unit, test_class.z,
+              test_class.z_unit)
     assert result == expected
 
 
@@ -258,6 +302,15 @@ def test_cls_voltage_to_dict():
     assert result == expected
 
 
+def test_cls_voltage_from_dict():
+    test_class = cable.Voltage()
+    expected = (433, "VAC", 3, True)
+    details = {"phases": 3, "v": 433, "unit": "vac", "neutral_required": True}
+    test_class.from_dict(details)
+    result = (test_class.v, test_class.unit, test_class.phases, test_class.neutral_required)
+    assert result == expected
+
+
 def test_cls_vector():
     test_class = cable.Vector()
     test_class.magnitude = 415
@@ -274,10 +327,19 @@ def test_cls_vector_magnitude_getter():
     assert result == expected
 
 
-def test_cls_vector_dict():
+def test_cls_vector_to_dict():
     test_class = cable.Vector(33, 'kV')
     expected = {"magnitude": 33, "unit": "KV"}
     result = test_class.to_dict()
+    assert result == expected
+
+
+def test_cls_vector_from_dict():
+    test_class = cable.Vector()
+    expected = (33, "KV")
+    details = {"magnitude": 33, "unit": "kv"}
+    test_class.from_dict(details)
+    result = (test_class.magnitude, test_class.unit)
     assert result == expected
 
 
@@ -291,7 +353,8 @@ def test_cls_circuit_type():
 def test_cls_circuit_voltage():
     test_class = cable.Circuit(voltage=22, voltage_unit='kv', phases=4, neutral_required=True)
     expected = (22, 'KV', 4, True)
-    result = (test_class.v, test_class.v_unit, test_class.phases, test_class.neutral_required)
+    result = (test_class.Voltage.v, test_class.Voltage.unit, test_class.Voltage.phases,
+              test_class.Voltage.neutral_required)
     assert result == expected
 
 
@@ -330,10 +393,25 @@ def test_cls_installation_method():
     assert result == expected
 
 
+def tst_cls_installation_to_dict():
+    test_class = cable.InstallationMethod("touching", "trefoil")
+    expected = {"installation": "TOUCHING", "arrangement": "TREFOIL"}
+    result = test_class.to_dict()
+    assert result == expected
+
+
+def tst_cls_installation_from_dict():
+    test_class = cable.InstallationMethod()
+    expected = ("TOUCHING", "TREFOIL")
+    test_class.from_dict({"installation": "TOUCHING", "arrangement": "TREFOIL"})
+    result = (test_class.physical_installation, test_class.cable_arrangement)
+    assert result == expected
+
+
 def test_cls_circuit_installation_method():
     test_class = cable.Circuit(physical_method="touching", cable_arrangement='trefoil')
     expected = ("TOUCHING", "TREFOIL")
-    result = (test_class.physical_installation, test_class.cable_arrangement)
+    result = (test_class.Installation.physical_installation, test_class.Installation.cable_arrangement)
     assert result == expected
 
 
@@ -383,10 +461,19 @@ def test_cls_core_details():
     assert result == expected
 
 
-def test_cls_core_details_dict():
+def test_cls_core_details_to_dict():
     test_class = cable.CoreDetails(35, "mm2", 4, "core")
     expected = {"size": 35, "unit": "MM2", "number": 4, "name": "CORE"}
     result = test_class.to_dict()
+    assert result == expected
+
+
+def test_cls_core_details_from_dict():
+    test_class = cable.CoreDetails()
+    expected = (35, "MM2", 4, "CORE")
+    details = {"size": 35, "unit": "mm2", "number": 4, "name": "core"}
+    test_class.from_dict(details)
+    result = (test_class.size, test_class.unit, test_class.number, test_class.name)
     assert result == expected
 
 
@@ -400,10 +487,18 @@ def test_cls_cable_installation_method():
     assert result == expected
 
 
-def test_cls_cable_installation_method_dict():
+def test_cls_cable_installation_method_to_dict():
     test_class = cable.CableInstallationMethod(140, 45, "trefoil")
     expected = {"ccc": 140, "install_temp": 45, "arrangement": "TREFOIL"}
     result = test_class.to_dict()
+    assert result == expected
+
+
+def test_cls_cable_installation_method_from_dict():
+    test_class = cable.CableInstallationMethod()
+    expected = (140, 45, "TREFOIL")
+    test_class.from_dict({"ccc": 140, "install_temp": 45, "arrangement": "trefoil"})
+    result = (test_class.ccc, test_class.install_temp, test_class.cable_arrangement)
     assert result == expected
 
 
@@ -462,10 +557,18 @@ def test_cls_screen():
     assert result == expected
 
 
-def test_cls_screen_dict():
+def test_cls_screen_to_dict():
     test_class = cable.Screen("os", 27000000)
     expected = {"name": "OS", "fault_withstand": 27000000}
     result = test_class.to_dict()
+    assert result == expected
+
+
+def test_cls_screen_from_dict():
+    test_class = cable.Screen()
+    expected = ("OS", 27000000)
+    test_class.from_dict({"name": "os", "fault_withstand": 27000000})
+    result = (test_class.name, test_class.fault_withstand)
     assert result == expected
 
 
@@ -492,8 +595,8 @@ def test_cls_cable():
                              conductor_material="", cable_sheath="", insulation_material="", insulation_code="",
                              cont_conductor_temp=0, max_conductor_temp=0, circuit_type="", volt_rating="", armour=None,
                              description="", flexible=False)
-    expected = ("POWER", 0.0, 0, "", "", 0.0, 0, "", "", 0.0, 0, "", "", 0.0, 0, "", "", 0.0, 0,"", "", 0.0, 0, "", "",
-                0.0, 0, "", "", 0, 0, "", 0, 0, "",0, 0, "", 0, 0, "", 0, 0, "", 0, 0, "", 0, 0, "", 0, 0, "", 0, 0,
+    expected = ("POWER", 0.0, 0, "", "", 0.0, 0, "", "", 0.0, 0, "", "", 0.0, 0, "", "", 0.0, 0, "", "", 0.0, 0, "", "",
+                0.0, 0, "", "", 0, 0, "", 0, 0, "", 0, 0, "", 0, 0, "", 0, 0, "", 0, 0, "", 0, 0, "", 0, 0, "", 0, 0,
                 "", 0.0, 0.0, "", 0.0, "", 0.0, "", "", 0, "", 0, "", "", "", "", "", "", 0, 0, "", "", None, "", False)
     result = (test_class.cable_type, test_class.activeCores.size, test_class.activeCores.number,
               test_class.activeCores.unit, test_class.activeCores.name, test_class.neutralCores.size,
@@ -530,11 +633,11 @@ def test_cls_cable():
 
 
 def test_cls_cable_dict():
-    test_class = cable.Cable(cable_type="power", active_size=0.0, active_number=0, active_unit="", active_name="",
+    test_class = cable.Cable(cable_type="control", active_size=0.0, active_number=0, active_unit="", active_name="",
                              neutral_size=0.0, neutral_number=0, neutral_unit="", neutral_name="", earth_size=0.0,
                              earth_number=0, earth_unit="", earth_name="", instrument_size=0.0, instrument_number=0,
-                             instrument_unit="", instrument_name="", control_size=0.0, control_number=0,
-                             control_unit="", control_name="", communication_size=0.0, communication_number=0,
+                             instrument_unit="", instrument_name="", control_size=1.0, control_number=20,
+                             control_unit="mm2", control_name="core", communication_size=0.0, communication_number=0,
                              communication_unit="", communication_name="", data_size=0.0, data_number=0, data_unit="",
                              data_name="", unenclosed_spaced_ccc=0, unenclosed_spaced_install_temp=0,
                              unenclosed_spaced_arrangement="", unenclosed_surface_ccc=0,
@@ -552,7 +655,7 @@ def test_cls_cable_dict():
                              conductor_material="", cable_sheath="", insulation_material="", insulation_code="",
                              cont_conductor_temp=0, max_conductor_temp=0, circuit_type="", volt_rating="", armour=None,
                              description="", flexible=False)
-    expected = {"cable_type": "POWER",
+    expected = {"cable_type": "CONTROL",
                 "activeCores": {
                     "size": 0.0, "unit": "", "number": 0, "name": ""
                 },
@@ -566,7 +669,7 @@ def test_cls_cable_dict():
                     "size": 0.0, "unit": "", "number": 0, "name": ""
                 },
                 "controlCores": {
-                    "size": 0.0, "unit": "", "number": 0, "name": ""
+                    "size": 1.0, "unit": "MM2", "number": 20, "name": "CORE"
                 },
                 "communicationCores": {
                     "size": 0.0, "unit": "", "number": 0, "name": ""
@@ -655,15 +758,56 @@ def test_cls_revision():
     assert result == expected
 
 
-def test_cls_revision_dict():
+def test_cls_revision_to_dict():
     test_class = cable.RevisionDetail("A", dt.datetime(20, 3, 20))
     expected = {"number": "A", "date": dt.datetime(20, 3, 20)}
     result = test_class.to_dict()
     assert result == expected
 
 
-def test_cls_insulation_dict():
+def test_cls_revision_from_dict():
+    test_class = cable.RevisionDetail()
+    expected = ("A", dt.datetime(20, 3, 20))
+    details = {"number": "a", "date": dt.datetime(20, 3, 20)}
+    test_class.from_dict(details)
+    result = (test_class.number, test_class.date)
+    assert result == expected
+
+
+def test_cls_insulation_to_dict():
     test_class = cable.Insulation("pvc", "v-90", 90, 250)
     expected = {"material": "PVC", "code": "V-90", "op_temp": 90, "max_temp": 250}
     result = test_class.to_dict()
+    assert result == expected
+
+
+def test_cls_insulation_from_dict():
+    test_class = cable.Insulation()
+    expected = ("PVC", "V-90", 90, 250)
+    details = {"material": "pvc", "code": "v-90", "op_temp": 90, "max_temp": 250}
+    test_class.from_dict(details)
+    result = (test_class.material, test_class.code, test_class.op_temp, test_class.max_temp)
+    assert result == expected
+
+
+def test_cls_contracts():
+    test_class = cable.Contracts("gc-12", "gc-14", "ic-89")
+    expected = ("GC-12", "GC-14", "IC-89")
+    result = (test_class.supply, test_class.install, test_class.connect)
+    assert result == expected
+
+
+def test_cls_contracts_to_dict():
+    test_class = cable.Contracts("gc-12", "gc-14", "ic-89")
+    expected = {"supply": "GC-12", "install": "GC-14", "connect": "IC-89"}
+    result = test_class.to_dict()
+    assert result == expected
+
+
+def test_cls_contracts_from_dict():
+    test_class = cable.Contracts()
+    expected = ("GC-12", "GC-14", "IC-89")
+    details = {"supply": "GC-12", "install": "GC-14", "connect": "IC-89"}
+    test_class.from_dict(details)
+    result = (test_class.supply, test_class.install, test_class.connect)
     assert result == expected

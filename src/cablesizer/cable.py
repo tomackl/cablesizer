@@ -32,7 +32,8 @@ class CableRun:
         :param derating_run: The current carrying capacity derating factor to be applied to the cable run, based on
         installation conditions and other factors.
         """
-        self.cables: list = cable_list
+        self.cables: list = []
+        self.add_cable(cable_list)
         self.circuit_details = Circuit()
         self.conductor = ConductorDetail()
         self.impedance = Impedance()
@@ -63,6 +64,22 @@ class CableRun:
         x["revision"] = self.revision
         x["derate_run"] = self.derate_run
         return x
+
+    def from_dict(self, cable: dict):
+        x = dict()
+        self.cables = cable["cables"]
+        self.circuit_details.from_dict(cable["circuit_details"])
+        self.conductor.from_dict(cable["conductor"])
+        self.impedance.from_dict(cable["impedance"])
+        self.tag = cable["tag"] = self.tag
+        self.length = cable["length"]
+        self.description = cable["description"]
+        self.supply = cable["supply"]
+        self.load = cable["load"]
+        self.notes = cable["notes"]
+        self.contracts.from_dict(cable["contracts"])
+        self.revision.from_dict(cable["revision"])
+        self.derate_run = cable["derate_run"]
 
     def add_cable(self, cable):
         self.cables.append(cable)
@@ -108,11 +125,11 @@ class CableSpec:
     """
     A class to store the cable_list requirements.
     """
-    def __init__(self, run_type: str = '', max_parallel: int = 1, allow_parallel_multicore: bool = True,
-                 shape: str = '', conductor_material: str = '', min_size: float = 0.0, core_arrangement: str = '',
-                 sheath: str = '', insulation_material: str = '', insulation_code: str = '',
-                 max_operating_temp: int = 0, armour: str = '', screen_cable: str = '', screen_core: str = '',
-                 volt_rating: str = '', flexible: bool = False, vd_max: float = 0.0, vd: float = 0.0):
+    def __init__(self, run_type: str = "", max_parallel: int = 1, allow_parallel_multicore: bool = True,
+                 shape: str = "", conductor_material: str = "", min_size: float = 0.0, core_arrangement: str = "",
+                 sheath: str = "", insulation_material: str = "", insulation_code: str = "",
+                 max_operating_temp: int = 0, armour: str = "", screen_cable: str = "", screen_core: str = "",
+                 volt_rating: str = "", flexible: bool = False, vd_max: float = 0.0, vd: float = 0.0):
         """
 
         :param run_type: A description of the material of cable_list run
@@ -306,6 +323,12 @@ class CableSpec:
         if value < 0.0:
             raise ValueError(f"vd_max must be positive number.")
         self._vd = value
+
+    def to_dict(self) -> dict:
+        pass
+
+    def from_dict(self, details: dict):
+        pass
 
 
 class Cable:
@@ -546,22 +569,13 @@ class Cable:
         pass
 
     def has_active(self):
-        if self.activeCores.number > 0:
-            return True
-        else:
-            return False
+        return self.activeCores.number > 0
 
     def has_neutral(self):
-        if self.neutralCores.number > 0:
-            return True
-        else:
-            return False
+        return self.neutralCores.number > 0
 
     def has_earth(self):
-        if self.earthCores.number > 0:
-            return True
-        else:
-            return False
+        return self.earthCores.number > 0
 
     # @property
     # def ccc(self) -> float:
@@ -609,6 +623,39 @@ class Cable:
         x["cable_shape"] = self.shape
         return x
 
+    def from_dict(self, cable_dict: dict):
+        self.cable_type = cable_dict["cable_type"]
+        self.activeCores.from_dict(cable_dict["activeCores"])
+        self.neutralCores.from_dict(cable_dict["neutralCores"])
+        self.earthCores.from_dict(cable_dict["earthCores"])
+        self.instrumentCores.from_dict(cable_dict["instrumentCores"])
+        self.controlCores.from_dict(cable_dict["controlCores"])
+        self.communicationCores.from_dict(cable_dict["communicationCores"])
+        self.dataCores.from_dict(cable_dict["dataCores"])
+        self.unenclosedSpaced.from_dict(cable_dict["unenclosedSpaced"])
+        self.unenclosedSurface.from_dict(cable_dict["unenclosedSurface"])
+        self.unenclosedTouching.from_dict(cable_dict["unenclosedTouching"])
+        self.enclosedConduit.from_dict(cable_dict["enclosedConduit"])
+        self.enclosedPartial.from_dict(cable_dict["enclosedPartial"])
+        self.enclosedComplete.from_dict(cable_dict["enclosedComplete"])
+        self.buriedDirect.from_dict(cable_dict["buriedDirect"])
+        self.ductsSingle.from_dict(cable_dict["ductsSingle"])
+        self.ductsPerCable.from_dict(cable_dict["ductsPerCable"])
+        self.impedance.from_dict(cable_dict["impedance"])
+        self.cableScreen.from_dict(cable_dict["cableScreen"])
+        self.coreScreen.from_dict(cable_dict["coreScreen"])
+        self.insulation.from_dict(cable_dict["insulation"])
+        self.sheath = cable_dict["sheath"]
+        self.voltage_rating = cable_dict["volt_rating"]
+        self.flexible = cable_dict["flexible"]
+        self.armour = cable_dict["armour"]
+        self.revision.from_dict(cable_dict["revision"])
+        self.description = cable_dict["description"]
+        self.circuit_type = cable_dict["circuit_type"]
+        self.conductor_material = cable_dict["conductor_material"]
+        self.core_arrangement = cable_dict["core_arrangement"]
+        self.shape = cable_dict["cable_shape"]
+
 
 class ConductorDetail:
     """
@@ -636,10 +683,11 @@ class ConductorDetail:
         self._size_unit = unit.upper()
 
     def to_dict(self):
-        x = dict()
-        x["size"] = self.size
-        x["unit"] = self.unit
-        return x
+        return {'size': self.size, 'unit': self.unit}
+
+    def from_dict(self, details: dict):
+        self.size = details["size"]
+        self.unit = details["unit"]
 
 
 class ConductorCableRun:
@@ -661,11 +709,20 @@ class ConductorCableRun:
         x["activeConductors"] = self.activeConductors.to_dict()
         x["neutralConductors"] = self.neutralConductors.to_dict()
         x["earthConductors"] = self.earthConductors.to_dict()
-        x["communicationConductors"] = self.earthConductors.to_dict()
+        x["communicationConductors"] = self.communicationConductors.to_dict()
         x["instrumentationConductors"] = self.instrumentationConductors.to_dict()
         x["dataConductors"] = self.dataConductors.to_dict()
         x["controlConductors"] = self.controlConductors.to_dict()
         return x
+
+    def from_dict(self, details: dict):
+        self.activeConductors.from_dict(details["activeConductors"])
+        self.neutralConductors.from_dict(details["neutralConductors"])
+        self.earthConductors.from_dict(details["earthConductors"])
+        self.communicationConductors.from_dict(details["communicationConductors"])
+        self.instrumentationConductors.from_dict(details["instrumentationConductors"])
+        self.dataConductors.from_dict(details["dataConductors"])
+        self.controlConductors.from_dict(details["controlConductors"])
 
 
 class RevisionDetail:
@@ -688,15 +745,16 @@ class RevisionDetail:
     @date.setter
     def date(self, date: [None, datetime.datetime]):
         if date is None:
-            self._date = date
+            self._date = None
         else:
             self._date = date
 
-    def to_dict(self):
-        x = dict()
-        x["number"] = self.number
-        x["date"] = self.date
-        return x
+    def to_dict(self) -> dict:
+        return {'number': self.number, 'date': self.date}
+
+    def from_dict(self, details: dict):
+        self.number = details["number"]
+        self.date = details["date"]
 
 
 class Impedance:
@@ -800,6 +858,15 @@ class Impedance:
         x["z_unit"] = self.z_unit
         return x
 
+    def from_dict(self, details: dict):
+        self.mvam = details["mvam"]
+        self.r = details["r"]
+        self.r_unit = details["r_unit"]
+        self.x = details["x"]
+        self.x_unit = details["x_unit"]
+        self.z = details["z"]
+        self.z_unit = details["z_unit"]
+
 
 class Insulation:
     def __init__(self, insulation_material: str = "", insulation_code: str = '', op_temp: int = 0, max_temp: int = 0):
@@ -850,12 +917,18 @@ class Insulation:
         self._max_temp = temp
 
     def to_dict(self):
-        x = dict()
-        x["material"] = self.material
-        x["code"] = self.code
-        x["op_temp"] = self.op_temp
-        x["max_temp"] = self.max_temp
-        return x
+        return {
+            'material': self.material,
+            'code': self.code,
+            'op_temp': self.op_temp,
+            'max_temp': self.max_temp,
+        }
+
+    def from_dict(self, details: dict):
+        self.material = details["material"]
+        self.code = details["code"]
+        self.op_temp = details["op_temp"]
+        self.max_temp = details["max_temp"]
 
 
 class Contracts:
@@ -893,6 +966,17 @@ class Contracts:
     def connect(self, connecter: str):
         self._connect = connecter.upper()
 
+    def to_dict(self) -> dict:
+        return {'supply': self.supply,
+                'install': self.install,
+                'connect': self.connect
+                }
+
+    def from_dict(self, details: dict):
+        self.supply = details["supply"]
+        self.install = details["install"]
+        self.connect = details["connect"]
+
 
 class Circuit:
     def __init__(self, circuit_type: str = '', voltage: int = 0, voltage_unit: str = '', frequency: int = 0,
@@ -912,18 +996,9 @@ class Circuit:
         :param load_current: The circuit's load current.
         """
         self.circuit_type = circuit_type
-        self._voltage = Voltage()
-        self.v = voltage
-        self.v_unit = voltage_unit
-        self.phases = phases
-        self.neutral_required = neutral_required
-        self._frequency = Frequency()
-        self.frequency = frequency
-        self.frequency_unit = frequency_unit
-        self.waveform = waveform
-        self._installation = InstallationMethod()
-        self.physical_installation = physical_method
-        self.cable_arrangement = cable_arrangement
+        self.Voltage = Voltage(voltage, voltage_unit, phases, neutral_required)
+        self.Frequency = Frequency(frequency, frequency_unit, waveform)
+        self.Installation = InstallationMethod(physical_method, cable_arrangement)
         self._load_current = load_current
 
     @property
@@ -933,78 +1008,6 @@ class Circuit:
     @circuit_type.setter
     def circuit_type(self, value: str):
         self._type = value.upper()
-
-    @property
-    def v(self) -> int:
-        return self._voltage.v
-
-    @v.setter
-    def v(self, value: int):
-        self._voltage.v = value
-
-    @property
-    def v_unit(self) -> str:
-        return self._voltage.unit
-
-    @v_unit.setter
-    def v_unit(self, unit: str):
-        self._voltage.unit = unit.upper()
-
-    @property
-    def phases(self):
-        return self._voltage.phases
-
-    @phases.setter
-    def phases(self, phases):
-        self._voltage.phases = phases
-
-    @property
-    def neutral_required(self) -> bool:
-        return self._voltage.neutral_required
-
-    @neutral_required.setter
-    def neutral_required(self, neutral_req: bool):
-        self._voltage.neutral_required = neutral_req
-
-    @property
-    def frequency(self) -> int:
-        return self._frequency.frequency
-
-    @frequency.setter
-    def frequency(self, value: int):
-        self._frequency.frequency = value
-
-    @property
-    def frequency_unit(self) -> str:
-        return self._frequency.unit
-
-    @frequency_unit.setter
-    def frequency_unit(self, unit: str):
-        self._frequency.unit = unit.upper()
-
-    @property
-    def waveform(self) -> str:
-        return self._frequency.waveform
-
-    @waveform.setter
-    def waveform(self, value: str):
-        self._frequency.waveform = value.upper()
-
-    @property
-    def physical_installation(self) -> str:
-        return self._installation.physical_installation
-
-    @physical_installation.setter
-    def physical_installation(self, value: str):
-        self._installation.physical_installation = value.upper()
-
-    @property
-    def cable_arrangement(self) -> str:
-        return self._installation.cable_arrangement
-
-    @cable_arrangement.setter
-    def cable_arrangement(self, value: str):
-        self._installation.cable_arrangement = value.upper()
 
     @property
     def load_current(self) -> float:
@@ -1017,11 +1020,18 @@ class Circuit:
     def to_dict(self):
         x = dict()
         x["circuit_type"] = self.circuit_type
-        x["voltage"] = self._voltage.to_dict()
-        x["frequency"] = self._frequency.to_dict()
-        x["installation_name"] = self._installation.to_dict()
+        x["voltage"] = self.Voltage.to_dict()
+        x["frequency"] = self.Frequency.to_dict()
+        x["installation_name"] = self.Installation.to_dict()
         x["load_current"] = self.load_current
         return x
+
+    def from_dict(self, details: dict):
+        self.circuit_type = details["circuit_type"]
+        self.Voltage.from_dict(details["voltage"])
+        self.Frequency.from_dict(details["frequency"])
+        self.Installation.from_dict(details["installation_name"])
+        self.load_current = details["load_current"]
 
 
 class Vector:
@@ -1048,11 +1058,14 @@ class Vector:
     def unit(self, unit: str):
         self._unit = unit.upper()
 
-    def to_dict(self):
-        x = dict()
-        x["magnitude"] = self.magnitude
-        x["unit"] = self.unit
-        return x
+    def to_dict(self) -> dict:
+        return {'magnitude': self.magnitude,
+                'unit': self.unit
+                }
+
+    def from_dict(self, details: dict):
+        self.magnitude = details["magnitude"]
+        self.unit = details["unit"]
 
 
 class InstallationMethod:
@@ -1085,11 +1098,15 @@ class InstallationMethod:
         else:
             self._cable_arrangement = arrangement.upper()
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         x: dict = dict()
         x["installation"] = self.physical_installation
         x["arrangement"] = self.cable_arrangement
         return x
+
+    def from_dict(self, details: dict):
+        self.physical_installation = details["installation"]
+        self.cable_arrangement = details["arrangement"]
 
 
 class Frequency:
@@ -1126,11 +1143,16 @@ class Frequency:
         self._unit = unit.upper()
 
     def to_dict(self) -> dict:
-        x = dict()
-        x["waveform"] = self.waveform
-        x["frequency"] = self.frequency
-        x["unit"] = self.unit
-        return x
+        return {
+            'waveform': self.waveform,
+            'frequency': self.frequency,
+            'unit': self.unit,
+        }
+
+    def from_dict(self, details: dict):
+        self.waveform = details["waveform"]
+        self.frequency = details["frequency"]
+        self.unit = details["unit"]
 
 
 class Voltage:
@@ -1138,9 +1160,9 @@ class Voltage:
     A simple class for voltage details.
     """
     def __init__(self, volts: int = None, unit: str = '', phases: int = 0, neutral_required: bool = True):
-        self.phases: int = phases
         self.v: int = volts
         self.unit: str = unit
+        self.phases: int = phases
         self.neutral_required: bool = neutral_required
 
     @property
@@ -1176,12 +1198,18 @@ class Voltage:
         self._neutral_req = neutral
 
     def to_dict(self) -> dict:
-        x = dict()
-        x["phases"] = self.phases
-        x["v"] = self.v
-        x["unit"] = self.unit
-        x["neutral_required"] = self.neutral_required
-        return x
+        return {
+            'v': self.v,
+            'unit': self.unit,
+            'phases': self.phases,
+            'neutral_required': self.neutral_required,
+        }
+
+    def from_dict(self, details: dict):
+        self.v = details["v"]
+        self.unit = details["unit"]
+        self.phases = details["phases"]
+        self.neutral_required = details["neutral_required"]
 
 
 class CoreDetails:
@@ -1235,12 +1263,18 @@ class CoreDetails:
         Convert the class to a dictionary.
         :return:
         """
-        x = dict()
-        x["size"] = self.size
-        x["unit"] = self.unit
-        x["number"] = self.number
-        x["name"] = self.name
-        return x
+        return {
+            'size': self.size,
+            'unit': self.unit,
+            'number': self.number,
+            'name': self.name,
+        }
+
+    def from_dict(self, details: dict):
+        self.size = details["size"]
+        self.unit = details["unit"]
+        self.number = details["number"]
+        self.name = details["name"]
 
 
 class CableInstallationMethod:
@@ -1284,11 +1318,16 @@ class CableInstallationMethod:
         Convert the class to a dictionary.
         :return:
         """
-        x = dict()
-        x["ccc"] = self.ccc
-        x["install_temp"] = self.install_temp
-        x["arrangement"] = self.cable_arrangement
-        return x
+        return {
+            'ccc': self.ccc,
+            'install_temp': self.install_temp,
+            'arrangement': self.cable_arrangement,
+        }
+
+    def from_dict(self, details: dict):
+        self.ccc = details["ccc"]
+        self.install_temp = details["install_temp"]
+        self.cable_arrangement = details["arrangement"]
 
 
 class Screen:
@@ -1313,10 +1352,11 @@ class Screen:
         self._fault_withstand = value
 
     def to_dict(self):
-        x = dict()
-        x["name"] = self.name
-        x["fault_withstand"] = self.fault_withstand
-        return x
+        return {'name': self.name, 'fault_withstand': self.fault_withstand}
+
+    def from_dict(self, details: dict):
+        self.name = details["name"]
+        self.fault_withstand = details["fault_withstand"]
 
 
 class Manufacturer:
@@ -1341,10 +1381,11 @@ class Manufacturer:
         self._number = value.upper()
 
     def to_dict(self):
-        x = dict()
-        x["name"] = self.name
-        x["part_number"] = self.part_number
-        return x
+        return {'name': self.name, 'part_number': self.part_number}
+
+    def from_dict(self, details: dict):
+        self.name = details["name"]
+        self.part_number = details["part_number"]
 
 
 class I2T:
@@ -1376,7 +1417,8 @@ class I2T:
             self._amp_time.append(value)
 
     def to_dict(self):
-        x = dict()
-        x["k_factor"] = self.k_factor
-        x["amp_time"] = self.amp_time
-        return x
+        return {'k_factor': self.k_factor, 'amp_time': self.amp_time}
+
+    def from_dict(self, details: dict):
+        self.k_factor = details["k_factor"]
+        self.amp_time = details["amp_time"]

@@ -17,6 +17,7 @@ def test_cls_cablespec():
               test_class.armour, test_class.screen_cable, test_class.screen_core, test_class.volt_rating,
               test_class.flexible)
     assert result == expected
+    # todo: vd_max, vd, to_dict, from_dict
 
 
 def test_cls_to_cable():
@@ -81,27 +82,40 @@ def test_cls_to_cable():
 
 def test_cls_cable_dict():
     test_class = cable.Cable(cable_type="control", active_size=0.0, active_number=0, active_unit="", active_name="",
-                             neutral_size=0.0, neutral_number=0, neutral_unit="", neutral_name="", earth_size=0.0,
-                             earth_number=0, earth_unit="", earth_name="", instrument_size=0.0, instrument_number=0,
-                             instrument_unit="", instrument_name="", control_size=1.0, control_number=20,
-                             control_unit="mm2", control_name="core", communication_size=0.0, communication_number=0,
-                             communication_unit="", communication_name="", data_size=0.0, data_number=0, data_unit="",
-                             data_name="", unenclosed_spaced_ccc=0, unenclosed_spaced_install_temp=0,
-                             unenclosed_spaced_arrangement="", unenclosed_surface_ccc=0,
-                             unenclosed_surface_install_temp=0, unenclosed_surface_arrangement="",
+                             neutral_size=0.0, neutral_number=0, neutral_unit="", neutral_name="",
+                             earth_size=0.0, earth_number=0, earth_unit="", earth_name="",
+                             instrument_size=0.0, instrument_number=0, instrument_unit="", instrument_name="",
+                             control_size=1.0, control_number=20, control_unit="mm2", control_name="core",
+                             communication_size=0.0, communication_number=0, communication_unit="",
+                             communication_name="",
+                             data_size=0.0, data_number=0, data_unit="", data_name="",
+                             mvam=0.0, r=0.0, r_unit="", x=0.0, x_unit="", z=0.0, z_unit="",
+                             unenclosed_spaced_ccc=0, unenclosed_spaced_install_temp=0,
+                             unenclosed_spaced_arrangement="",
+                             unenclosed_surface_ccc=0, unenclosed_surface_install_temp=0,
+                             unenclosed_surface_arrangement="",
                              unenclosed_touching_ccc=0, unenclosed_touching_install_temp=0,
-                             unenclosed_touching_arrangement="", enclosed_conduit_ccc=0,
-                             enclosed_conduit_install_temp=0, enclosed_conduit_arrangement="", enclosed_partial_ccc=0,
-                             enclosed_partial_install_temp=0, enclosed_partial_arrangement="", enclosed_complete_ccc=0,
-                             enclosed_complete_install_temp=0, enclosed_complete_arrangement="", buried_direct_ccc=0,
-                             buried_direct_install_temp=0, buried_direct_arrangement="", ducts_single_ccc=0,
-                             ducts_single_install_temp=0, ducts_single_arrangement="", ducts_per_cable_ccc=0,
-                             ducts_per_cable_install_temp=0, ducts_per_cable_arrangement="", mvam=0.0, r=0.0, r_unit="",
-                             x=0.0, x_unit="", z=0.0, z_unit="", cable_screen_type="", cable_screen_withstand=0,
-                             core_screen_type="", core_screen_withstand=0, core_arrangement="", cable_shape="",
-                             conductor_material="", cable_sheath="", insulation_material="", insulation_code="",
-                             cont_conductor_temp=0, max_conductor_temp=0, circuit_type="", volt_rating="", armour=None,
-                             description="", flexible=False)
+                             unenclosed_touching_arrangement="",
+                             enclosed_conduit_ccc=0, enclosed_conduit_install_temp=0, enclosed_conduit_arrangement="",
+                             enclosed_partial_ccc=0, enclosed_partial_install_temp=0, enclosed_partial_arrangement="",
+                             enclosed_complete_ccc=0, enclosed_complete_install_temp=0, enclosed_complete_arrangement="",
+                             buried_direct_ccc=0, buried_direct_install_temp=0, buried_direct_arrangement="",
+                             ducts_single_ccc=0, ducts_single_install_temp=0, ducts_single_arrangement="",
+                             ducts_per_cable_ccc=0, ducts_per_cable_install_temp=0, ducts_per_cable_arrangement="",
+                             cable_screen_type="", cable_screen_withstand=0,
+                             core_screen_type="", core_screen_withstand=0,
+                             insulation_material="", insulation_code="",
+                             cont_conductor_temp=0, max_conductor_temp=0,
+                             cable_sheath="",
+                             volt_rating="",
+                             flexible=False,
+                             armour=None,
+                             rev_number="", rev_date=None,
+                             description="",
+                             core_arrangement="",
+                             cable_shape="",
+                             conductor_material="",
+                             circuit_type="")
     expected = {"cable_type": "CONTROL",
                 "activeCores": {
                     "size": 0.0, "unit": "", "number": 0, "name": ""
@@ -905,7 +919,7 @@ def test_cls_vector_magnitude_getter():
 def test_cls_vector_to_dict():
     test_class = cable.Vector(33, 'kV')
     expected = {"magnitude": 33, "unit": "KV"}
-    result = test_class.to_dict
+    result = test_class.to_dict()
     assert result == expected
 
 

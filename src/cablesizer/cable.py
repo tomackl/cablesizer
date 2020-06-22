@@ -14,7 +14,7 @@ class CableRun:
     """
     Base class for cable_list runs.
     """
-    def __init__(self, cable_list: list = [], tag: str = '', length: float = 0.0, description: str = '',
+    def __init__(self, cable_list=None, tag: str = '', length: float = 0.0, description: str = '',
                  supply: str = '', load: str = '', notes: str = '', required_ccc: float = 0.0,
                  derating_run: float = 1.0):
         """
@@ -32,6 +32,8 @@ class CableRun:
         :param derating_run: The current carrying capacity derating factor to be applied to the cable run, based on
         installation conditions and other factors.
         """
+        if cable_list is None:
+            cable_list = []
         self.cables: list = []
         self.add_cable(cable_list)
         self.circuit_details = Circuit()
@@ -49,21 +51,21 @@ class CableRun:
         self.derate_run: float = derating_run
 
     def to_dict(self):
-        x = dict()
-        x["cables"] = self.cables
-        x["circuit_details"] = self.circuit_details
-        x["conductor"] = self.conductor
-        x["impedance"] = self.impedance
-        x["tag"] = self.tag
-        x["length"] = self.length
-        x["description"] = self.description
-        x["supply"] = self.supply
-        x["load"] = self.load
-        x["notes"] = self.notes
-        x["contracts"] = self.contracts
-        x["revision"] = self.revision
-        x["derate_run"] = self.derate_run
-        return x
+        return {
+            "cables": self.cables,
+            "circuit_details": self.circuit_details,
+            "conductor": self.conductor,
+            "impedance": self.impedance,
+            "tag": self.tag,
+            "length": self.length,
+            "description": self.description,
+            "supply": self.supply,
+            "load": self.load,
+            "notes": self.notes,
+            "contracts": self.contracts,
+            "revision": self.revision,
+            "derate_run": self.derate_run,
+        }
 
     def from_dict(self, cable: dict):
         x = dict()
@@ -399,40 +401,44 @@ class Cable:
         same size.
         :param data_unit: The unit of measurement associate with data_size.
         :param data_name: The type of data core.
-        :param unenclosed_spaced_ccc:
-        :param unenclosed_spaced_install_temp:
+        :param unenclosed_spaced_ccc: The current carrying capacity for the cable based on this installation
+        methodology.
+        :param unenclosed_spaced_install_temp: The ambient temperature associated with the cable installation CCC.
         :param unenclosed_spaced_arrangement: The single core cable_list arrangement associated with this installation
         method.
-        :param unenclosed_surface_ccc:
-        :param unenclosed_surface_install_temp:
+        :param unenclosed_surface_ccc: The current carrying capacity for the cable based on this installation
+        methodology.
+        :param unenclosed_surface_install_temp: The ambient temperature associated with the cable installation CCC.
         :param unenclosed_surface_arrangement: The single core cable_list arrangement associated with this installation
         method.
-        :param unenclosed_touching_ccc:
-        :param unenclosed_touching_install_temp:
+        :param unenclosed_touching_ccc: The current carrying capacity for the cable based on this installation
+        methodology.
+        :param unenclosed_touching_install_temp: The ambient temperature associated with the cable installation CCC.
         :param unenclosed_touching_arrangement: The single core cable_list arrangement associated with this installation
         method.
-        :param enclosed_conduit_ccc:
-        :param enclosed_conduit_install_temp:
+        :param enclosed_conduit_ccc: The current carrying capacity for the cable based on this installation methodology.
+        :param enclosed_conduit_install_temp: The ambient temperature associated with the cable installation CCC.
         :param enclosed_conduit_arrangement: The single core cable_list arrangement associated with this installation
         method.
-        :param enclosed_partial_ccc:
-        :param enclosed_partial_install_temp:
+        :param enclosed_partial_ccc: The current carrying capacity for the cable based on this installation methodology.
+        :param enclosed_partial_install_temp: The ambient temperature associated with the cable installation CCC.
         :param enclosed_partial_arrangement: The single core cable_list arrangement associated with this installation
         method.
-        :param enclosed_complete_ccc:
-        :param enclosed_complete_install_temp:
+        :param enclosed_complete_ccc: The current carrying capacity for the cable based on this installation
+        methodology.
+        :param enclosed_complete_install_temp: The ambient temperature associated with the cable installation CCC.
         :param enclosed_complete_arrangement: The single core cable_list arrangement associated with this installation
         method.
-        :param buried_direct_ccc:
-        :param buried_direct_install_temp:
+        :param buried_direct_ccc: The current carrying capacity for the cable based on this installation methodology.
+        :param buried_direct_install_temp: The ambient temperature associated with the cable installation CCC.
         :param buried_direct_arrangement: The single core cable_list arrangement associated with this installation
         method.
-        :param ducts_single_ccc:
-        :param ducts_single_install_temp:
+        :param ducts_single_ccc: The current carrying capacity for the cable based on this installation methodology.
+        :param ducts_single_install_temp: The ambient temperature associated with the cable installation CCC.
         :param ducts_single_arrangement: The single core cable_list arrangement associated with this installation
         method.
-        :param ducts_per_cable_ccc:
-        :param ducts_per_cable_install_temp:
+        :param ducts_per_cable_ccc: The current carrying capacity for the cable based on this installation methodology.
+        :param ducts_per_cable_install_temp: The ambient temperature associated with the cable installation CCC.
         :param ducts_per_cable_arrangement: The single core cable_list arrangement associated with this installation
         method.
         :param mvam: Milli-volt per amp-metre resistance value.
@@ -544,16 +550,6 @@ class Cable:
     def conductor_material(self, value):
         self._c_material = value.upper()
 
-    # @property
-    # def cross_sectional_area(self) -> int:
-    #     return self._csa
-    #
-    # @cross_sectional_area.setter
-    # def cross_sectional_area(self, value):
-    #     if value < 0:
-    #         raise ValueError(f"The value must be greater than 0.")
-    #     self._csa = value
-
     @property
     def sheath(self) -> str:
         return self._sheath
@@ -563,9 +559,11 @@ class Cable:
         self._sheath = value.upper()
 
     def find_ccc(self):
+        # todo: complete method and add test
         pass
 
     def find_mvam(self):
+        # todo: complete method and add test
         pass
 
     def has_active(self):
@@ -577,51 +575,39 @@ class Cable:
     def has_earth(self):
         return self.earthCores.number > 0
 
-    # @property
-    # def ccc(self) -> float:
-    #     return self._ccc
-    #
-    # @ccc.setter
-    # def ccc(self, value: float):
-    #     if value < 0:
-    #         raise ValueError(f"value must be greater than 0.")
-    #     else:
-    #         self._ccc = value
-
     def to_dict(self):
-        x = dict()
-        x["cable_type"] = self.cable_type
-        x["activeCores"] = self.activeCores.to_dict()
-        x["neutralCores"] = self.neutralCores.to_dict()
-        x["earthCores"] = self.earthCores.to_dict()
-        x["instrumentCores"] = self.instrumentCores.to_dict()
-        x["controlCores"] = self.controlCores.to_dict()
-        x["communicationCores"] = self.communicationCores.to_dict()
-        x["dataCores"] = self.dataCores.to_dict()
-        x["unenclosedSpaced"] = self.unenclosedSpaced.to_dict()
-        x["unenclosedSurface"] = self.unenclosedSurface.to_dict()
-        x["unenclosedTouching"] = self.unenclosedTouching.to_dict()
-        x["enclosedConduit"] = self.enclosedConduit.to_dict()
-        x["enclosedPartial"] = self.enclosedPartial.to_dict()
-        x["enclosedComplete"] = self.enclosedComplete.to_dict()
-        x["buriedDirect"] = self.buriedDirect.to_dict()
-        x["ductsSingle"] = self.ductsSingle.to_dict()
-        x["ductsPerCable"] = self.ductsPerCable.to_dict()
-        x["impedance"] = self.impedance.to_dict()
-        x["cableScreen"] = self.cableScreen.to_dict()
-        x["coreScreen"] = self.coreScreen.to_dict()
-        x["insulation"] = self.insulation.to_dict()
-        x["sheath"] = self.sheath
-        x["volt_rating"] = self.voltage_rating
-        x["flexible"] = self.flexible
-        x["armour"] = self.armour
-        x["revision"] = self.revision.to_dict()
-        x["description"] = self.description
-        x["circuit_type"] = self.circuit_type
-        x["conductor_material"] = self.conductor_material
-        x["core_arrangement"] = self.core_arrangement
-        x["cable_shape"] = self.shape
-        return x
+        return {"cable_type": self.cable_type,
+                "activeCores": self.activeCores.to_dict(),
+                "neutralCores": self.neutralCores.to_dict(),
+                "earthCores": self.earthCores.to_dict(),
+                "instrumentCores": self.instrumentCores.to_dict(),
+                "controlCores": self.controlCores.to_dict(),
+                "communicationCores": self.communicationCores.to_dict(),
+                "dataCores": self.dataCores.to_dict(),
+                "unenclosedSpaced": self.unenclosedSpaced.to_dict(),
+                "unenclosedSurface": self.unenclosedSurface.to_dict(),
+                "unenclosedTouching": self.unenclosedTouching.to_dict(),
+                "enclosedConduit": self.enclosedConduit.to_dict(),
+                "enclosedPartial": self.enclosedPartial.to_dict(),
+                "enclosedComplete": self.enclosedComplete.to_dict(),
+                "buriedDirect": self.buriedDirect.to_dict(),
+                "ductsSingle": self.ductsSingle.to_dict(),
+                "ductsPerCable": self.ductsPerCable.to_dict(),
+                "impedance": self.impedance.to_dict(),
+                "cableScreen": self.cableScreen.to_dict(),
+                "coreScreen": self.coreScreen.to_dict(),
+                "insulation": self.insulation.to_dict(),
+                "sheath": self.sheath,
+                "volt_rating": self.voltage_rating,
+                "flexible": self.flexible,
+                "armour": self.armour,
+                "revision": self.revision.to_dict(),
+                "description": self.description,
+                "circuit_type": self.circuit_type,
+                "conductor_material": self.conductor_material,
+                "core_arrangement": self.core_arrangement,
+                "cable_shape": self.shape,
+                }
 
     def from_dict(self, cable_dict: dict):
         self.cable_type = cable_dict["cable_type"]
@@ -848,15 +834,15 @@ class Impedance:
         return self.z, self.z_unit
 
     def to_dict(self):
-        x = dict()
-        x["mvam"] = self.mvam
-        x["r"] = self.r
-        x["r_unit"] = self.r_unit
-        x["x"] = self.x
-        x["x_unit"] = self.x_unit
-        x["z"] = self.z
-        x["z_unit"] = self.z_unit
-        return x
+        return {
+            "mvam": self.mvam,
+            "r": self.r,
+            "r_unit": self.r_unit,
+            "x": self.x,
+            "x_unit": self.x_unit,
+            "z": self.z,
+            "z_unit": self.z_unit,
+        }
 
     def from_dict(self, details: dict):
         self.mvam = details["mvam"]
@@ -1018,13 +1004,9 @@ class Circuit:
         self._load_current = amps
 
     def to_dict(self):
-        x = dict()
-        x["circuit_type"] = self.circuit_type
-        x["voltage"] = self.Voltage.to_dict()
-        x["frequency"] = self.Frequency.to_dict()
-        x["installation_name"] = self.Installation.to_dict()
-        x["load_current"] = self.load_current
-        return x
+        return {"circuit_type": self.circuit_type, "voltage": self.Voltage.to_dict(),
+             "frequency": self.Frequency.to_dict(), "installation_name": self.Installation.to_dict(),
+             "load_current": self.load_current}
 
     def from_dict(self, details: dict):
         self.circuit_type = details["circuit_type"]
@@ -1059,9 +1041,7 @@ class Vector:
         self._unit = unit.upper()
 
     def to_dict(self) -> dict:
-        return {'magnitude': self.magnitude,
-                'unit': self.unit
-                }
+        return {"magnitude": self.magnitude, "unit": self.unit}
 
     def from_dict(self, details: dict):
         self.magnitude = details["magnitude"]

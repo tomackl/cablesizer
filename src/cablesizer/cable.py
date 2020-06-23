@@ -1,5 +1,5 @@
 import datetime
-from typing import Tuple, List
+from typing import Tuple, List, Union, Optional
 
 
 class CableRunDefaultValues:
@@ -557,6 +557,22 @@ class Cable:
     @sheath.setter
     def sheath(self, value: str):
         self._sheath = value.upper()
+
+    @property
+    def csa(self) -> dict:
+        """
+        A simple getter for the CSA of each conductor in the cable. THERE IS NO SIMILAR GETTER PROPERTY FOR
+        CROSS-SECTIONAL AREA.
+        :return: dict containing the CSA details
+        """
+        return {"POWER": self.activeCores.size,
+                "NEUTRAL": self.neutralCores.size,
+                "EARTH": self.earthCores.size,
+                "CONTROL": self.controlCores.size,
+                "INSTRUMENT": self.instrumentCores.size,
+                "DATA": self.dataCores.size,
+                "COMMUNICATION": self.communicationCores.size
+                }
 
     def find_ccc(self):
         # todo: complete method and add test

@@ -345,6 +345,20 @@ def test_cls_cable_from_dict():
     assert result == expected
 
 
+def test_cls_cable_csa():
+    test_class = cable.Cable(active_size=35.0)
+    result = test_class.csa
+    expected = {"POWER": 35.0,
+                "NEUTRAL": 0.0,
+                "EARTH": 0.0,
+                "CONTROL": 0.0,
+                "INSTRUMENT": 0.0,
+                "DATA": 0.0,
+                "COMMUNICATION": 0.0,
+                }
+    assert result == expected
+
+
 def test_cls_cable_installation_method():
     test_class = cable.CableInstallationMethod()
     test_class.ccc = 140

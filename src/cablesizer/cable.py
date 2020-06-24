@@ -68,7 +68,6 @@ class CableRun:
         }
 
     def from_dict(self, cable: dict):
-        x = dict()
         self.cables = cable["cables"]
         self.circuit_details.from_dict(cable["circuit_details"])
         self.conductor.from_dict(cable["conductor"])
@@ -574,9 +573,30 @@ class Cable:
                 "COMMUNICATION": self.communicationCores.size
                 }
 
-    def find_ccc(self):
-        # todo: complete method and add test
-        pass
+    def find_ccc(self, install_method: str) -> Union[float, int]:
+        """
+        Find the current carrying capacity for the cable for a given installation method.
+        :param install_method: The cable installation method associated with the current carrying capacity.
+        :return:
+        """
+        if install_method.upper() == "UNENCLOSEDSPACED":
+            return self.unenclosedSpaced.ccc
+        elif install_method.upper() == "UNENCLOSEDSURFACE":
+            return self.unenclosedSurface.ccc
+        elif install_method.upper() == "UNENCLOSEDTOUCHING":
+            return self.unenclosedTouching.ccc
+        elif install_method.upper() == "ENCLOSEDCONDUIT":
+            return self.enclosedConduit.ccc
+        elif install_method.upper() == "ENCLOSEDPARTIAL":
+            return self.enclosedPartial.ccc
+        elif install_method.upper() == "ENCLOSEDCOMPLETE":
+            return self.enclosedComplete.ccc
+        elif install_method.upper() == "BURIEDDIRECT":
+            return self.buriedDirect.ccc
+        elif install_method.upper() == "DUCTSSINGLE":
+            return self.ductsSingle.ccc
+        elif install_method.upper() == "DUCTSPERCABLE":
+            return self.ductsPerCable.ccc
 
     def find_mvam(self):
         # todo: complete method and add test
@@ -707,15 +727,14 @@ class ConductorCableRun:
         self.communicationConductors = ConductorDetail(communication_size, communication_unit)
 
     def to_dict(self):
-        x = dict()
-        x["activeConductors"] = self.activeConductors.to_dict()
-        x["neutralConductors"] = self.neutralConductors.to_dict()
-        x["earthConductors"] = self.earthConductors.to_dict()
-        x["communicationConductors"] = self.communicationConductors.to_dict()
-        x["instrumentationConductors"] = self.instrumentationConductors.to_dict()
-        x["dataConductors"] = self.dataConductors.to_dict()
-        x["controlConductors"] = self.controlConductors.to_dict()
-        return x
+        return {"activeConductors": self.activeConductors.to_dict(),
+                "neutralConductors": self.neutralConductors.to_dict(),
+                "earthConductors": self.earthConductors.to_dict(),
+                "communicationConductors": self.communicationConductors.to_dict(),
+                "instrumentationConductors": self.instrumentationConductors.to_dict(),
+                "dataConductors": self.dataConductors.to_dict(),
+                "controlConductors": self.controlConductors.to_dict(),
+                }
 
     def from_dict(self, details: dict):
         self.activeConductors.from_dict(details["activeConductors"])

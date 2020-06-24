@@ -359,6 +359,24 @@ def test_cls_cable_csa():
     assert result == expected
 
 
+@pytest.mark.parametrize("install_ccc_test, install_method, test_amp",
+                         [(cable.Cable(unenclosed_spaced_ccc=16), "unenclosedSpaced", 16),
+                          (cable.Cable(unenclosed_surface_ccc=20), "unenclosedsuRface", 20),
+                          (cable.Cable(unenclosed_touching_ccc=150), "unenclosedtouching", 150),
+                          (cable.Cable(enclosed_conduit_ccc=65), "encloseDconduit", 65),
+                          (cable.Cable(enclosed_partial_ccc=87), "enclosedpartial", 87),
+                          (cable.Cable(enclosed_complete_ccc=94), "ENCLOSEDCOMPLETE", 94),
+                          (cable.Cable(buried_direct_ccc=29), "burieddirect", 29),
+                          (cable.Cable(ducts_single_ccc=45), "ductssingle", 45),
+                          (cable.Cable(ducts_per_cable_ccc=450), "ductsperCABLE", 450)]
+                         )
+def test_cls_cable_find_ccc(install_ccc_test, install_method, test_amp):
+    test_class = install_ccc_test
+    result = test_class.find_ccc(install_method)
+    expected = test_amp
+    assert result == expected
+
+
 def test_cls_cable_installation_method():
     test_class = cable.CableInstallationMethod()
     test_class.ccc = 140

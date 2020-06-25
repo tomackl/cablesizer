@@ -363,7 +363,6 @@ class Cable:
                  circuit_type: str = ""
                  ):
         """
-
         :param cable_type:
         :param active_size: Cross sectional area of the active conductor(s). All active conductors are assumed to be
         the same size.
@@ -598,9 +597,13 @@ class Cable:
         elif install_method.upper() == "DUCTSPERCABLE":
             return self.ductsPerCable.ccc
 
-    def find_mvam(self):
-        # todo: complete method and add test
-        pass
+    @property
+    def mvam(self) -> float:
+        return self.impedance.mvam
+
+    @mvam.setter
+    def mvam(self, value: float):
+        self.impedance.mvam = value
 
     def has_active(self):
         return self.activeCores.number > 0

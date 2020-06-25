@@ -368,12 +368,20 @@ def test_cls_cable_csa():
                           (cable.Cable(enclosed_complete_ccc=94), "ENCLOSEDCOMPLETE", 94),
                           (cable.Cable(buried_direct_ccc=29), "burieddirect", 29),
                           (cable.Cable(ducts_single_ccc=45), "ductssingle", 45),
-                          (cable.Cable(ducts_per_cable_ccc=450), "ductsperCABLE", 450)]
-                         )
+                          (cable.Cable(ducts_per_cable_ccc=450), "ductsperCABLE", 450)
+                          ])
 def test_cls_cable_find_ccc(install_ccc_test, install_method, test_amp):
     test_class = install_ccc_test
     result = test_class.find_ccc(install_method)
     expected = test_amp
+    assert result == expected
+
+
+def test_cls_cable_mvam():
+    test_class = cable.Cable()
+    test_class.mvam = 0.123
+    result = test_class.mvam
+    expected = 0.123
     assert result == expected
 
 

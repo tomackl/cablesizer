@@ -124,11 +124,12 @@ class CableRun:
 
 class CableSpec:
     """
-    A class to store the cable_list requirements.
+    A class to store the cable_list requirements. This class is intended to define the specification criteria used to
+    select cables.
     """
     def __init__(self, run_type: str = "", max_parallel: int = 1, allow_parallel_multicore: bool = True,
                  shape: str = "", conductor_material: str = "", min_size: float = 0.0, core_arrangement: str = "",
-                 sheath: str = "", insulation_material: str = "", insulation_code: str = "",
+                 sheath: str = "", insulation_material: str = "", insulation_code: str = "", operating_temp: int = 0,
                  max_operating_temp: int = 0, armour: str = "", screen_cable: str = "", screen_core: str = "",
                  volt_rating: str = "", flexible: bool = False, vd_max: float = 0.0, vd: float = 0.0):
         """
@@ -144,6 +145,7 @@ class CableSpec:
         :param sheath: Cable sheath insulation_material.
         :param insulation_material: The cable_list insulation insulation_material.
         :param insulation_code: The cable_list insulation insulation_code.
+        :param operating_temp: The operating temperature of the cable under a constant steady load.
         :param max_operating_temp: The maximum continuous conductor operating temperature.
         :param armour: Description of the cable_list armouring.
         :param screen_cable: Description of the cable_list's screen.
@@ -164,6 +166,7 @@ class CableSpec:
         self.insulation = Insulation()
         self.insulation_material: str = insulation_material
         self.insulation_code: str = insulation_code
+        self.operating_temp: int = operating_temp
         self.maximum_operating_temp: int = max_operating_temp
         self.armour: str = armour
         self.screen_cable: str = screen_cable
@@ -258,6 +261,14 @@ class CableSpec:
         self.insulation.code = value.upper()
 
     @property
+    def operating_temp(self) -> int:
+        return self.insulation.op_temp
+
+    @operating_temp.setter
+    def operating_temp(self, value):
+        self.insulation.op_temp = value
+
+    @property
     def maximum_operating_temp(self) -> int:
         return self.insulation.max_temp
 
@@ -320,16 +331,53 @@ class CableSpec:
         return self._vd
 
     @vd.setter
-    def vd(self, value: float):
+    def vd(self, value: [int, float]):
         if value < 0.0:
             raise ValueError(f"vd_max must be positive number.")
         self._vd = value
 
     def to_dict(self) -> dict:
-        pass
+        return {"cableType": self.type,
+                "maxParallel": self.max_parallel,
+                "allowParallelMulticore": self.allow_parallel_multicore,
+                "shape": self.shape,
+                "conductorMaterial": self.conductor_material,
+                "minSize": self.min_size,
+                "coreArrangement": self.core_arrangement,
+                "sheath": self.sheath,
+                "insulationMaterial": self.insulation_material,
+                "insulationCode": self.insulation_code,
+                "operatingTemp": self.operating_temp,
+                "maximumOperatingTemp": self.maximum_operating_temp,
+                "armour": self.armour,
+                "screenCable": self.screen_cable,
+                "screenCore": self.screen_core,
+                "voltRating": self.volt_rating,
+                "flexible": self.flexible,
+                "vdMax": self.vd_max,
+                "vd": self.vd,
+                }
 
     def from_dict(self, details: dict):
-        pass
+        self.type = details["cableType"]
+        self.max_parallel = details["maxParallel"]
+        self.allow_parallel_multicore = details["allowParallelMulticore"]
+        self.shape = details["shape"]
+        self.conductor_material = details["conductorMaterial"]
+        self.min_size = details["minSize"]
+        self.core_arrangement = details["coreArrangement"]
+        self.sheath = details["sheath"]
+        self.insulation_material = details["insulationMaterial"]
+        self.insulation_code = details["insulationCode"]
+        self.operating_temp = details["operatingTemp"]
+        self.maximum_operating_temp = details["maximumOperatingTemp"]
+        self.armour = details["armour"]
+        self.screen_cable = details["screenCable"]
+        self.screen_core = details["screenCore"]
+        self.volt_rating = details["voltRating"]
+        self.flexible = details["flexible"]
+        self.vd_max = details["vdMax"]
+        self.vd = details["vd"]
 
 
 class Cable:
@@ -1043,8 +1091,8 @@ class Circuit:
 
     def to_dict(self):
         return {"circuit_type": self.circuit_type, "voltage": self.Voltage.to_dict(),
-             "frequency": self.Frequency.to_dict(), "installation_name": self.Installation.to_dict(),
-             "load_current": self.load_current}
+                "frequency": self.Frequency.to_dict(), "installation_name": self.Installation.to_dict(),
+                "load_current": self.load_current}
 
     def from_dict(self, details: dict):
         self.circuit_type = details["circuit_type"]

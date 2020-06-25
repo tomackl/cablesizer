@@ -15,13 +15,6 @@ class CSVtoJSON:
         self._csv = []
         self._json = None
 
-    def check_fp(self):
-        """
-        A method to confirm that self._fp exists.
-        :return:
-        """
-        pass
-
     def open_file(self):
         """
         Open the csv file and save the contents as a list of dictionaries.

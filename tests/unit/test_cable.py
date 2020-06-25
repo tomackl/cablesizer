@@ -6,18 +6,63 @@ import datetime as dt
 def test_cls_cablespec():
     test_class = cable.CableSpec(run_type='multi', max_parallel=2, allow_parallel_multicore=True, shape="circular",
                                  conductor_material="CU", min_size=4.0, core_arrangement='multi', sheath='none',
-                                 insulation_material='xlpe', insulation_code='x-90', max_operating_temp=90,
-                                 armour='dwa', screen_cable='nil', screen_core='is', volt_rating='0.6/1kv',
-                                 flexible=False)
-    expected = ("MULTI", 2, True, "CIRCULAR", "CU", 4.0, "MULTI", "NONE", "XLPE", "X-90", 90, "DWA", "NIL", "IS",
-                "0.6/1KV", False)
+                                 insulation_material='xlpe', insulation_code='x-90', operating_temp=45,
+                                 max_operating_temp=90, armour='dwa', screen_cable='nil', screen_core='is',
+                                 volt_rating='0.6/1kv', flexible=False, vd_max=(round(433*.05, 2)), vd=0.0)
+    expected = ("MULTI", 2, True, "CIRCULAR", "CU", 4.0, "MULTI", "NONE", "XLPE", "X-90", 45, 90, "DWA", "NIL", "IS",
+                "0.6/1KV", False, 21.65, 0.0)
     result = (test_class.type, test_class.max_parallel, test_class.allow_parallel_multicore, test_class.shape,
               test_class.conductor_material, test_class.min_size, test_class.core_arrangement, test_class.sheath,
-              test_class.insulation_material, test_class.insulation_code, test_class.maximum_operating_temp,
-              test_class.armour, test_class.screen_cable, test_class.screen_core, test_class.volt_rating,
-              test_class.flexible)
+              test_class.insulation_material, test_class.insulation_code, test_class.operating_temp,
+              test_class.maximum_operating_temp, test_class.armour, test_class.screen_cable, test_class.screen_core,
+              test_class.volt_rating, test_class.flexible, test_class.vd_max, test_class.vd)
     assert result == expected
-    # todo: vd_max, vd, to_dict, from_dict
+
+
+def test_cls_cablespec_dict():
+    test_class = cable.CableSpec()
+    test_class.from_dict({"cableType": "multi",
+                          "maxParallel": 2,
+                          "allowParallelMulticore": True,
+                          "shape": "CIRCULAR",
+                          "conductorMaterial": "CU",
+                          "minSize": 4.0,
+                          "coreArrangement": "multi",
+                          "sheath": "none",
+                          "insulationMaterial": "xlpe",
+                          "insulationCode": "X-90",
+                          "operatingTemp": 45,
+                          "maximumOperatingTemp": 90,
+                          "armour": "DWA",
+                          "screenCable": "nil",
+                          "screenCore": "is",
+                          "voltRating": "0.6/1KV",
+                          "flexible": False,
+                          "vdMax": 21.65,
+                          "vd": 0.0
+                          })
+    expected = {"cableType": "MULTI",
+                "maxParallel": 2,
+                "allowParallelMulticore": True,
+                "shape": "CIRCULAR",
+                "conductorMaterial": "CU",
+                "minSize": 4.0,
+                "coreArrangement": "MULTI",
+                "sheath": "NONE",
+                "insulationMaterial": "XLPE",
+                "insulationCode": "X-90",
+                "operatingTemp": 45,
+                "maximumOperatingTemp": 90,
+                "armour": "DWA",
+                "screenCable": "NIL",
+                "screenCore": "IS",
+                "voltRating": "0.6/1KV",
+                "flexible": False,
+                "vdMax": 21.65,
+                "vd": 0.0
+                }
+    result = test_class.to_dict()
+    assert result == expected
 
 
 def test_cls_to_cable():
@@ -98,24 +143,15 @@ def test_cls_cable_dict():
                              unenclosed_touching_arrangement="",
                              enclosed_conduit_ccc=0, enclosed_conduit_install_temp=0, enclosed_conduit_arrangement="",
                              enclosed_partial_ccc=0, enclosed_partial_install_temp=0, enclosed_partial_arrangement="",
-                             enclosed_complete_ccc=0, enclosed_complete_install_temp=0, enclosed_complete_arrangement="",
-                             buried_direct_ccc=0, buried_direct_install_temp=0, buried_direct_arrangement="",
-                             ducts_single_ccc=0, ducts_single_install_temp=0, ducts_single_arrangement="",
-                             ducts_per_cable_ccc=0, ducts_per_cable_install_temp=0, ducts_per_cable_arrangement="",
-                             cable_screen_type="", cable_screen_withstand=0,
-                             core_screen_type="", core_screen_withstand=0,
-                             insulation_material="", insulation_code="",
-                             cont_conductor_temp=0, max_conductor_temp=0,
-                             cable_sheath="",
-                             volt_rating="",
-                             flexible=False,
-                             armour=None,
-                             rev_number="", rev_date=None,
-                             description="",
-                             core_arrangement="",
-                             cable_shape="",
-                             conductor_material="",
-                             circuit_type="")
+                             enclosed_complete_ccc=0, enclosed_complete_install_temp=0,
+                             enclosed_complete_arrangement="", buried_direct_ccc=0, buried_direct_install_temp=0,
+                             buried_direct_arrangement="", ducts_single_ccc=0, ducts_single_install_temp=0,
+                             ducts_single_arrangement="", ducts_per_cable_ccc=0, ducts_per_cable_install_temp=0,
+                             ducts_per_cable_arrangement="", cable_screen_type="", cable_screen_withstand=0,
+                             core_screen_type="", core_screen_withstand=0, insulation_material="", insulation_code="",
+                             cont_conductor_temp=0, max_conductor_temp=0, cable_sheath="", volt_rating="",
+                             flexible=False, armour=None, rev_number="", rev_date=None, description="",
+                             core_arrangement="", cable_shape="", conductor_material="", circuit_type="")
     expected = {"cable_type": "CONTROL",
                 "activeCores": {
                     "size": 0.0, "unit": "", "number": 0, "name": ""

@@ -1,41 +1,41 @@
 {
 	"cable": {
-		"type": ["POWER", "EARTH", "CONTROL", "INSTRUMENT", "DATA", "COMMUNICATION", "-"],
+		"description": ["POWER", "EARTH", "CONTROL", "INSTRUMENT", "DATA", "COMMUNICATION", "-"],
 		"default": "POWER",
 		"max_parallel": 4,
 		"allow_parallel_multicore": true,
 		"core": {
-			"type": ["ACTIVE", "NEUTRAL", "EARTH"],
+			"description": ["ACTIVE", "NEUTRAL", "EARTH"],
 			"default": "ACTIVE"
 		},
 		"core_arrangement": {
-			"single": {
-				"type": ["-", "1C", "2C", "2C+E"],
+			"single_phase": {
+				"description": ["-", "1C", "2C", "2C+E"],
 				"name": "CORE",
 				"core_abbreviation": "C",
 				"default": ["2C+E"]
 			},
-			"multi": {
-				"type": ["-", "1C", "3C", "2C+E", "3C+E", "3C+3E", "4C+E"],
+			"multi_phase": {
+				"description": ["-", "1C", "3C", "2C+E", "3C+E", "3C+3E", "4C+E"],
 				"name": "CORE",
 				"core_abbreviation": "C",
 				"default": "3C+E"
 			},
 			"control": {
-				"type": ["-", "1C", "2C", "3C", "2C+E", "3C+E", "3C+3E", "4C+E", "5C+E", "10C+E", "20C+E", "50C+E"],
+				"description": ["-", "1C", "2C", "3C", "2C+E", "3C+E", "3C+3E", "4C+E", "5C+E", "10C+E", "20C+E", "50C+E"],
 				"name": "CORE",
 				"core_abbreviation": "C",
 				"default": "2C"
 			},
 			"instrument": {
 				"pair": {
-					"type": ["-", "1PR", "2PR", "4PR", "5PR", "6PR", "10PR", "12PR", "20PR"],
+					"description": ["-", "1PR", "2PR", "4PR", "5PR", "6PR", "10PR", "12PR", "20PR"],
 					"name": "PAIR",
 					"core_abbreviation": "PR",
 					"default": "1PR"
 				},
 				"triple": {
-					"type": ["-", "1TRI", "2TRI", "4TRI", "5TRI", "6TRI", "10TRI", "12TRI", "20TRI"],
+					"description": ["-", "1TRI", "2TRI", "4TRI", "5TRI", "6TRI", "10TRI", "12TRI", "20TRI"],
 					"name": "TRIPLE",
 					"core_abbreviation": "TRI",
 					"default": "1TRI"
@@ -43,11 +43,11 @@
 			}
 		},
 		"shape": {
-			"type": ["CIRCULAR", "FLAT"],
+			"description": ["CIRCULAR", "FLAT"],
 			"default": "CIRCULAR"
 		},
 		"conductor_material": {
-			"type": ["CU", "AL"],
+			"description": ["CU", "AL"],
 			"default": "CU"
 		},
 		"size_list": {
@@ -76,7 +76,7 @@
 		"min_size": 4,
 		"min_single_core_size": 120,
 		"unit": {
-			"type": ["MM2"],
+			"description": ["MM2"],
 			"default": "MM2"
 		},
 		"earth_conductor_size_min": {
@@ -182,64 +182,64 @@
 			}
 		},
 		"sheath": {
-			"type": ["PVC", "HDPE", "EPR", "UNSHEATHED"],
+			"description": ["PVC", "HDPE", "EPR", "UNSHEATHED"],
 			"default": "PVC"
 		},
 		"insulation": {
 			"material": {
-				"type": ["XLPE", "PVC", "PILS", "EPR"],
+				"description": ["XLPE", "PVC", "PILS", "EPR"],
 				"default": "PVC"
 			},
 			"code": {
-				"type": ["PILS", "X-90", "V-90", "V-90RP", "V-75", "V-90HT", "R-EP-90", "R-CPE-90", "R-S-150", "HF-I-90", "R-E-110"],
+				"description": ["PILS", "X-90", "V-90", "V-90RP", "V-75", "V-90HT", "R-EP-90", "R-CPE-90", "R-S-150", "HF-I-90", "R-E-110"],
 				"default": "V-90"
 			},
 			"max_operating_temperature": [65, 75, 90, 110]
 		},
 		"armour": {
-			"type": ["NIL", "SWA", "DWA"],
+			"description": ["NIL", "SWA", "DWA"],
 			"default": "NIL"
 		},
 		"screen": {
 			"cable": {
-				"type": ["NIL", "DCT", "OS"],
+				"description": ["NIL", "DCT", "OS"],
 				"default": "NIL"
 			},
 			"core": {
-				"type": ["NIL", "IS"],
+				"description": ["NIL", "IS"],
 				"default": "NIL"
 			}
 		},
 		"flexible": {
-			"type": [true, false],
+			"description": [true, false],
 			"default": false
 		},
 		"volt_rating": {
-			"type": ["300\/500V", "450\/750V", "110V", "0.6\/1KV", "6.35\/11KV", "12.7\/22KV"],
+			"description": ["300\/500V", "450\/750V", "110V", "0.6\/1KV", "6.35\/11KV", "12.7\/22KV"],
 			"default": "0.6\/1KV"
 		}
 	},
 	"circuit": {
-		"type": ["SINGLE", "MULTI", "CONTROL", "INSTRUMENT", "COMMUNICATION", "DATA"],
-		"default": "MULTI",
+		"description": ["SINGLE_PHASE", "MULTI_PHASE", "CONTROL", "INSTRUMENT", "COMMUNICATION", "DATA"],
+		"default": "MULTI_PHASE",
 		"voltage": {
-			"type": [0, 12, 24, 48, 110, 230, 240, 380, 400, 415, 433, 440, 690, 1000, 3300, 6600, 11000, 22000, 33000],
+			"description": [0, 12, 24, 48, 110, 230, 240, 380, 400, 415, 433, 440, 690, 1000, 3300, 6600, 11000, 22000, 33000],
 			"default": 50
 
 			},
 		"frequency": {
-			"type": [0, 50, 60],
+			"description": [0, 50, 60],
 			"default": 50,
 			"waveform": ["AC", "DC"]
 			}
 	},
 	"install_method": {
 		"physical_installation" : {
-			"type": ["UNENCLOSED_SPACED", "UNENCLOSED_SURFACE", "UNENCLOSED_TOUCHING", "ENCLOSED_CONDUIT", "ENCLOSED_PARTIAL", "ENCLOSED_COMPLETE", "UNENCLOSED_PARTIAL", "UNENCLOSED_COMPLETE", "UNENCLOSED_BURIED", "ENCLOSED_BURIED", "ENCLOSED_BURIED_SEPARATE"],
+			"description": ["UNENCLOSED_SPACED", "UNENCLOSED_SURFACE", "UNENCLOSED_TOUCHING", "ENCLOSED_CONDUIT", "ENCLOSED_PARTIAL", "ENCLOSED_COMPLETE", "UNENCLOSED_PARTIAL", "UNENCLOSED_COMPLETE", "UNENCLOSED_BURIED", "ENCLOSED_BURIED", "ENCLOSED_BURIED_SEPARATE"],
 			"default": "UNENCLOSED_TOUCHING"
 				},
 		"cable_arrangement": {
-			"type": ["NIL", "FLAT", "TREFOIL"],
+			"description": ["NIL", "FLAT", "TREFOIL"],
 			"default": "NIL"
 		}
 	},

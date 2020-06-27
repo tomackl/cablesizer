@@ -3,11 +3,6 @@ import CableSizer.cable as cable
 import datetime as dt
 
 
-def test_cls_cable_run_defaults():
-    test_class = cable.CableRunDefaultValues("../../src/Constants/cable.json")
-
-
-
 def test_cls_cablespec():
     test_class = cable.CableSpec(run_type='multi', max_parallel=2, allow_parallel_multicore=True, shape="circular",
                                  conductor_material="CU", min_size=4.0, core_arrangement='multi', sheath='none',

@@ -1,13 +1,75 @@
 import datetime
 from typing import Tuple, List, Union, Optional
+import pathlib as path
+import json as json
+import pprint as pp
 
 
 class CableRunDefaultValues:
     """
-    A class to store the default values for the cable_list run
+    A class to store the default values for the cable_list run. The default values are stored in the "cable.json" file
+    as a JSON object.
     """
-    def __init__(self):
-        pass
+    def __init__(self, fp):
+        self._cable = None
+        self._cct = None
+        self._install_method = None
+        self._pwr_unit = None
+        self._json = None
+        self.load_file(fp)
+        self.load_data()
+        pp.pprint(self.cable)
+        pp.pprint(self.circuit)
+        pp.pprint(self.installation)
+        pp.pprint(self.power_unit)
+
+    def load_file(self, fp):
+        """
+        Load a .json file.
+        :param fp:
+        """
+        fp = path.Path(fp)
+        with open(fp, newline='', encoding='utf-8-sig') as jsonfile:
+            self._json = json.load(jsonfile)
+
+    def load_data(self):
+        self.cable = self._json["cable"]
+        self.circuit = self._json["circuit"]
+        self.installation = self._json["install_method"]
+        self.power_unit = self._json["power_unit"]
+        self._json = None
+
+    @property
+    def cable(self) -> dict:
+        return self._cable
+
+    @cable.setter
+    def cable(self, value: dict):
+        self._cable = value
+
+    @property
+    def circuit(self) -> dict:
+        return self._cct
+
+    @circuit.setter
+    def circuit(self, value: dict):
+        self._cct = value
+
+    @property
+    def installation(self) -> dict:
+        return self._install_method
+
+    @installation.setter
+    def installation(self, value: dict):
+        self._install_method = value
+
+    @property
+    def power_unit(self) -> dict:
+        return self._pwr_unit
+
+    @power_unit.setter
+    def power_unit(self, value: dict):
+        self._pwr_unit = value
 
 
 class CableRun:
@@ -337,46 +399,46 @@ class CableSpec:
         self._vd = value
 
     def to_dict(self) -> dict:
-        return {"cableType": self.type,
-                "maxParallel": self.max_parallel,
-                "allowParallelMulticore": self.allow_parallel_multicore,
+        return {"cable_type": self.type,
+                "max_parallel": self.max_parallel,
+                "allow_parallel_multicore": self.allow_parallel_multicore,
                 "shape": self.shape,
-                "conductorMaterial": self.conductor_material,
-                "minSize": self.min_size,
-                "coreArrangement": self.core_arrangement,
+                "conductor_material": self.conductor_material,
+                "min_size": self.min_size,
+                "core_arrangement": self.core_arrangement,
                 "sheath": self.sheath,
-                "insulationMaterial": self.insulation_material,
-                "insulationCode": self.insulation_code,
-                "operatingTemp": self.operating_temp,
-                "maximumOperatingTemp": self.maximum_operating_temp,
+                "insulation_material": self.insulation_material,
+                "insulation_code": self.insulation_code,
+                "operating_temp": self.operating_temp,
+                "maximum_operating_temp": self.maximum_operating_temp,
                 "armour": self.armour,
-                "screenCable": self.screen_cable,
-                "screenCore": self.screen_core,
-                "voltRating": self.volt_rating,
+                "screen_cable": self.screen_cable,
+                "screen_core": self.screen_core,
+                "volt_rating": self.volt_rating,
                 "flexible": self.flexible,
-                "vdMax": self.vd_max,
+                "vd_max": self.vd_max,
                 "vd": self.vd,
                 }
 
     def from_dict(self, details: dict):
-        self.type = details["cableType"]
-        self.max_parallel = details["maxParallel"]
-        self.allow_parallel_multicore = details["allowParallelMulticore"]
+        self.type = details["cable_type"]
+        self.max_parallel = details["max_parallel"]
+        self.allow_parallel_multicore = details["allow_parallel_multicore"]
         self.shape = details["shape"]
-        self.conductor_material = details["conductorMaterial"]
-        self.min_size = details["minSize"]
-        self.core_arrangement = details["coreArrangement"]
+        self.conductor_material = details["conductor_material"]
+        self.min_size = details["min_size"]
+        self.core_arrangement = details["core_arrangement"]
         self.sheath = details["sheath"]
-        self.insulation_material = details["insulationMaterial"]
-        self.insulation_code = details["insulationCode"]
-        self.operating_temp = details["operatingTemp"]
-        self.maximum_operating_temp = details["maximumOperatingTemp"]
+        self.insulation_material = details["insulation_material"]
+        self.insulation_code = details["insulation_code"]
+        self.operating_temp = details["operating_temp"]
+        self.maximum_operating_temp = details["maximum_operating_temp"]
         self.armour = details["armour"]
-        self.screen_cable = details["screenCable"]
-        self.screen_core = details["screenCore"]
-        self.volt_rating = details["voltRating"]
+        self.screen_cable = details["screen_cable"]
+        self.screen_core = details["screen_core"]
+        self.volt_rating = details["volt_rating"]
         self.flexible = details["flexible"]
-        self.vd_max = details["vdMax"]
+        self.vd_max = details["vd_max"]
         self.vd = details["vd"]
 
 
@@ -620,29 +682,29 @@ class Cable:
                 "COMMUNICATION": self.communicationCores.size
                 }
 
-    def find_ccc(self, install_method: str) -> Union[float, int]:
+    def installation_ccc(self, install_method: str) -> Union[float, int]:
         """
         Find the current carrying capacity for the cable for a given installation method.
         :param install_method: The cable installation method associated with the current carrying capacity.
         :return:
         """
-        if install_method.upper() == "UNENCLOSEDSPACED":
+        if install_method.upper() in ["UNENCLOSED_SPACED", "UNENCLOSEDSPACED"]:
             return self.unenclosedSpaced.ccc
-        elif install_method.upper() == "UNENCLOSEDSURFACE":
+        elif install_method.upper() in ["UNENCLOSED_SURFACE", "UNENCLOSEDSURFACE"]:
             return self.unenclosedSurface.ccc
-        elif install_method.upper() == "UNENCLOSEDTOUCHING":
+        elif install_method.upper() in ["UNENCLOSED_TOUCHING", "UNENCLOSEDTOUCHING"]:
             return self.unenclosedTouching.ccc
-        elif install_method.upper() == "ENCLOSEDCONDUIT":
+        elif install_method.upper() in ["ENCLOSED_CONDUIT", "ENCLOSEDCONDUIT"]:
             return self.enclosedConduit.ccc
-        elif install_method.upper() == "ENCLOSEDPARTIAL":
+        elif install_method.upper() in ["ENCLOSED_PARTIAL", "ENCLOSEDPARTIAL"]:
             return self.enclosedPartial.ccc
-        elif install_method.upper() == "ENCLOSEDCOMPLETE":
+        elif install_method.upper() in ["ENCLOSED_COMPLETE", "ENCLOSEDCOMPLETE"]:
             return self.enclosedComplete.ccc
-        elif install_method.upper() == "BURIEDDIRECT":
+        elif install_method.upper() in ["BURIED_DIRECT", "BURIEDDIRECT"]:
             return self.buriedDirect.ccc
-        elif install_method.upper() == "DUCTSSINGLE":
+        elif install_method.upper() in ["DUCTS_SINGLE", "DUCTSSINGLE"]:
             return self.ductsSingle.ccc
-        elif install_method.upper() == "DUCTSPERCABLE":
+        elif install_method.upper() in ["DUCTS_PER_CABLE", "DUCTSPERCABLE"]:
             return self.ductsPerCable.ccc
 
     @property
@@ -664,25 +726,25 @@ class Cable:
 
     def to_dict(self):
         return {"cable_type": self.cable_type,
-                "activeCores": self.activeCores.to_dict(),
-                "neutralCores": self.neutralCores.to_dict(),
-                "earthCores": self.earthCores.to_dict(),
-                "instrumentCores": self.instrumentCores.to_dict(),
-                "controlCores": self.controlCores.to_dict(),
-                "communicationCores": self.communicationCores.to_dict(),
-                "dataCores": self.dataCores.to_dict(),
-                "unenclosedSpaced": self.unenclosedSpaced.to_dict(),
-                "unenclosedSurface": self.unenclosedSurface.to_dict(),
-                "unenclosedTouching": self.unenclosedTouching.to_dict(),
-                "enclosedConduit": self.enclosedConduit.to_dict(),
-                "enclosedPartial": self.enclosedPartial.to_dict(),
-                "enclosedComplete": self.enclosedComplete.to_dict(),
-                "buriedDirect": self.buriedDirect.to_dict(),
-                "ductsSingle": self.ductsSingle.to_dict(),
-                "ductsPerCable": self.ductsPerCable.to_dict(),
+                "active_cores": self.activeCores.to_dict(),
+                "neutral_cores": self.neutralCores.to_dict(),
+                "earth_cores": self.earthCores.to_dict(),
+                "instrument_cores": self.instrumentCores.to_dict(),
+                "control_cores": self.controlCores.to_dict(),
+                "communication_cores": self.communicationCores.to_dict(),
+                "data_cores": self.dataCores.to_dict(),
+                "unenclosed_spaced": self.unenclosedSpaced.to_dict(),
+                "unenclosed_surface": self.unenclosedSurface.to_dict(),
+                "unenclosed_touching": self.unenclosedTouching.to_dict(),
+                "enclosed_conduit": self.enclosedConduit.to_dict(),
+                "enclosed_partial": self.enclosedPartial.to_dict(),
+                "enclosed_complete": self.enclosedComplete.to_dict(),
+                "buried_direct": self.buriedDirect.to_dict(),
+                "ducts_single": self.ductsSingle.to_dict(),
+                "ducts_per_cable": self.ductsPerCable.to_dict(),
                 "impedance": self.impedance.to_dict(),
-                "cableScreen": self.cableScreen.to_dict(),
-                "coreScreen": self.coreScreen.to_dict(),
+                "cable_screen": self.cableScreen.to_dict(),
+                "core_screen": self.coreScreen.to_dict(),
                 "insulation": self.insulation.to_dict(),
                 "sheath": self.sheath,
                 "volt_rating": self.voltage_rating,
@@ -698,25 +760,25 @@ class Cable:
 
     def from_dict(self, cable_dict: dict):
         self.cable_type = cable_dict["cable_type"]
-        self.activeCores.from_dict(cable_dict["activeCores"])
-        self.neutralCores.from_dict(cable_dict["neutralCores"])
-        self.earthCores.from_dict(cable_dict["earthCores"])
-        self.instrumentCores.from_dict(cable_dict["instrumentCores"])
-        self.controlCores.from_dict(cable_dict["controlCores"])
-        self.communicationCores.from_dict(cable_dict["communicationCores"])
-        self.dataCores.from_dict(cable_dict["dataCores"])
-        self.unenclosedSpaced.from_dict(cable_dict["unenclosedSpaced"])
-        self.unenclosedSurface.from_dict(cable_dict["unenclosedSurface"])
-        self.unenclosedTouching.from_dict(cable_dict["unenclosedTouching"])
-        self.enclosedConduit.from_dict(cable_dict["enclosedConduit"])
-        self.enclosedPartial.from_dict(cable_dict["enclosedPartial"])
-        self.enclosedComplete.from_dict(cable_dict["enclosedComplete"])
-        self.buriedDirect.from_dict(cable_dict["buriedDirect"])
-        self.ductsSingle.from_dict(cable_dict["ductsSingle"])
-        self.ductsPerCable.from_dict(cable_dict["ductsPerCable"])
+        self.activeCores.from_dict(cable_dict["active_cores"])
+        self.neutralCores.from_dict(cable_dict["neutral_cores"])
+        self.earthCores.from_dict(cable_dict["earth_cores"])
+        self.instrumentCores.from_dict(cable_dict["instrument_cores"])
+        self.controlCores.from_dict(cable_dict["control_cores"])
+        self.communicationCores.from_dict(cable_dict["communication_cores"])
+        self.dataCores.from_dict(cable_dict["data_cores"])
+        self.unenclosedSpaced.from_dict(cable_dict["unenclosed_spaced"])
+        self.unenclosedSurface.from_dict(cable_dict["unenclosed_surface"])
+        self.unenclosedTouching.from_dict(cable_dict["unenclosed_touching"])
+        self.enclosedConduit.from_dict(cable_dict["enclosed_conduit"])
+        self.enclosedPartial.from_dict(cable_dict["enclosed_partial"])
+        self.enclosedComplete.from_dict(cable_dict["enclosed_complete"])
+        self.buriedDirect.from_dict(cable_dict["buried_direct"])
+        self.ductsSingle.from_dict(cable_dict["ducts_single"])
+        self.ductsPerCable.from_dict(cable_dict["ducts_per_cable"])
         self.impedance.from_dict(cable_dict["impedance"])
-        self.cableScreen.from_dict(cable_dict["cableScreen"])
-        self.coreScreen.from_dict(cable_dict["coreScreen"])
+        self.cableScreen.from_dict(cable_dict["cable_screen"])
+        self.coreScreen.from_dict(cable_dict["core_screen"])
         self.insulation.from_dict(cable_dict["insulation"])
         self.sheath = cable_dict["sheath"]
         self.voltage_rating = cable_dict["volt_rating"]
@@ -778,23 +840,23 @@ class ConductorCableRun:
         self.communicationConductors = ConductorDetail(communication_size, communication_unit)
 
     def to_dict(self):
-        return {"activeConductors": self.activeConductors.to_dict(),
-                "neutralConductors": self.neutralConductors.to_dict(),
-                "earthConductors": self.earthConductors.to_dict(),
-                "communicationConductors": self.communicationConductors.to_dict(),
-                "instrumentationConductors": self.instrumentationConductors.to_dict(),
-                "dataConductors": self.dataConductors.to_dict(),
-                "controlConductors": self.controlConductors.to_dict(),
+        return {"active_conductors": self.activeConductors.to_dict(),
+                "neutral_conductors": self.neutralConductors.to_dict(),
+                "earth_conductors": self.earthConductors.to_dict(),
+                "communication_conductors": self.communicationConductors.to_dict(),
+                "instrumentation_conductors": self.instrumentationConductors.to_dict(),
+                "data_conductors": self.dataConductors.to_dict(),
+                "control_conductors": self.controlConductors.to_dict(),
                 }
 
     def from_dict(self, details: dict):
-        self.activeConductors.from_dict(details["activeConductors"])
-        self.neutralConductors.from_dict(details["neutralConductors"])
-        self.earthConductors.from_dict(details["earthConductors"])
-        self.communicationConductors.from_dict(details["communicationConductors"])
-        self.instrumentationConductors.from_dict(details["instrumentationConductors"])
-        self.dataConductors.from_dict(details["dataConductors"])
-        self.controlConductors.from_dict(details["controlConductors"])
+        self.activeConductors.from_dict(details["active_conductors"])
+        self.neutralConductors.from_dict(details["neutral_conductors"])
+        self.earthConductors.from_dict(details["earth_conductors"])
+        self.communicationConductors.from_dict(details["communication_conductors"])
+        self.instrumentationConductors.from_dict(details["instrumentation_conductors"])
+        self.dataConductors.from_dict(details["data_conductors"])
+        self.controlConductors.from_dict(details["control_conductors"])
 
 
 class RevisionDetail:
@@ -1058,7 +1120,7 @@ class Circuit:
         :param circuit_type: The cable_type of circuit.
         :param voltage: The circuit's voltage.
         :param voltage_unit: Circuit voltage unit
-        :param frequency: Frequency of the circuit 0 = DC
+        :param frequency: frequency of the circuit 0 = DC
         :param frequency_unit: Unit of frequency measurement.
         :param waveform: Is the circuit AC or DC
         :param phases: The number of phases for the circuit
@@ -1068,10 +1130,10 @@ class Circuit:
         :param load_current: The circuit's load current.
         """
         self.circuit_type = circuit_type
-        self.Voltage = Voltage(voltage, voltage_unit, phases, neutral_required)
-        self.Frequency = Frequency(frequency, frequency_unit, waveform)
-        self.Installation = InstallationMethod(physical_method, cable_arrangement)
-        self._load_current = load_current
+        self.voltage = Voltage(voltage, voltage_unit, phases, neutral_required)
+        self.frequency = Frequency(frequency, frequency_unit, waveform)
+        self.installation = InstallationMethod(physical_method, cable_arrangement)
+        self.load_current = load_current
 
     @property
     def circuit_type(self) -> str:
@@ -1090,15 +1152,15 @@ class Circuit:
         self._load_current = amps
 
     def to_dict(self):
-        return {"circuit_type": self.circuit_type, "voltage": self.Voltage.to_dict(),
-                "frequency": self.Frequency.to_dict(), "installation_name": self.Installation.to_dict(),
+        return {"circuit_type": self.circuit_type, "voltage": self.voltage.to_dict(),
+                "frequency": self.frequency.to_dict(), "installation_name": self.installation.to_dict(),
                 "load_current": self.load_current}
 
     def from_dict(self, details: dict):
         self.circuit_type = details["circuit_type"]
-        self.Voltage.from_dict(details["voltage"])
-        self.Frequency.from_dict(details["frequency"])
-        self.Installation.from_dict(details["installation_name"])
+        self.voltage.from_dict(details["voltage"])
+        self.frequency.from_dict(details["frequency"])
+        self.installation.from_dict(details["installation_name"])
         self.load_current = details["load_current"]
 
 

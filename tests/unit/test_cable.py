@@ -3,6 +3,11 @@ import CableSizer.cable as cable
 import datetime as dt
 
 
+def test_cls_cable_run_defaults():
+    test_class = cable.CableRunDefaultValues("../../src/Constants/cable.json")
+
+
+
 def test_cls_cablespec():
     test_class = cable.CableSpec(run_type='multi', max_parallel=2, allow_parallel_multicore=True, shape="circular",
                                  conductor_material="CU", min_size=4.0, core_arrangement='multi', sheath='none',
@@ -21,44 +26,44 @@ def test_cls_cablespec():
 
 def test_cls_cablespec_dict():
     test_class = cable.CableSpec()
-    test_class.from_dict({"cableType": "multi",
-                          "maxParallel": 2,
-                          "allowParallelMulticore": True,
+    test_class.from_dict({"cable_type": "multi",
+                          "max_parallel": 2,
+                          "allow_parallel_multicore": True,
                           "shape": "CIRCULAR",
-                          "conductorMaterial": "CU",
-                          "minSize": 4.0,
-                          "coreArrangement": "multi",
+                          "conductor_material": "CU",
+                          "min_size": 4.0,
+                          "core_arrangement": "multi",
                           "sheath": "none",
-                          "insulationMaterial": "xlpe",
-                          "insulationCode": "X-90",
-                          "operatingTemp": 45,
-                          "maximumOperatingTemp": 90,
+                          "insulation_material": "xlpe",
+                          "insulation_code": "X-90",
+                          "operating_temp": 45,
+                          "maximum_operating_temp": 90,
                           "armour": "DWA",
-                          "screenCable": "nil",
-                          "screenCore": "is",
-                          "voltRating": "0.6/1KV",
+                          "screen_cable": "nil",
+                          "screen_core": "is",
+                          "volt_rating": "0.6/1KV",
                           "flexible": False,
-                          "vdMax": 21.65,
+                          "vd_max": 21.65,
                           "vd": 0.0
                           })
-    expected = {"cableType": "MULTI",
-                "maxParallel": 2,
-                "allowParallelMulticore": True,
+    expected = {"cable_type": "MULTI",
+                "max_parallel": 2,
+                "allow_parallel_multicore": True,
                 "shape": "CIRCULAR",
-                "conductorMaterial": "CU",
-                "minSize": 4.0,
-                "coreArrangement": "MULTI",
+                "conductor_material": "CU",
+                "min_size": 4.0,
+                "core_arrangement": "MULTI",
                 "sheath": "NONE",
-                "insulationMaterial": "XLPE",
-                "insulationCode": "X-90",
-                "operatingTemp": 45,
-                "maximumOperatingTemp": 90,
+                "insulation_material": "XLPE",
+                "insulation_code": "X-90",
+                "operating_temp": 45,
+                "maximum_operating_temp": 90,
                 "armour": "DWA",
-                "screenCable": "NIL",
-                "screenCore": "IS",
-                "voltRating": "0.6/1KV",
+                "screen_cable": "NIL",
+                "screen_core": "IS",
+                "volt_rating": "0.6/1KV",
                 "flexible": False,
-                "vdMax": 21.65,
+                "vd_max": 21.65,
                 "vd": 0.0
                 }
     result = test_class.to_dict()
@@ -153,68 +158,68 @@ def test_cls_cable_dict():
                              flexible=False, armour=None, rev_number="", rev_date=None, description="",
                              core_arrangement="", cable_shape="", conductor_material="", circuit_type="")
     expected = {"cable_type": "CONTROL",
-                "activeCores": {
+                "active_cores": {
                     "size": 0.0, "unit": "", "number": 0, "name": ""
                 },
-                "neutralCores": {
+                "neutral_cores": {
                     "size": 0.0, "unit": "", "number": 0, "name": ""
                 },
-                "earthCores": {
+                "earth_cores": {
                     "size": 0.0, "unit": "", "number": 0, "name": ""
                 },
-                "instrumentCores": {
+                "instrument_cores": {
                     "size": 0.0, "unit": "", "number": 0, "name": ""
                 },
-                "controlCores": {
+                "control_cores": {
                     "size": 1.0, "unit": "MM2", "number": 20, "name": "CORE"
                 },
-                "communicationCores": {
+                "communication_cores": {
                     "size": 0.0, "unit": "", "number": 0, "name": ""
                 },
-                "dataCores": {
+                "data_cores": {
                     "size": 0.0, "unit": "", "number": 0, "name": ""
                 },
-                "unenclosedSpaced": {
+                "unenclosed_spaced": {
                     "ccc": 0,
                     "install_temp": 0,
                     "arrangement": ""
                 },
-                "unenclosedSurface": {
+                "unenclosed_surface": {
                     "ccc": 0,
                     "install_temp": 0,
                     "arrangement": ""
                 },
-                "unenclosedTouching": {
+                "unenclosed_touching": {
                     "ccc": 0,
                     "install_temp": 0,
                     "arrangement": ""
                 },
-                "enclosedConduit": {
+                "enclosed_conduit": {
                     "ccc": 0,
                     "install_temp": 0,
                     "arrangement": ""
                 },
-                "enclosedPartial": {
+                "enclosed_partial": {
                     "ccc": 0,
                     "install_temp": 0,
                     "arrangement": ""
                 },
-                "enclosedComplete": {
+                "enclosed_complete": {
                     "ccc": 0,
                     "install_temp": 0,
                     "arrangement": ""
                 },
-                "buriedDirect": {
+                "buried_direct": {
                     "ccc": 0,
                     "install_temp": 0,
                     "arrangement": ""
                 },
-                "ductsSingle": {
+                "ducts_single": {
                     "ccc": 0,
                     "install_temp": 0,
                     "arrangement": ""
                 },
-                "ductsPerCable": {
+                "ducts_per_cable": {
                     "ccc": 0,
                     "install_temp": 0,
                     "arrangement": ""
@@ -222,11 +227,11 @@ def test_cls_cable_dict():
                 "impedance": {
                     "mvam": 0.0, "r": 0.0, "r_unit": "", "x": 0.0, "x_unit": "", "z": 0.0, "z_unit": ""
                 },
-                "cableScreen": {
+                "cable_screen": {
                     "name": "",
                     "fault_withstand": 0
                 },
-                "coreScreen": {
+                "core_screen": {
                     "name": "",
                     "fault_withstand": 0
                 },
@@ -255,68 +260,68 @@ def test_cls_cable_from_dict():
                 0, "", 0, 0, "", 0.0, 0.0, "", 0.0, "", 0.0, "", "", 0, "", 0, "", "", "", "", "", "", 0, 0, "", "",
                 None, "", False)
     details = {"cable_type": "instrument",
-               "activeCores": {
+               "active_cores": {
                    "size": 0.0, "unit": "", "number": 0, "name": ""
                },
-               "neutralCores": {
+               "neutral_cores": {
                    "size": 0.0, "unit": "", "number": 0, "name": ""
                },
-               "earthCores": {
+               "earth_cores": {
                    "size": 0.0, "unit": "", "number": 0, "name": ""
                },
-               "instrumentCores": {
+               "instrument_cores": {
                    "size": 0.0, "unit": "", "number": 0, "name": ""
                },
-               "controlCores": {
+               "control_cores": {
                    "size": 1.0, "unit": "MM2", "number": 20, "name": "CORE"
                },
-               "communicationCores": {
+               "communication_cores": {
                    "size": 0.0, "unit": "", "number": 0, "name": ""
                },
-               "dataCores": {
+               "data_cores": {
                    "size": 0.0, "unit": "", "number": 0, "name": ""
                },
-               "unenclosedSpaced": {
+               "unenclosed_spaced": {
                    "ccc": 0,
                    "install_temp": 0,
                    "arrangement": ""
                },
-               "unenclosedSurface": {
+               "unenclosed_surface": {
                    "ccc": 0,
                    "install_temp": 0,
                    "arrangement": ""
                },
-               "unenclosedTouching": {
+               "unenclosed_touching": {
                    "ccc": 0,
                    "install_temp": 0,
                    "arrangement": ""
                },
-               "enclosedConduit": {
+               "enclosed_conduit": {
                    "ccc": 0,
                    "install_temp": 0,
                    "arrangement": ""
                },
-               "enclosedPartial": {
+               "enclosed_partial": {
                    "ccc": 0,
                    "install_temp": 0,
                    "arrangement": ""
                },
-               "enclosedComplete": {
+               "enclosed_complete": {
                    "ccc": 0,
                    "install_temp": 0,
                    "arrangement": ""
                },
-               "buriedDirect": {
+               "buried_direct": {
                    "ccc": 0,
                    "install_temp": 0,
                    "arrangement": ""
                },
-               "ductsSingle": {
+               "ducts_single": {
                    "ccc": 0,
                    "install_temp": 0,
                    "arrangement": ""
                },
-               "ductsPerCable": {
+               "ducts_per_cable": {
                    "ccc": 0,
                    "install_temp": 0,
                    "arrangement": ""
@@ -324,11 +329,11 @@ def test_cls_cable_from_dict():
                "impedance": {
                    "mvam": 0.0, "r": 0.0, "r_unit": "", "x": 0.0, "x_unit": "", "z": 0.0, "z_unit": ""
                },
-               "cableScreen": {
+               "cable_screen": {
                    "name": "",
                    "fault_withstand": 0
                },
-               "coreScreen": {
+               "core_screen": {
                    "name": "",
                    "fault_withstand": 0
                },
@@ -404,11 +409,20 @@ def test_cls_cable_csa():
                           (cable.Cable(enclosed_complete_ccc=94), "ENCLOSEDCOMPLETE", 94),
                           (cable.Cable(buried_direct_ccc=29), "burieddirect", 29),
                           (cable.Cable(ducts_single_ccc=45), "ductssingle", 45),
-                          (cable.Cable(ducts_per_cable_ccc=450), "ductsperCABLE", 450)
+                          (cable.Cable(ducts_per_cable_ccc=450), "ductsperCABLE", 450),
+                          (cable.Cable(unenclosed_spaced_ccc=16), "unenclosed_Spaced", 16),
+                          (cable.Cable(unenclosed_surface_ccc=20), "unenclosed_suRface", 20),
+                          (cable.Cable(unenclosed_touching_ccc=150), "unenclosed_touching", 150),
+                          (cable.Cable(enclosed_conduit_ccc=65), "encloseD_conduit", 65),
+                          (cable.Cable(enclosed_partial_ccc=87), "enclosed_partial", 87),
+                          (cable.Cable(enclosed_complete_ccc=94), "ENCLOSED_COMPLETE", 94),
+                          (cable.Cable(buried_direct_ccc=29), "buried_direct", 29),
+                          (cable.Cable(ducts_single_ccc=45), "ducts_single", 45),
+                          (cable.Cable(ducts_per_cable_ccc=450), "ducts_per_CABLE", 450)
                           ])
 def test_cls_cable_find_ccc(install_ccc_test, install_method, test_amp):
     test_class = install_ccc_test
-    result = test_class.find_ccc(install_method)
+    result = test_class.installation_ccc(install_method)
     expected = test_amp
     assert result == expected
 
@@ -472,8 +486,8 @@ def test_cls_circuit_type():
 def test_cls_circuit_voltage():
     test_class = cable.Circuit(voltage=22, voltage_unit='kv', phases=4, neutral_required=True)
     expected = (22, 'KV', 4, True)
-    result = (test_class.Voltage.v, test_class.Voltage.unit, test_class.Voltage.phases,
-              test_class.Voltage.neutral_required)
+    result = (test_class.voltage.v, test_class.voltage.unit, test_class.voltage.phases,
+              test_class.voltage.neutral_required)
     assert result == expected
 
 
@@ -494,9 +508,16 @@ def test_cls_circuit_dict():
 def test_cls_circuit_installation_method():
     test_class = cable.Circuit(physical_method="touching", cable_arrangement='trefoil')
     expected = ("TOUCHING", "TREFOIL")
-    result = (test_class.Installation.physical_installation, test_class.Installation.cable_arrangement)
+    result = (test_class.installation.physical_installation, test_class.installation.cable_arrangement)
     assert result == expected
 
+
+def test_cls_circuit_load_current():
+    test_class = cable.Circuit()
+    expected = 150
+    test_class.load_current = 150
+    result = test_class.load_current
+    assert result == expected
 
 # def test_cls_cable_run_dict():
 #     test_class = cable_list.CableRun(cable_list=[], tag="1234-PU-7890-P1", length=150.0, description="Dewatering pump 7890",
@@ -597,13 +618,13 @@ def test_cls_conductor_cable_run_to_dict():
                                          instrumentation_unit="mm2", control_size=1.5, control_unit="mm2",
                                          data_size=0.75, data_unit="mm2", communication_size=1.5,
                                          communication_unit="mm2")
-    expected = {"activeConductors": {"size": 4, "unit": "MM2"},
-                "neutralConductors": {"size": 4, "unit": "MM2"},
-                "earthConductors": {"size": 1.5, "unit": "MM2"},
-                "instrumentationConductors": {"size": 1.5, "unit": "MM2"},
-                "communicationConductors": {"size": 1.5, "unit": "MM2"},
-                "dataConductors": {"size": 0.75, "unit": "MM2"},
-                "controlConductors": {"size": 1.5, "unit": "MM2"},
+    expected = {"active_conductors": {"size": 4, "unit": "MM2"},
+                "neutral_conductors": {"size": 4, "unit": "MM2"},
+                "earth_conductors": {"size": 1.5, "unit": "MM2"},
+                "instrumentation_conductors": {"size": 1.5, "unit": "MM2"},
+                "communication_conductors": {"size": 1.5, "unit": "MM2"},
+                "data_conductors": {"size": 0.75, "unit": "MM2"},
+                "control_conductors": {"size": 1.5, "unit": "MM2"},
                 }
     result = test_class.to_dict()
     assert result == expected
@@ -616,13 +637,13 @@ def test_cls_conductor_cable_run_from_dict():
                                          data_size=0.75, data_unit="mm2", communication_size=1.5,
                                          communication_unit="mm2")
     expected = (4, "MM2", 4, "MM2", 1.5, "MM2", 1.5, "MM2", 1.5, "MM2", 0.75, "MM2", 1.5, "MM2")
-    details = {"activeConductors": {"size": 4, "unit": "mm2"},
-               "neutralConductors": {"size": 4, "unit": "mm2"},
-               "earthConductors": {"size": 1.5, "unit": "mm2"},
-               "instrumentationConductors": {"size": 1.5, "unit": "mm2"},
-               "communicationConductors": {"size": 1.5, "unit": "mm2"},
-               "dataConductors": {"size": 0.75, "unit": "mm2"},
-               "controlConductors": {"size": 1.5, "unit": "mm2"},
+    details = {"active_conductors": {"size": 4, "unit": "mm2"},
+               "neutral_conductors": {"size": 4, "unit": "mm2"},
+               "earth_conductors": {"size": 1.5, "unit": "mm2"},
+               "instrumentation_conductors": {"size": 1.5, "unit": "mm2"},
+               "communication_conductors": {"size": 1.5, "unit": "mm2"},
+               "data_conductors": {"size": 0.75, "unit": "mm2"},
+               "control_conductors": {"size": 1.5, "unit": "mm2"},
                }
     test_class.from_dict(details)
     result = (test_class.activeConductors.size, test_class.activeConductors.unit, test_class.neutralConductors.size,

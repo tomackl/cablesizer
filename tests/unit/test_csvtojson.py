@@ -1,4 +1,4 @@
-import pytest as test
+import pytest
 import CableSizer.csvtojson as c2j
 from pathlib import Path
 
@@ -33,3 +33,15 @@ def test_class_csvtojson_loads():
     test_cls.dumps()
     result = test_cls.loads()
     assert expected == result
+
+
+@pytest.mark.parametrize('fp_input,csv_input,expected',
+                         [(False, False, []),
+                          (False, "A,B,C,D,E,F\n1,2,3,4,5,6\n11,12,13,14,15,16",
+                           "A,B,C,D,E,F\n1,2,3,4,5,6\n11,12,13,14,15,16")
+                          ])
+def test_class_csvtojson_csv(fp_input, csv_input, expected):
+    test_class = c2j.CSVtoJSON(fp_input, csv_input)
+    expected = expected
+    result = test_class._csv
+    assert result == expected

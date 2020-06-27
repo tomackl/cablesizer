@@ -7,13 +7,19 @@ class CSVtoJSON:
     """
     A class to convert csv to json. It takes a csv and returns a json representation.
     """
-    def __init__(self, fp):
+    def __init__(self, fp: str = False, csv: str = False):
         """
-
+        Initialise the object.
+        :param fp: File path to the .csv file.
+        :param csv: A reference to a .csv file that has been stored in memory.
         """
-        self._fp = path.Path(fp)
-        self._csv = []
         self._json = None
+        if fp:
+            self._fp = path.Path(fp)
+        if csv:
+            self._csv = csv
+        else:
+            self._csv = []
 
     def open_file(self):
         """

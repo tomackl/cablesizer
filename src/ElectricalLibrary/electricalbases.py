@@ -1,6 +1,6 @@
 """
 A set of electrical classes: current, voltage, impedance and power. The classes are designed to be used with each other
- for the modelling both DC and AC circuits. Frequency is the only unit to be defined in the base class and forms the
+ for the modelling both DC and AC circuits. frequency is the only unit to be defined in the base class and forms the
  only check when performing addition, subtraction, multiplication and division functions on the classes.
 """
 from ElectricalLibrary.constants import NumType, ComType

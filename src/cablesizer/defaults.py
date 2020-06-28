@@ -1,5 +1,6 @@
 import pathlib as path
 import json as json
+from typing import Union, List, Dict
 
 
 class CableRun:
@@ -52,6 +53,7 @@ class CableRun:
                                                   instrument_triple_abbreviation, instrument_triple_default)
         self.shape = BasicDefaults(shape_description, shape_default)
         self.conductor_material = BasicDefaults(conductor_material_description, conductor_material_default)
+        self.self_list = size_list
         self._cable = None
         self._cct = None
         self._install_method = None
@@ -108,8 +110,18 @@ class CableRun:
     def power_unit(self, value: dict):
         self._pwr_unit = value
 
+    @property
+    def size_list(self, value: str) -> dict:
+        return self._size_list[value.upper()]
+
+
+
+
 
 class CoreArrangement:
+    """
+
+    """
     def __init__(self, description: list = "", name: str = None, abbreviation: str = None, default: str = None):
         """
 
@@ -163,8 +175,6 @@ class CoreArrangement:
             self._default = value
         elif value.upper() in self.description:
             self._default = value.upper()
-        # elif value is None:
-        #     self._default = value
         else:
             raise ValueError(f"Value ({value}) not contained in description list")
 
@@ -192,7 +202,15 @@ class CoreArrangement:
 
 
 class BasicDefaults:
+    """
+
+    """
     def __init__(self, description: list = [], default: str = None):
+        """
+
+        :param description:
+        :param default:
+        """
         self.description = description
         self.default = default
 
@@ -211,6 +229,11 @@ class BasicDefaults:
 
     @default.setter
     def default(self, value: str):
+        """
+
+        :param value:
+        :return:
+        """
         if value is None:
             self._default = value
         elif value.upper() in self.description:
@@ -235,3 +258,50 @@ class BasicDefaults:
         """
         self.description = value["description"]
         self.default = value["default"]
+
+
+class Sizes:
+    def __init__(self, size_list: Dict[str, List[str]] = None, min_size: [str, int, float] = None,
+                 unit_description: list = None, unit_default: str = None):
+        self._size_list = {}
+        self.set_size_list_dict(size_list)
+        self.min_size = min_size
+        self.unit = BasicDefaults(description=unit_description, default=unit_default)
+
+    def set_size_list_dict(self, value: dict):
+        """
+        A method to set the size_list dict.
+        :param value:
+        :return:
+        """
+        if value is not None:
+            for key in value:
+                self._size_list[key.upper()] = value[key]
+        else:
+            self._size_list = None
+
+    def get_size_list_dict(self, key: str = None) -> [dict, list]:
+        """
+        A getter method for the self._size_list dictionary. The 'size_list' property is the preferred method to get the
+        default size list, with this method intending to provide a means of getting the whole dictionary or the sizes
+        associated with a non-default set of sizes.
+        :param key: Dictionary key associated with the size unit required.
+        :return: List of sizes associated with the size unit proved.
+        """
+        if key is not None:
+            return {key.upper(): self._size_list[key.upper()]}
+        return self._size_list
+
+    @property
+    def size_list(self) -> list:
+        return self._size_list[self.unit.default]
+
+    @property
+    def min_size(self) -> float:
+        return self._min_size
+
+    @min_size.setter
+    def min_size(self, value: float):
+        self._min_size = value
+
+

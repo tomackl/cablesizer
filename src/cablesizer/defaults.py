@@ -17,7 +17,11 @@ class CableRun:
                  instrument_pair_default: str = None, instrument_triple_arrangement: list = [],
                  instrument_triple_name: str = None, instrument_triple_abbreviation: str = None,
                  instrument_triple_default: str = None, shape_description: list = [], shape_default: str = None,
-                 conductor_material_description: list = [], conductor_material_default: str = None):
+                 conductor_material_description: list = [], conductor_material_default: str = None,
+                 size_list:  Dict[str, List[str]] = None, min_size: [str, int, float] = None,
+                 min_single_core_size: [str, int, float] = None, size_unit_description = None,
+                 size_unit_default: str = None,
+                 ):
         """
 
         :param fp:
@@ -53,7 +57,8 @@ class CableRun:
                                                   instrument_triple_abbreviation, instrument_triple_default)
         self.shape = BasicDefaults(shape_description, shape_default)
         self.conductor_material = BasicDefaults(conductor_material_description, conductor_material_default)
-        self.self_list = size_list
+        self.sizes = SizeList(size_list, min_size, min_single_core_size, size_unit_description, size_unit_default)
+        #  todo: add parameters for below.
         self._cable = None
         self._cct = None
         self._install_method = None
@@ -110,12 +115,21 @@ class CableRun:
     def power_unit(self, value: dict):
         self._pwr_unit = value
 
-    @property
-    def size_list(self, value: str) -> dict:
-        return self._size_list[value.upper()]
-
-
-
+    # @property
+    # def size_list(self, value: str) -> dict:
+    #     return self._size_list[value.upper()]
+    #
+    # @size_list.setter
+    # def size_list(self, value: str):
+    #     self._size_list[value.upper()] = value
+    #
+    # @property
+    # def min_size(self) -> str:
+    #     return self._min_size
+    #
+    # @min_size.setter
+    # def min_size(self, value: [str, int, float]):
+    #     self._min_size = str(value)
 
 
 class CoreArrangement:
@@ -222,10 +236,12 @@ class BasicDefaults:
     def description(self, value: list):
         if value is not None:
             self._descrip = value
+        else:
+            self._descrip = None
 
     @property
     def default(self) -> str:
-        return self._default.upper()
+        return self._default
 
     @default.setter
     def default(self, value: str):
@@ -260,17 +276,19 @@ class BasicDefaults:
         self.default = value["default"]
 
 
-class Sizes:
+class SizeList:
     def __init__(self, size_list: Dict[str, List[str]] = None, min_size: [str, int, float] = None,
-                 unit_description: list = None, unit_default: str = None):
+                 min_single_core_size: [str, int, float] = None, unit_description: list = None,
+                 unit_default: list = None):
         self._size_list = {}
         self.set_size_list_dict(size_list)
-        self.min_size = min_size
         self.unit = BasicDefaults(description=unit_description, default=unit_default)
+        self.min_size = min_size
+        self.min_single_core_size = min_single_core_size
 
     def set_size_list_dict(self, value: dict):
         """
-        A method to set the size_list dict.
+        A method to set the default_list dict.
         :param value:
         :return:
         """
@@ -282,26 +300,53 @@ class Sizes:
 
     def get_size_list_dict(self, key: str = None) -> [dict, list]:
         """
-        A getter method for the self._size_list dictionary. The 'size_list' property is the preferred method to get the
-        default size list, with this method intending to provide a means of getting the whole dictionary or the sizes
-        associated with a non-default set of sizes.
-        :param key: Dictionary key associated with the size unit required.
-        :return: List of sizes associated with the size unit proved.
+        A getter method for the self._size_list dictionary. The 'default_list' property is the preferred method to get
+        the default size list, with this method intending to provide a means of getting the whole dictionary or the
+        sizes associated with a non-default set of sizes.
+        :param key: Dictionary key associated with the size key required.
+        :return: List of sizes associated with the size key proved.
         """
         if key is not None:
             return {key.upper(): self._size_list[key.upper()]}
         return self._size_list
 
-    @property
-    def size_list(self) -> list:
+    def get_default_size_list(self) -> list:
+        if self.unit.default is None:
+            return None
         return self._size_list[self.unit.default]
 
     @property
-    def min_size(self) -> float:
+    def min_size(self) -> str:
         return self._min_size
 
     @min_size.setter
-    def min_size(self, value: float):
-        self._min_size = value
+    def min_size(self, value: str):
+        if value is None:
+            self._min_size = None
+        elif self.get_default_size_list() is None:
+            self._min_size = str(value)
+        elif str(value) not in self.get_default_size_list():
+            self._min_size = None
+        else:
+            self._min_size = str(value)
 
+    @property
+    def min_single_core_size(self) -> float:
+        return self._min_single_core_size
 
+    @min_single_core_size.setter
+    def min_single_core_size(self, value: float):
+        if value is None:
+            self._min_single_core_size = None
+        elif self.get_default_size_list() is None:
+            self._min_single_core_size = str(value)
+        elif str(value) not in self.get_default_size_list():
+            self._min_single_core_size = None
+        else:
+            self._min_single_core_size = str(value)
+
+    def to_dict(self):
+        pass
+
+    def from_dict(self):
+        pass

@@ -407,37 +407,37 @@ class Cable:
         :param active_size: Cross sectional area of the active conductor(s). All active conductors are assumed to be
         the same size.
         :param active_number: The number of active cores.
-        :param active_unit: The unit of measurement associate with active_size.
+        :param active_unit: The key of measurement associate with active_size.
         :param active_name: The type of earth core.
         :param neutral_size: Cross sectional area of the neutral conductor(s). All active conductors are assumed to be
         the same size.
         :param neutral_number: The number of neutral cores.
-        :param neutral_unit: The unit of measurement associate with neutral_size.
+        :param neutral_unit: The key of measurement associate with neutral_size.
         :param neutral_name: The type of earth core
         :param earth_size: Cross sectional area of the earth conductor(s). All active conductors are assumed to be the
         same size.
         :param earth_number: The number of earth cores.
-        :param earth_unit: The unit of measurement associate with earth_size.
+        :param earth_unit: The key of measurement associate with earth_size.
         :param earth_name: The type of earth core.
         :param instrument_size: Cross sectional area of the instrumentation conductor(s). All active conductors are
         assumed to be the same size.
         :param instrument_number: The number of instrumentation cores.
-        :param instrument_unit: The unit of measurement associate with instrument_size.
+        :param instrument_unit: The key of measurement associate with instrument_size.
         :param instrument_name: The type of instrument core.
         :param control_size: Cross sectional area of the control conductor(s). All active conductors are assumed to be
         the same size.
         :param control_number: The number of control cores.
-        :param control_unit: The unit of measurement associate with control_size.
+        :param control_unit: The key of measurement associate with control_size.
         :param control_name: The type of control core.
         :param communication_size: Cross sectional area of the communication conductor(s). All active conductors are
         assumed to be the same size.
         :param communication_number: The number of communication cores.
-        :param communication_unit: The unit of measurement associate with communication_size.
+        :param communication_unit: The key of measurement associate with communication_size.
         :param communication_name: The type of communication core.
         :param data_size: The number of data cores.
         :param data_number: Cross sectional area of the data conductor(s). All active conductors are assumed to be the
         same size.
-        :param data_unit: The unit of measurement associate with data_size.
+        :param data_unit: The key of measurement associate with data_size.
         :param data_name: The type of data core.
         :param unenclosed_spaced_ccc: The current carrying capacity for the cable based on this installation
         methodology.
@@ -481,11 +481,11 @@ class Cable:
         method.
         :param mvam: Milli-volt per amp-metre resistance value.
         :param r: Resistance value for the cable_list.
-        :param r_unit: Resistance value unit.
+        :param r_unit: Resistance value key.
         :param x: Reactance value for the cable_list.
-        :param x_unit: Reactance value unit.
+        :param x_unit: Reactance value key.
         :param z: Impedance value for the cable_list.
-        :param z_unit: Impedance value unit.
+        :param z_unit: Impedance value key.
         :param cable_screen_type:
         :param cable_screen_withstand:
         :param core_screen_type:
@@ -748,11 +748,11 @@ class ConductorDetail:
         self._size_unit = unit.upper()
 
     def to_dict(self):
-        return {'size': self.size, 'unit': self.unit}
+        return {'size': self.size, 'key': self.unit}
 
     def from_dict(self, details: dict):
         self.size = details["size"]
-        self.unit = details["unit"]
+        self.unit = details["key"]
 
 
 class ConductorCableRun:
@@ -1049,7 +1049,7 @@ class Circuit:
         """
         :param circuit_type: The cable_type of circuit.
         :param voltage: The circuit's voltage.
-        :param voltage_unit: Circuit voltage unit
+        :param voltage_unit: Circuit voltage key
         :param frequency: frequency of the circuit 0 = DC
         :param frequency_unit: Unit of frequency measurement.
         :param waveform: Is the circuit AC or DC
@@ -1096,7 +1096,7 @@ class Circuit:
 
 class Vector:
     """
-    A simple class to represent a magnitude, unit vector pair.
+    A simple class to represent a magnitude, key vector pair.
     """
     def __init__(self, magnitude=None, unit: str = ''):
         self.magnitude = magnitude
@@ -1119,11 +1119,11 @@ class Vector:
         self._unit = unit.upper()
 
     def to_dict(self) -> dict:
-        return {"magnitude": self.magnitude, "unit": self.unit}
+        return {"magnitude": self.magnitude, "key": self.unit}
 
     def from_dict(self, details: dict):
         self.magnitude = details["magnitude"]
-        self.unit = details["unit"]
+        self.unit = details["key"]
 
 
 class InstallationMethod:
@@ -1204,13 +1204,13 @@ class Frequency:
         return {
             'waveform': self.waveform,
             'frequency': self.frequency,
-            'unit': self.unit,
+            'key': self.unit,
         }
 
     def from_dict(self, details: dict):
         self.waveform = details["waveform"]
         self.frequency = details["frequency"]
-        self.unit = details["unit"]
+        self.unit = details["key"]
 
 
 class Voltage:
@@ -1258,14 +1258,14 @@ class Voltage:
     def to_dict(self) -> dict:
         return {
             'v': self.v,
-            'unit': self.unit,
+            'key': self.unit,
             'phases': self.phases,
             'neutral_required': self.neutral_required,
         }
 
     def from_dict(self, details: dict):
         self.v = details["v"]
-        self.unit = details["unit"]
+        self.unit = details["key"]
         self.phases = details["phases"]
         self.neutral_required = details["neutral_required"]
 
@@ -1275,7 +1275,7 @@ class CoreDetails:
         """
         This class defines and checks the details of a cable_list core.
         :param csa: Cross sectional area of the main conductors
-        :param csa_unit: The cross-sectional area unit of measurement.
+        :param csa_unit: The cross-sectional area key of measurement.
         :param number: The number of cable_list cores including earth and neutrals.
         :param name: Description of the cable_list cores.
         """
@@ -1323,14 +1323,14 @@ class CoreDetails:
         """
         return {
             'size': self.size,
-            'unit': self.unit,
+            'key': self.unit,
             'number': self.number,
             'name': self.name,
         }
 
     def from_dict(self, details: dict):
         self.size = details["size"]
-        self.unit = details["unit"]
+        self.unit = details["key"]
         self.number = details["number"]
         self.name = details["name"]
 

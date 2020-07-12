@@ -154,25 +154,25 @@ def test_cls_cable_dict():
                              core_arrangement="", cable_shape="", conductor_material="", circuit_type="")
     expected = {"cable_type": "CONTROL",
                 "active_cores": {
-                    "size": 0.0, "unit": "", "number": 0, "name": ""
+                    "size": 0.0, "key": "", "number": 0, "name": ""
                 },
                 "neutral_cores": {
-                    "size": 0.0, "unit": "", "number": 0, "name": ""
+                    "size": 0.0, "key": "", "number": 0, "name": ""
                 },
                 "earth_cores": {
-                    "size": 0.0, "unit": "", "number": 0, "name": ""
+                    "size": 0.0, "key": "", "number": 0, "name": ""
                 },
                 "instrument_cores": {
-                    "size": 0.0, "unit": "", "number": 0, "name": ""
+                    "size": 0.0, "key": "", "number": 0, "name": ""
                 },
                 "control_cores": {
-                    "size": 1.0, "unit": "MM2", "number": 20, "name": "CORE"
+                    "size": 1.0, "key": "MM2", "number": 20, "name": "CORE"
                 },
                 "communication_cores": {
-                    "size": 0.0, "unit": "", "number": 0, "name": ""
+                    "size": 0.0, "key": "", "number": 0, "name": ""
                 },
                 "data_cores": {
-                    "size": 0.0, "unit": "", "number": 0, "name": ""
+                    "size": 0.0, "key": "", "number": 0, "name": ""
                 },
                 "unenclosed_spaced": {
                     "ccc": 0,
@@ -256,25 +256,25 @@ def test_cls_cable_from_dict():
                 None, "", False)
     details = {"cable_type": "instrument",
                "active_cores": {
-                   "size": 0.0, "unit": "", "number": 0, "name": ""
+                   "size": 0.0, "key": "", "number": 0, "name": ""
                },
                "neutral_cores": {
-                   "size": 0.0, "unit": "", "number": 0, "name": ""
+                   "size": 0.0, "key": "", "number": 0, "name": ""
                },
                "earth_cores": {
-                   "size": 0.0, "unit": "", "number": 0, "name": ""
+                   "size": 0.0, "key": "", "number": 0, "name": ""
                },
                "instrument_cores": {
-                   "size": 0.0, "unit": "", "number": 0, "name": ""
+                   "size": 0.0, "key": "", "number": 0, "name": ""
                },
                "control_cores": {
-                   "size": 1.0, "unit": "MM2", "number": 20, "name": "CORE"
+                   "size": 1.0, "key": "MM2", "number": 20, "name": "CORE"
                },
                "communication_cores": {
-                   "size": 0.0, "unit": "", "number": 0, "name": ""
+                   "size": 0.0, "key": "", "number": 0, "name": ""
                },
                "data_cores": {
-                   "size": 0.0, "unit": "", "number": 0, "name": ""
+                   "size": 0.0, "key": "", "number": 0, "name": ""
                },
                "unenclosed_spaced": {
                    "ccc": 0,
@@ -491,8 +491,8 @@ def test_cls_circuit_dict():
                                waveform="ac", phases=4, neutral_required=True, physical_method="buried_direct",
                                cable_arrangement="trefoil", load_current=150)
     expected = {"circuit_type": "POWER",
-                "voltage": {"v": 22, "unit": "KV", "phases": 4, "neutral_required": True},
-                "frequency": {"frequency": 50, "unit": "HZ", "waveform": "AC"},
+                "voltage": {"v": 22, "key": "KV", "phases": 4, "neutral_required": True},
+                "frequency": {"frequency": 50, "key": "HZ", "waveform": "AC"},
                 "installation_name": {"installation": "BURIED_DIRECT", "arrangement": "TREFOIL"},
                 "load_current": 150
                 }
@@ -559,14 +559,14 @@ def test_cls_conductor_detail_size_unit_getter():
 
 def test_cls_conductor_detail_to_dict():
     test_class = cable.ConductorDetail(95, "mm2")
-    expected = {"size": 95, "unit": "MM2"}
+    expected = {"size": 95, "key": "MM2"}
     result = test_class.to_dict()
     assert result == expected
 
 
 def test_cls_conductor_detail_from_dict():
     test_class = cable.ConductorDetail()
-    details = {"size": 95, "unit": "mm2"}
+    details = {"size": 95, "key": "mm2"}
     test_class.from_dict(details)
     expected = (95, "MM2")
     result = (test_class.size, test_class.unit)
@@ -613,13 +613,13 @@ def test_cls_conductor_cable_run_to_dict():
                                          instrumentation_unit="mm2", control_size=1.5, control_unit="mm2",
                                          data_size=0.75, data_unit="mm2", communication_size=1.5,
                                          communication_unit="mm2")
-    expected = {"active_conductors": {"size": 4, "unit": "MM2"},
-                "neutral_conductors": {"size": 4, "unit": "MM2"},
-                "earth_conductors": {"size": 1.5, "unit": "MM2"},
-                "instrumentation_conductors": {"size": 1.5, "unit": "MM2"},
-                "communication_conductors": {"size": 1.5, "unit": "MM2"},
-                "data_conductors": {"size": 0.75, "unit": "MM2"},
-                "control_conductors": {"size": 1.5, "unit": "MM2"},
+    expected = {"active_conductors": {"size": 4, "key": "MM2"},
+                "neutral_conductors": {"size": 4, "key": "MM2"},
+                "earth_conductors": {"size": 1.5, "key": "MM2"},
+                "instrumentation_conductors": {"size": 1.5, "key": "MM2"},
+                "communication_conductors": {"size": 1.5, "key": "MM2"},
+                "data_conductors": {"size": 0.75, "key": "MM2"},
+                "control_conductors": {"size": 1.5, "key": "MM2"},
                 }
     result = test_class.to_dict()
     assert result == expected
@@ -632,13 +632,13 @@ def test_cls_conductor_cable_run_from_dict():
                                          data_size=0.75, data_unit="mm2", communication_size=1.5,
                                          communication_unit="mm2")
     expected = (4, "MM2", 4, "MM2", 1.5, "MM2", 1.5, "MM2", 1.5, "MM2", 0.75, "MM2", 1.5, "MM2")
-    details = {"active_conductors": {"size": 4, "unit": "mm2"},
-               "neutral_conductors": {"size": 4, "unit": "mm2"},
-               "earth_conductors": {"size": 1.5, "unit": "mm2"},
-               "instrumentation_conductors": {"size": 1.5, "unit": "mm2"},
-               "communication_conductors": {"size": 1.5, "unit": "mm2"},
-               "data_conductors": {"size": 0.75, "unit": "mm2"},
-               "control_conductors": {"size": 1.5, "unit": "mm2"},
+    details = {"active_conductors": {"size": 4, "key": "mm2"},
+               "neutral_conductors": {"size": 4, "key": "mm2"},
+               "earth_conductors": {"size": 1.5, "key": "mm2"},
+               "instrumentation_conductors": {"size": 1.5, "key": "mm2"},
+               "communication_conductors": {"size": 1.5, "key": "mm2"},
+               "data_conductors": {"size": 0.75, "key": "mm2"},
+               "control_conductors": {"size": 1.5, "key": "mm2"},
                }
     test_class.from_dict(details)
     result = (test_class.activeConductors.size, test_class.activeConductors.unit, test_class.neutralConductors.size,
@@ -703,7 +703,7 @@ def test_cls_core_details():
 
 def test_cls_core_details_to_dict():
     test_class = cable.CoreDetails(35, "mm2", 4, "core")
-    expected = {"size": 35, "unit": "MM2", "number": 4, "name": "CORE"}
+    expected = {"size": 35, "key": "MM2", "number": 4, "name": "CORE"}
     result = test_class.to_dict()
     assert result == expected
 
@@ -711,7 +711,7 @@ def test_cls_core_details_to_dict():
 def test_cls_core_details_from_dict():
     test_class = cable.CoreDetails()
     expected = (35, "MM2", 4, "CORE")
-    details = {"size": 35, "unit": "mm2", "number": 4, "name": "core"}
+    details = {"size": 35, "key": "mm2", "number": 4, "name": "core"}
     test_class.from_dict(details)
     result = (test_class.size, test_class.unit, test_class.number, test_class.name)
     assert result == expected
@@ -726,7 +726,7 @@ def test_cls_frequency():
 
 def test_cls_frequency_dict():
     test_class = cable.Frequency(50, 'hz', 'dc')
-    expected = {"frequency": 50, "unit": "HZ", "waveform": "DC"}
+    expected = {"frequency": 50, "key": "HZ", "waveform": "DC"}
     result = test_class.to_dict()
     assert result == expected
 
@@ -1010,7 +1010,7 @@ def test_cls_vector_magnitude_getter():
 
 def test_cls_vector_to_dict():
     test_class = cable.Vector(33, 'kV')
-    expected = {"magnitude": 33, "unit": "KV"}
+    expected = {"magnitude": 33, "key": "KV"}
     result = test_class.to_dict()
     assert result == expected
 
@@ -1018,7 +1018,7 @@ def test_cls_vector_to_dict():
 def test_cls_vector_from_dict():
     test_class = cable.Vector()
     expected = (33, "KV")
-    details = {"magnitude": 33, "unit": "kv"}
+    details = {"magnitude": 33, "key": "kv"}
     test_class.from_dict(details)
     result = (test_class.magnitude, test_class.unit)
     assert result == expected
@@ -1037,7 +1037,7 @@ def test_cls_voltage():
 
 def test_cls_voltage_to_dict():
     test_class = cable.Voltage(433, "vac", 3, True)
-    expected = {"phases": 3, "v": 433, "unit": "VAC", "neutral_required": True}
+    expected = {"phases": 3, "v": 433, "key": "VAC", "neutral_required": True}
     result = test_class.to_dict()
     assert result == expected
 
@@ -1045,7 +1045,7 @@ def test_cls_voltage_to_dict():
 def test_cls_voltage_from_dict():
     test_class = cable.Voltage()
     expected = (433, "VAC", 3, True)
-    details = {"phases": 3, "v": 433, "unit": "vac", "neutral_required": True}
+    details = {"phases": 3, "v": 433, "key": "vac", "neutral_required": True}
     test_class.from_dict(details)
     result = (test_class.v, test_class.unit, test_class.phases, test_class.neutral_required)
     assert result == expected

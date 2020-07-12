@@ -1,6 +1,6 @@
 """
 A set of electrical classes: current, voltage, impedance and power. The classes are designed to be used with each other
- for the modelling both DC and AC circuits. frequency is the only unit to be defined in the base class and forms the
+ for the modelling both DC and AC circuits. frequency is the only key to be defined in the base class and forms the
  only check when performing addition, subtraction, multiplication and division functions on the classes.
 """
 from ElectricalLibrary.constants import NumType, ComType
@@ -9,12 +9,12 @@ from ElectricalLibrary.constants import NumType, ComType
 class ElectricalBase:
     def __init__(self, frequency: int = None, freq_unit: str = None, **kwargs):
         """
-        A generic base class for electrical units. The class contains attributes to store the magnitude of the unit and
+        A generic base class for electrical units. The class contains attributes to store the magnitude of the key and
         also contain the respective frequency associated with the electrical characteristic. Where series of frequency
         values are required it is expected that these will be achieved by using a list containing objects of the
         appropriate class.
         :param freq: frequency associated with the object's magnitude
-        :param freq_unit: frequency unit
+        :param freq_unit: frequency key
         """
         self._freq: int = freq
         self._freq_unit: str = freq_unit

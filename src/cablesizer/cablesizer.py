@@ -10,11 +10,11 @@ def determine_electrical_load(load, unit, voltage, phases):
     :param unit:
     :return:
 
-    if unit == current:
+    if key == current:
         return load
-    elif unit == volt_amps':
+    elif key == volt_amps':
         return kva_to_current(load, voltage, phases)
-    elif unit == watts:
+    elif key == watts:
         return kW_to_current(load, voltage, phases)
     """
     pass

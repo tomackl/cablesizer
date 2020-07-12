@@ -52,43 +52,40 @@ def test_cls_basic_defaults_exception():
                               "default": "triangle"})
 
 
-size_list = {"mm2": ["0", "1", "1.5", "2.5", "4"], "awg": ["0000", "000", "1"]}
-min_size = "1"
-min_single_core_size = "1.5"
-unit = {"description": ["MM2", "AWG"], "default": "MM2"}
-
-
 @pytest.mark.parametrize('t_size_list,key,expected',
-                         [(size_list, None, {"MM2": ["0", "1", "1.5", "2.5", "4"],
-                                             "AWG": ["0000", "000", "1"]}
+                         [({"mm2": ["0", "1", "1.5", "2.5", "4"], "awg": ["0000", "000", "1"]}, None,
+                           {"MM2": ["0", "1", "1.5", "2.5", "4"], "AWG": ["0000", "000", "1"]}
                            ),
-                          (size_list, "mm2", {"MM2": ["0", "1", "1.5", "2.5", "4"]}),
+                          ({"mm2": ["0", "1", "1.5", "2.5", "4"], "awg": ["0000", "000", "1"]}, "mm2",
+                           {"MM2": ["0", "1", "1.5", "2.5", "4"]}),
                           (None, None, None)]
-                          # (None, "mm2", None)]
                          )
 def test_cls_sizes_size_list_dict(t_size_list, key, expected):
-    test_class = defaults.Sizes(size_list=t_size_list)
+    test_class = defaults.SizeList(size_list=t_size_list)
     expected = expected
     result = test_class.get_size_list_dict(key)
     assert result == expected
 
 
 def test_cls_sizes_get_size_list_dict():
-    test_class = defaults.Sizes()
+    test_class = defaults.SizeList()
     with pytest.raises(TypeError):
         test_class.get_size_list_dict(key="mm2")
 
 
-def test_cls_sizes_list():
-    test_class = defaults.Sizes(size_list=size_list, unit_description=unit["description"], unit_default=unit["default"])
-    expected = ["0", "1", "1.5", "2.5", "4"]
-    result = test_class.size_list
+@pytest.mark.parametrize('size_list,min_size,min_single_core_size,unit_description,unit_default,expected',
+                         [
+                         ({"mm2": ["0", "1", "1.5", "2.5", "4"], "awg": ["0000", "000", "1"]}, 4, 120,
+                           ["MM2", "AWG"], None,
+                           ("4", "120")),
+                          ({"mm2": ["0", "1", "1.5", "2.5", "4", "120"], "awg": ["0000", "000", "1"]},  4, 120,
+                           ["MM2", "AWG"], "mm2",
+                           ("4", "120"))
+                          ])
+def test_cls_size_list(size_list, min_size, min_single_core_size, unit_description, unit_default, expected):
+    test_class = defaults.SizeList(size_list=size_list, min_size=min_size, min_single_core_size=min_single_core_size,
+                                   unit_description=unit_description, unit_default=unit_default)
+    expected = expected
+    result = (test_class.min_size, test_class.min_single_core_size)
     assert result == expected
 
-
-def test_cls_sizez_min_size():
-    test_class = defaults.Sizes()
-    test_class.min_size = "1.5"
-    expected = "1.5"
-    result = test_class.min_size
-    assert result == expected
